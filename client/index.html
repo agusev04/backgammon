@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ConnectiveGames TypeScript demo Project</title>
+    <style>
+        html
+        {
+            background-color : #001100;
+        }
+        body
+        {
+            background-color : #001100;
+            padding: 0;
+            margin: 0;
+            /* force hardware acceleration on certain devices */
+            transform :  translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+            transform :  translateZ(0);
+            -webkit-transform: translateZ(0);
+            -ms-touch-action: none; /* отключение появления меню */
+            width : 100%;
+            height : 100%;
+            position : fixed;
+        }
+    </style>
+</head>
+<body>
+    <script src="libs/pixi.js"></script>
+    <script src="libs/require.js"></script>
+    <script>
+        requirejs([ "app/Main.js" ]);
+    </script>
+</body>
+</html>
