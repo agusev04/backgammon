@@ -1,0 +1,6 @@
+.idea/
+.gradle/
+build/
+web-test/build/
+tomcat.8080/
+backgammon-server.iml

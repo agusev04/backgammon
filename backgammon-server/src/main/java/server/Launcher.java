@@ -13,7 +13,7 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
         System.out.println("Server started");
 
-        String webappDirLocation = "web/src/main/webapp";
+        String webappDirLocation = "web-test/src/main/webapp";
 
         Tomcat tomcat = new Tomcat();
         tomcat.addWebapp("", new File(webappDirLocation).getAbsolutePath());
