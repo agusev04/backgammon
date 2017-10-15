@@ -11,14 +11,14 @@ import java.io.File;
  */
 public class Launcher {
     public static void main(String[] args) throws Exception {
-        System.out.println("Server started");
+        System.out.println("Launcher: Server started");
 
-        String webappDirLocation = "web-test/src/main/webapp";
+        String webappDirLocation = "web/src/main/webapp";
 
         Tomcat tomcat = new Tomcat();
         tomcat.addWebapp("", new File(webappDirLocation).getAbsolutePath());
-
-        System.out.println("configuring app with basedir: " + new File("" + webappDirLocation).getAbsolutePath());
+        tomcat.setPort(8888);
+        System.out.println("Launcher: configuring app with basedir: " + new File("" + webappDirLocation).getAbsolutePath());
 
         tomcat.start();
         tomcat.getServer().await();
