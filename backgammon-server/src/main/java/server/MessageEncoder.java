@@ -8,7 +8,7 @@ import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
 
-public class PackageEncoder implements Encoder.Text<AbstractPackage>{
+public class MessageEncoder implements Encoder.Text<AbstractMessage>{
 
     @Override
     public void init(EndpointConfig endpointConfig) {
@@ -19,9 +19,11 @@ public class PackageEncoder implements Encoder.Text<AbstractPackage>{
     }
 
     @Override
-    public String encode(AbstractPackage myPackage) throws EncodeException {
-        System.out.println("StringEncoderClass encode it " + myPackage.CLASS_NAME);
+    public String encode(AbstractMessage myPackage) throws EncodeException {
+        System.out.println("MessegeEncoderClass encode it " + myPackage.CLASS_NAME);
         Gson gson = new Gson();
         return gson.toJson(myPackage);
+
+
     }
 }

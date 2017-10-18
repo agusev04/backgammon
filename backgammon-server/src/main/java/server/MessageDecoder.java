@@ -10,35 +10,43 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-public class PackageDecoder implements Decoder.Text<AbstractPackage>{
+public class MessageDecoder implements Decoder.Text<AbstractMessage>{
 
     @Override
-    public AbstractPackage decode(String s)throws DecodeException {
+    public AbstractMessage decode(String s)throws DecodeException {
         //TODO make factory
-        System.out.println("PackageDecoder parse JSON string "+s);
+        System.out.println("MessageDecoder parse JSON string "+s);
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(s);
-        JsonObject object;
-        object = element.getAsJsonObject();
+        JsonObject object = element.getAsJsonObject();
         String className = object.get("CLASS_NAME").getAsString();
         Gson gson = new Gson();
-        AbstractPackage abstractPackage = null; // можно сделать полем класс, чтобы лишний раз не парсить????
+        AbstractMessage abstractMessage = null; // можно сделать полем класс, чтобы лишний раз не парсить????
         //TODO make dispatcher
         switch (className){
-            case "EnterPackage":
-                abstractPackage = gson.fromJson(s, EnterPackage.class);
+            case "Enter":
+                abstractMessage = gson.fromJson(s, Enter.class);
                 break;
             case "ClosePackage":
                 break;
+            case "ErrorMessage":
+                break;
+            case "SuccessMessage":
+                break;
+            case "MoveMessage":
+                break;
+            case "FinalMessage":
+                break;
+
 
         }
-        return abstractPackage;
+        return abstractMessage;
     }
 
     @Override
     public boolean willDecode(String s) { //проверяет можно ли получаемый джэсон объект декодировать!
-        boolean resutlt = false;
-        System.out.println("StringDecorerClass check JSON string: "+s);
+        boolean resutlt;
+        System.out.println("DecorerClass check JSON string: "+s);
         try{
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(s);
@@ -46,11 +54,11 @@ public class PackageDecoder implements Decoder.Text<AbstractPackage>{
             object = element.getAsJsonObject();
             String className = object.get("CLASS_NAME").getAsString();
             Gson gson = new Gson();
-            AbstractPackage abstractPackage; // можно сделать полем класс, чтобы лишний раз не парсить????
+            AbstractMessage abstractMessage; // можно сделать полем класс, чтобы лишний раз не парсить????
             //TODO (Alexandr) think about it
             switch (className){
-                case "EnterPackage":
-                    abstractPackage = gson.fromJson(s, EnterPackage.class);
+                case "Enter":
+                    abstractMessage = gson.fromJson(s, Enter.class);
                     resutlt = true;
                     break;
                 case "ClosePackage":
@@ -61,7 +69,7 @@ public class PackageDecoder implements Decoder.Text<AbstractPackage>{
                     break;
             }
         }catch (Exception e ){
-            e.printStackTrace();
+            System.out.println("ERROR!!!!");
             resutlt = false;
         }
         return resutlt;
