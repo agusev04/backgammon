@@ -10,9 +10,9 @@ import java.io.File;
  * Copyright 2017 Connective Games LLC. All rights reserved.
  */
 public class Launcher {
+
     public static void main(String[] args) throws Exception {
         System.out.println("Launcher: Server started");
-
         String webappDirLocation = "web-test/src/main/webapp";
 
         Tomcat tomcat = new Tomcat();
