@@ -2,8 +2,8 @@ package game.gameobjects;
 
 
 public class Cell {
-        char color; // цвет
-        int count;  // количество
+        public char color; // цвет
+        public int count;  // количество
 
     Cell() {
         color = 'N';
