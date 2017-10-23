@@ -2,13 +2,14 @@ package server;
 
 import javax.websocket.Session;
 
-public class Hub {
+class Hub {
     public int getIter() {
         return iter;
     }
 
-    int iter = 0;
-    MySession[] sessions = new MySession[2];
+
+    private int iter = 0;
+    private MySession[] sessions = new MySession[2];
 
     public boolean setSession(MySession session){
         boolean result = false;
