@@ -9,45 +9,32 @@
     var socket = new WebSocket("ws://localhost:8888/ws");
 
     socket.onopen = function () {
-        log(socket.url + ': Connected!');
+        console.log("Connected!");
     };
 
     socket.onclose = function () {
-        log(socket.url + ': Connection closed.');
+        console.log ("Connection closed.");
     };
 
     socket.onmessage = function (event) {
-        log('Message from server:' + event.data);
+        console.log ("Message from server:", event.data);
     };
 
     function send(messageString) {
-        try {
-            socket.send(messageString);
-            log('Request: ' + messageString);
-        } catch (e) {
-            log(socket.url + ': Connection error');
-        }
-    }
+        var user = { "CLASS_NAME": "Enter" , "Name":"Jon"};
 
-    function log(message) {
-        var container = document.getElementById('endPageContainer');
-        container.innerHTML = container.innerHTML + '<div>'+message+'</div>';
-        console.log(message);
+        try {
+            socket.send(JSON.stringify(user));
+            console.log ("WTF");
+        } catch (e) {
+            console.log ("Connection error");
+        }
     }
 </script>
 
 <body>
-    <div>Sample requests</div>
-    <div><input type="button" value="{'CLASS_NAME' : 'Enter', 'myUserName' : 'Player1'}"
-                onclick="inputArea.value = this.value;"/></div>
-    <div><input type="button" value="{'CLASS_NAME' : 'ThrowCube'}"
-                onclick="inputArea.value = this.value;"/></div>
-    <div> Request to send: <textarea id="inputArea" class="input_field" rows="4" cols="100"></textarea></div>
-    <p>
-      <button onclick="send(inputArea.value)">
-      <span>Send</span>
-      </button>
-    </p>
-    <div id="endPageContainer"><strong>Log:</strong></div>
+  <button onclick="send('test')">
+    <span>Test</span>
+  </button>
 </body>
 </html>
