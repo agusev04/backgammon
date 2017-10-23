@@ -31,7 +31,7 @@ public class WsServer {
     @OnMessage
     public AbstractMessage onMessage(AbstractMessage pack, Session session){
         MySession thisSession = null;
-        if(!sessions.containsKey(session.hashCode())){
+        if(!sessions.containsKey(session.getId())){
             MySession mySession;
             if(currentHub.getIter()<2){
                 thisSession = new MySession(currentHub, session, 1); //created
@@ -39,11 +39,12 @@ public class WsServer {
                 currentHub = new Hub();
                 thisSession = new MySession(currentHub, session, 0); //created
             }
+
             currentHub.setSession(thisSession);
-            sessions.put(session.hashCode(), thisSession);
+            sessions.put(Integer.parseInt(session.getId()), thisSession);
         }else{
             for (Map.Entry<Integer, MySession> entry: sessions.entrySet()) {
-                if(entry.getKey()==session.hashCode()){
+                if(entry.getKey()==Integer.parseInt(session.getId())){
                     thisSession = entry.getValue(); //cought
                     break;
                 }
@@ -58,6 +59,7 @@ public class WsServer {
 
         AbstractMessage message = null;
         //получить GameLogic относящийся к данной сессии
+        //TODO add game logic to hub. logic
         message     = pack.apply(logic);
    //     message = new GameState();
         message.getValues(logic);
