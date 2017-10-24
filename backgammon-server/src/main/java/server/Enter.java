@@ -12,8 +12,10 @@ public class Enter extends AbstractMessage {
         return message;
     }
 
+
     @Override
     public void getValues(GameLogic logic) {
 
     }
 }
+
