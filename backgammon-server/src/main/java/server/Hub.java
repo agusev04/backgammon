@@ -1,24 +1,32 @@
 package server;
 
+import game.logics.Game;
+
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
+import java.io.IOException;
 
 class Hub {
     public int getIter() {
         return iter;
     }
 
-
+    Game game = new Game();
+    private int turn = 0;
     private int iter = 0;
     private MySession[] sessions = new MySession[2];
 
-    public boolean setSession(MySession session){
+    public void setSession(MySession session){
         boolean result = false;
         if(iter<2){
+            session.getPlayer().setGame(game);
             sessions[iter] = session;
             iter++;
             result = true;
         }
-        return result;
+        if(iter == 1){
+            sendGameStart();
+        }
     }
 
     public MySession getSecondSessions(int iter) {
@@ -29,5 +37,29 @@ class Hub {
             mySession = sessions[2];
         }
         return mySession;
+    }
+    public void nextTurn(){
+        turn++;
+        turn%=2;
+    }
+
+    public String getTurn(){
+        return sessions[turn].getPlayer().getName();
+    }
+
+    public void sendGameStart(){
+        GameStart gameStart = new GameStart();
+        gameStart.setEnemyUserName(sessions[1].getPlayer().getName());
+        try {
+            sessions[0].getSession().getBasicRemote().sendObject(gameStart);
+        } catch (IOException | EncodeException e) {
+            e.printStackTrace();
+        }
+        gameStart.setEnemyUserName(sessions[0].getPlayer().getName());
+        try {
+            sessions[1].getSession().getBasicRemote().sendObject(gameStart);
+        } catch (IOException | EncodeException e) {
+            e.printStackTrace();
+        }
     }
 }
