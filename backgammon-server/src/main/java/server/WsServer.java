@@ -38,6 +38,7 @@ public class WsServer {
             }else{
                 currentHub = new Hub();
                 thisSession = new MySession(currentHub, session, 0); //created
+
             }
 
             currentHub.setSession(thisSession);
@@ -60,9 +61,8 @@ public class WsServer {
         AbstractMessage message = null;
         //получить GameLogic относящийся к данной сессии
         //TODO add game logic to hub. logic
-        message     = pack.apply(logic);
+        message     = pack.apply(thisSession);
    //     message = new GameState();
-        message.getValues(logic);
        // session.getBasicRemote()
         //отправить изменения пользоватеЛЯМ
 

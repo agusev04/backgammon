@@ -1,19 +1,33 @@
 package server;
 
+
+import game.logics.Game;
+
 public class GameState extends AbstractMessage {
 
-    int myPosition[];
-    int enemyPosition[];
+    Integer whitePositions[];
+    Integer blackPositions[];
     int cubeValue;
-    int color;
-    boolean turn;
+    char color;
+    String turn;
 
     @Override
-    public void getValues(GameLogic logic){
-        color = logic.getValues();
+    public void getValues(Game game){
+        whitePositions = game.getTable().getGameState().getWhitePos().toArray(whitePositions);
+        blackPositions = game.getTable().getGameState().getBlackPos().toArray(blackPositions);
+        cubeValue = game.getDiceValue();
     }
     @Override
-    public AbstractMessage apply(GameLogic logic) {
+    public AbstractMessage apply(MySession mySession) {
         return null;
     }
+
+    public void setColor(char color){
+        this.color = color;
+    }
+
+    public void setTurn(String turn){
+        this.turn = turn;
+    }
 }
+
