@@ -2,11 +2,16 @@ package game.gameobjects;
 
 
 public class Cell {
+    public static final char WHITE = 'W';
+    public static final char BLACK = 'B';
+    public static final char NULL = 'N';
         public char color; // цвет
         public int count;  // количество
 
+
+
     Cell() {
-        color = 'N';
+        color = NULL;
         count = 0;
     }
 

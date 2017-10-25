@@ -12,4 +12,8 @@ public class Player {  //класс игрока
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

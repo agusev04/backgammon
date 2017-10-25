@@ -2,7 +2,6 @@ package game.logics;
 
 
 import game.gameobjects.Cell;
-
 import java.util.ArrayList;
 
 
@@ -22,10 +21,10 @@ public class ChipsPositions {
     public ChipsPositions(Cell[] cells) {
         for(int i = 0; i < cells.length; i++){
             if(cells[i].count > 0) {
-                if(cells[i].color == 'w') {
-                    whitePos.add((i+1)*100 + cells[i].count);
-                } else if(cells[i].color == 'b') {
-                    blackPos.add((i+1)*100 + cells[i].count);
+                if(cells[i].color == Cell.WHITE) {
+                    whitePos.add((i)*100 + cells[i].count);
+                } else if(cells[i].color == Cell.BLACK) {
+                    blackPos.add((i)*100 + cells[i].count);
                 }
             }
         }
