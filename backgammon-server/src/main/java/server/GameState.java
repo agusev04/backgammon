@@ -1,21 +1,31 @@
 package server;
 
 
+import game.gameobjects.GameTable;
+import game.logics.ChipsPositions;
 import game.logics.Game;
+
+import java.util.ArrayList;
 
 public class GameState extends AbstractMessage {
 
-    Integer whitePositions[];
-    Integer blackPositions[];
+    ArrayList<Integer> whitePositions;
+    ArrayList<Integer> blackPositions;
     int cubeValue;
     char color;
+
+
+
+    String tableName;
     String turn;
 
     @Override
     public void getValues(Game game){
-        whitePositions = game.getTable().getGameState().getWhitePos().toArray(whitePositions);
-        blackPositions = game.getTable().getGameState().getBlackPos().toArray(blackPositions);
-        cubeValue = game.getDiceValue();
+        ChipsPositions positions = game.getTable().getGameState();
+        whitePositions = positions.getWhitePos();
+        blackPositions = positions.getBlackPos();
+        cubeValue = 0;
+
     }
     @Override
     public AbstractMessage apply(MySession mySession) {
@@ -28,6 +38,10 @@ public class GameState extends AbstractMessage {
 
     public void setTurn(String turn){
         this.turn = turn;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }
 

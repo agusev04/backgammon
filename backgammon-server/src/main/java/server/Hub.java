@@ -10,12 +10,15 @@ class Hub {
     public int getIter() {
         return iter;
     }
-
+    private String hubName;
     Game game = new Game();
     private int turn = 0;
     private int iter = 0;
     private MySession[] sessions = new MySession[2];
 
+    public Hub(){
+        System.out.print("hub created");
+    }
     public void setSession(MySession session){
         boolean result = false;
         if(iter<2){
@@ -24,17 +27,16 @@ class Hub {
             iter++;
             result = true;
         }
-        if(iter == 1){
-            sendGameStart();
-        }
+
     }
 
     public MySession getSecondSessions(int iter) {
         MySession mySession = null;
         if(iter == 0){
+            //TODO do string with time when first enter.
             mySession = sessions[1];
         }if(iter == 1){
-            mySession = sessions[2];
+            mySession = sessions[0];
         }
         return mySession;
     }
@@ -47,19 +49,21 @@ class Hub {
         return sessions[turn].getPlayer().getName();
     }
 
-    public void sendGameStart(){
-        GameStart gameStart = new GameStart();
-        gameStart.setEnemyUserName(sessions[1].getPlayer().getName());
-        try {
-            sessions[0].getSession().getBasicRemote().sendObject(gameStart);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
-        gameStart.setEnemyUserName(sessions[0].getPlayer().getName());
-        try {
-            sessions[1].getSession().getBasicRemote().sendObject(gameStart);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
+    public String getHubName() {
+        return hubName;
+    }
+
+    public void setHubName(String hubName) {
+        this.hubName = hubName;
+    }
+
+
+
+    public MySession[] getSessions() {
+        return sessions;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

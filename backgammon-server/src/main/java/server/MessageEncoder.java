@@ -20,8 +20,9 @@ public class MessageEncoder implements Encoder.Text<AbstractMessage>{
 
     @Override
     public String encode(AbstractMessage myPackage) throws EncodeException {
-        System.out.println("MessegeEncoderClass encode it " + myPackage.CLASS_NAME);
+
         Gson gson = new Gson();
+        System.out.println( "sending "+gson.toJson(myPackage));
         return gson.toJson(myPackage);
 
 

@@ -10,7 +10,8 @@ public class ChipsPositions {
 
     ArrayList<Integer> whitePos = new ArrayList<Integer>(); // массив для записи позиций белых фишек
     ArrayList<Integer> blackPos = new ArrayList<Integer>(); // массив для записи позиций черных фишек
-
+    public static final char bChar = 'B';
+    public static final char wChar = 'W';
     public ArrayList<Integer> getBlackPos() {  // передача полученный позиций черных фишек
         return blackPos;
     }
@@ -22,9 +23,9 @@ public class ChipsPositions {
     public ChipsPositions(Cell[] cells) {
         for(int i = 0; i < cells.length; i++){
             if(cells[i].count > 0) {
-                if(cells[i].color == 'w') {
+                if(cells[i].color == wChar) {
                     whitePos.add((i+1)*100 + cells[i].count);
-                } else if(cells[i].color == 'b') {
+                } else if(cells[i].color == bChar) {
                     blackPos.add((i+1)*100 + cells[i].count);
                 }
             }

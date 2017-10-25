@@ -13,10 +13,11 @@ public class MySession {
     public MySession(Hub hub, Session session, int number) {
         this.hub = hub;
         this.session = session;
+        this.number = number;
     }
 
-    public void setPlayer(String name, char color){
-        player = new Player(name, color);
+    public void setPlayer(Player player){
+        this.player = player;
     }
 
     public Player getPlayer() {
@@ -34,4 +35,6 @@ public class MySession {
     public Session getSession() {
         return session;
     }
+
+
 }

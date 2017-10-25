@@ -3,6 +3,8 @@ package server;
 import game.logics.Game;
 import game.logics.Player;
 
+import java.util.Date;
+
 public class Enter extends AbstractMessage {
     public String myUserName;
     @Override
@@ -13,11 +15,14 @@ public class Enter extends AbstractMessage {
         }else{
             color = 'b';
         }
-        mySession.setPlayer(myUserName, color);
+
+        mySession.getPlayer().changeParam(myUserName, color);
         GameState gameState = new GameState();
         gameState.getValues(mySession.getPlayer().getGame());
-        gameState.setColor(mySession.getPlayer().getColor());
-        gameState.setTurn(mySession.hub.getTurn());
+        gameState.setColor(color);
+        gameState.setTurn("");
+        Date date = new Date();
+        gameState.setTableName(mySession.getHub().getSessions()[0].getPlayer().getName()+"s backgammon table created");
         return gameState;
     }
 
@@ -25,5 +30,7 @@ public class Enter extends AbstractMessage {
     @Override
     public void getValues(Game game) {
     }
+
+
 }
 

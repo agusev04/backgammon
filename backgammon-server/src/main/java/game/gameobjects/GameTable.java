@@ -6,7 +6,9 @@ public class GameTable {
     public Cell[] cells;
 
     public GameTable() {
+        System.out.println("creates GAMETABLE");
         cells = new Cell[24];
+        for(int i=0;i<24;i++) cells[i] = new Cell();
         cells[0].setCell('W', 2);
         cells[5].setCell('B', 5);
         cells[7].setCell('B', 3);

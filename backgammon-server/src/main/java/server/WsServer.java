@@ -1,6 +1,9 @@
 package server;
 
 
+import game.logics.Game;
+import game.logics.Player;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.util.HashMap;
@@ -13,59 +16,33 @@ import java.util.Map;
  */
 @ServerEndpoint(value = "/ws", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public class WsServer {
-//GameLogic для каждых двух сессий (два человека-оппонента)
-    GameLogic logic = new GameLogic();
-    HashMap<Integer, MySession> sessions = new HashMap<>();
-    Hub currentHub = new Hub();
+    RequestHandler requestHandler;
+
+    public WsServer(){
+        System.out.println("wsServer sreated");
+    }
 
     @OnOpen
     public void onOpen(Session session){
-        System.out.println("Open Connection ...");
+        System.out.println("Open Connection ..." + session.getId());
+        requestHandler = RequestHandler.getInstance();
     }
 
     @OnClose
     public void onClose(Session session){
         System.out.println("Close Connection ...");
     }
-
+    AbstractMessage message;
     @OnMessage
     public AbstractMessage onMessage(AbstractMessage pack, Session session){
-        MySession thisSession = null;
-        if(!sessions.containsKey(session.getId())){
-            MySession mySession;
-            if(currentHub.getIter()<2){
-                thisSession = new MySession(currentHub, session, 1); //created
-            }else{
-                currentHub = new Hub();
-                thisSession = new MySession(currentHub, session, 0); //created
-
+        //TODO medness!
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                message = requestHandler.request(pack, session);
             }
-
-            currentHub.setSession(thisSession);
-            sessions.put(Integer.parseInt(session.getId()), thisSession);
-        }else{
-            for (Map.Entry<Integer, MySession> entry: sessions.entrySet()) {
-                if(entry.getKey()==Integer.parseInt(session.getId())){
-                    thisSession = entry.getValue(); //cought
-                    break;
-                }
-            }
-        }
-
-        Hub hub = thisSession.getHub();
-        if(hub.getIter()==2){
-            MySession secondMySession = hub.getSecondSessions(thisSession.getNumber());
-            Session secondSession = secondMySession.getSession();
-        }
-
-        AbstractMessage message = null;
-        //получить GameLogic относящийся к данной сессии
-        //TODO add game logic to hub. logic
-        message     = pack.apply(thisSession);
-   //     message = new GameState();
-       // session.getBasicRemote()
-        //отправить изменения пользоватеЛЯМ
-
+        });
+        message = requestHandler.request(pack, session);
         return message;
     }
 
