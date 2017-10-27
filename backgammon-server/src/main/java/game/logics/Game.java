@@ -2,7 +2,12 @@ package game.logics;
 
 import game.gameobjects.*;
 
+import java.util.Random;
+
 public class Game {
+
+
+
     GameTable table = new GameTable();
 
 //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
@@ -28,5 +33,10 @@ public class Game {
         return table;
     }
 
-
+    public int throwDice(){
+        int resalt = 0;
+        Random random = new Random();
+        resalt = 10*(random.nextInt(5)+1)+random.nextInt(5)+1;
+        return resalt;
+    }
 }

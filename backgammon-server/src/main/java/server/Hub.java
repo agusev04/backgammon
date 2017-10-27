@@ -5,6 +5,7 @@ import game.logics.Game;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.util.Random;
 
 class Hub {
     public int getIter() {
@@ -12,7 +13,8 @@ class Hub {
     }
     private String hubName;
     Game game = new Game();
-    private int turn = 0;
+    private MySession turnSession = null;
+    private MySession moveSession = null;
     private int iter = 0;
     private MySession[] sessions = new MySession[2];
 
@@ -27,7 +29,15 @@ class Hub {
             iter++;
             result = true;
         }
+        if(iter==2){
+            Random random = new Random();
+            turnSession = sessions[random.nextInt(1)];
+        }
 
+    }
+
+    public void setMoveState(MySession mySessiion){
+        this.moveSession = mySessiion;
     }
 
     public MySession getSecondSessions(int iter) {
@@ -40,13 +50,20 @@ class Hub {
         }
         return mySession;
     }
-    public void nextTurn(){
-        turn++;
-        turn%=2;
+
+    public MySession getTurnSession() {
+        return turnSession;
     }
 
-    public String getTurn(){
-        return sessions[turn].getPlayer().getName();
+    public void nextTurn(MySession mySession){
+        turnSession = mySession.getHub().getSecondSessions(mySession.getNumber());
+    }
+
+    public boolean isMyTurn(MySession mySession){
+        boolean resalt = false;
+        if((turnSession == mySession))
+            resalt = true;
+        return resalt;
     }
 
     public String getHubName() {
@@ -63,7 +80,7 @@ class Hub {
         return sessions;
     }
 
-    public Game getGame() {
+    public Game getGame() {//P;ayer
         return game;
     }
 }

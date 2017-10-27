@@ -8,7 +8,7 @@ public abstract class AbstractMessage { //От этого класса насл�
         return CLASS_NAME;
     }
 
-    abstract public AbstractMessage apply(MySession mySession); //для реализации шаблона декоратор
+    abstract public AbstractMessage apply(MySession mySession) throws GameErrors; //для реализации шаблона декоратор
 
     abstract public void getValues(Game game);
 }

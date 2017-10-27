@@ -1,7 +1,6 @@
 package server;
 
 
-import game.gameobjects.GameTable;
 import game.logics.ChipsPositions;
 import game.logics.Game;
 

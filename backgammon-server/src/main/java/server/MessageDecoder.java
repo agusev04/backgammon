@@ -27,7 +27,8 @@ public class MessageDecoder implements Decoder.Text<AbstractMessage>{
             case "Enter":
                 abstractMessage = gson.fromJson(s, Enter.class);
                 break;
-            case "ClosePackage":
+            case "ThrowCube":
+                abstractMessage = gson.fromJson(s, ThrowCube.class);
                 break;
             case "ErrorMessage":
                 break;
@@ -61,7 +62,7 @@ public class MessageDecoder implements Decoder.Text<AbstractMessage>{
                     abstractMessage = gson.fromJson(s, Enter.class);
                     resutlt = true;
                     break;
-                case "ClosePackage":
+                case "ThrowCube":
                     resutlt = true;
                     break;
                 default:

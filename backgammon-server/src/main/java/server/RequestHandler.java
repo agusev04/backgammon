@@ -29,7 +29,8 @@ public class RequestHandler {
     public AbstractMessage request(AbstractMessage pack, Session session){
         AbstractMessage message = null;
         MySession thisSession = null;
-        if(!sessions.containsKey(session.getId())){
+        System.out.println("request from "+ session.getId());
+        if(!sessions.containsKey(Integer.parseInt(session.getId()))){
             MySession mySession;
             System.out.println("request "+ currentHub.getIter());
 
@@ -40,7 +41,13 @@ public class RequestHandler {
             System.out.println("dfdfd   "+ currentHub.getIter()+"    "+ thisSession.getNumber());
 
             currentHub.setSession(thisSession);
-            message = pack.apply(thisSession);
+            try {
+                message = pack.apply(thisSession);
+            } catch (GameErrors gameErrors) {
+                Error error = new Error();
+                error.setError(gameErrors);
+                message = error;
+            }
 
             sessions.put(Integer.parseInt(session.getId()), thisSession);
 
@@ -55,7 +62,13 @@ public class RequestHandler {
                     break;
                 }
             }
-            message = pack.apply(thisSession);
+            try {
+                message = pack.apply(thisSession);
+            } catch (GameErrors gameErrors) {
+                Error error = new Error();
+                error.setError(gameErrors);
+                message = error;
+            }
         }
 
         Hub hub = thisSession.getHub();
