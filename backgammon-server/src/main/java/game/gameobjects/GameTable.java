@@ -6,6 +6,7 @@ public class GameTable {
     public Cell[] cells;
 
     public GameTable() {  // 0 и 25 ячейки технологические, в них будут храниться фишки которые вышли с поля.
+        System.out.println("creates GAMETABLE");
         cells = new Cell[26];
 
         for(int i = 0; i < 26; i++){
