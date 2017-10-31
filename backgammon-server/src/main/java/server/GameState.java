@@ -42,5 +42,9 @@ public class GameState extends AbstractMessage {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
+    public char getColor() {
+        return color;
+    }
 }
 

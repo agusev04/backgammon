@@ -9,22 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestHandler {
-    private static volatile RequestHandler requestHandler;
 //TODO violatile collection and hub??
-    HashMap<Integer, MySession> sessions = new HashMap<>();
-    Hub currentHub = new Hub();
+    protected HashMap<Integer, MySession> sessions = new HashMap<>();
+    protected Hub currentHub = new Hub();
 
-    private RequestHandler(){
-
-    }
-    public static RequestHandler getInstance(){
-        if(requestHandler == null)synchronized (RequestHandler.class){
-            if(requestHandler == null){
-                requestHandler = new RequestHandler();
-            }
-        }
-        return requestHandler;
-    }
 //TODO синхронизация!!!!
     public AbstractMessage request(AbstractMessage pack, Session session){
         AbstractMessage message = null;

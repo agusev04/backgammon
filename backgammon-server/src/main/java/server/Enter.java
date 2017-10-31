@@ -7,6 +7,11 @@ import java.util.Date;
 
 public class Enter extends AbstractMessage {
     public String myUserName;
+
+    public Enter(String myUserName) {
+        this.myUserName = myUserName;
+    }
+
     @Override
     public AbstractMessage apply(MySession mySession) {
         char color;

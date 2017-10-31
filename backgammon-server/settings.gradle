@@ -1,3 +1,2 @@
 rootProject.name = 'backgammon-server'
-include 'web-test'
 

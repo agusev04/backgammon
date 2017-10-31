@@ -1,13 +1,8 @@
 package server;
 
 
-import game.logics.Game;
-import game.logics.Player;
-
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Oleg O. Plotnikov
@@ -16,7 +11,7 @@ import java.util.Map;
  */
 @ServerEndpoint(value = "/ws", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public class WsServer {
-    RequestHandler requestHandler;
+    private static final RequestHandler REQUEST_HANDLER = new RequestHandler();
 
     public WsServer(){
         System.out.println("wsServer sreated");
@@ -25,25 +20,16 @@ public class WsServer {
     @OnOpen
     public void onOpen(Session session){
         System.out.println("Open Connection ..." + session.getId());
-        requestHandler = RequestHandler.getInstance();
     }
 
     @OnClose
     public void onClose(Session session){
         System.out.println("Close Connection ...");
     }
-    AbstractMessage message;
+
     @OnMessage
     public AbstractMessage onMessage(AbstractMessage pack, Session session){
-        //TODO medness!
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                message = requestHandler.request(pack, session);
-            }
-        });
-        message = requestHandler.request(pack, session);
-        return message;
+        return REQUEST_HANDLER.request(pack, session);
     }
 
     @OnError
