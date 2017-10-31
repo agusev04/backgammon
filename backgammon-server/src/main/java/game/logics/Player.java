@@ -7,6 +7,7 @@ public class Player {  //класс игрока
 
     Game game;
 
+    //TODO (Michael) исправить, как было в задаче с изменением связанного кода
 
     public Player(String name, char color) { //конструктор по умолчанию для игрока
 
@@ -37,6 +38,7 @@ public class Player {  //класс игрока
         this.game = game;
     }
 
+    @Deprecated
     public void changeParam(String name, char color){
         this.name = name;
         this.color = color;

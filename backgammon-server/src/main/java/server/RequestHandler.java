@@ -12,9 +12,15 @@ public class RequestHandler {
 //TODO violatile collection and hub??
     protected HashMap<Integer, MySession> sessions = new HashMap<>();
     protected Hub currentHub = new Hub();
+    //TODO (IvchenkoAlexandr) Как и обсудили, делаем из этого флажок (либо храним текущую игру, Game)
 
 //TODO синхронизация!!!!
     public AbstractMessage request(AbstractMessage pack, Session session){
+
+        //TODO (IvchenkoAlexandr) Сложный метод, лучше разбить на логические части (другие методы).
+        //и назвать их так, чтобы было понятно, что они делают
+        // Как минимум разная логика работы с новыми сессиями и уже сохраненными
+
         AbstractMessage message = null;
         MySession thisSession = null;
         System.out.println("request from "+ session.getId());
@@ -32,6 +38,10 @@ public class RequestHandler {
             try {
                 message = pack.apply(thisSession);
             } catch (GameErrors gameErrors) {
+                //TODO (IvchenkoAlexandr) Дублируемый код, который должен насторожить. Нужен ли он здесь?
+                // Метод apply возвращает сообщение AbstractMessage. Ошибка Error это тоже AbstractMessage.
+                //На этом уровне без разницы, ошибка или нет, мы просто отсылаем ответное сообщение.
+                // Нужно ловить ошибку внутри apply и сюда не пробрасывать.
                 Error error = new Error();
                 error.setError(gameErrors);
                 message = error;
@@ -59,6 +69,7 @@ public class RequestHandler {
             }
         }
 
+        //TODO (IvchenkoAlexandr) Непонятно, зачем этот код ниже
         Hub hub = thisSession.getHub();
         if(hub.getIter()==2){
             MySession secondMySession = hub.getSecondSessions(thisSession.getNumber());
@@ -68,6 +79,8 @@ public class RequestHandler {
         return message;
     }
 
+    //TODO (IvchenkoAlexandr) нужно подумать, куда этот код перенести.
+    // По сути это рассылка сообщений всем игрокам подключенным к игре (матчу, игровому сеансу).
     private void sendGameStart(Hub hub){
         MySession sessions[] = hub.getSessions();
         GameStart gameStart = new GameStart();

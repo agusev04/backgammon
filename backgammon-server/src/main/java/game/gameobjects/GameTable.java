@@ -3,9 +3,15 @@ package game.gameobjects;
 import game.logics.ChipsPositions;
 
 public class GameTable {
+    //TODO (Michael) подумать, как лучше назвать этот класс
+
     public Cell[] cells;
 
     public GameTable() {  // 0 и 25 ячейки технологические, в них будут храниться фишки которые вышли с поля.
+        //TODO (Michael) если принято решение хранить в одном массиве обычные ячейки и "технологические",
+        // то это надо выразить в коде, чтобы было понятно что ячейки, например надо создать константы с номерами этих
+        // ячеек. Возможно сразу создать какие-то методы для работы с ними.
+
         System.out.println("creates GAMETABLE");
         cells = new Cell[26];
 

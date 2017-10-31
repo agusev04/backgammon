@@ -18,6 +18,8 @@ public class GameState extends AbstractMessage {
     String tableName;
     String turn;
 
+    //TODO (Michael) Оформить как транспортный объект.
+
     @Override
     public void getValues(Game game){
         ChipsPositions positions = game.getTable().getGameState();

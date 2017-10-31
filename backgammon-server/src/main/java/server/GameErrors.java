@@ -1,7 +1,8 @@
 package server;
 
+@Deprecated
 public class GameErrors extends Throwable {
-
+    //TODO (IvchenkoAlexandr) Использовать класс из игровой логики
     public static final GameErrors UNABLE_THROW_DICES = new GameErrors(2, "you can not throw dices");
 
     int cod;

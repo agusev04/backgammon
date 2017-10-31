@@ -2,9 +2,6 @@ package server;
 
 import game.logics.Game;
 
-import javax.websocket.EncodeException;
-import javax.websocket.Session;
-import java.io.IOException;
 import java.util.Random;
 
 class Hub {
@@ -13,6 +10,9 @@ class Hub {
     }
     private String hubName;
     Game game = new Game();
+
+    //TODO (IvchenkoAlexandr) Логику доступности действий и переключения хода нужно перенести в игру
+    //Игрок спрашивает у игры, могу ли сделать что-то и что я делать могу.
     private MySession turnSession = null;
     private MySession moveSession = null;
     private int iter = 0;

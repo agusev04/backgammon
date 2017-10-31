@@ -10,6 +10,10 @@ public class MySession {
     int number;
     Player player;
 
+    //TODO (IvchenkoAlexandr) Как и обсудили, от класса избавляемся. Сессия идет в игрока. Хаб тоже удаляем
+    // (функции его уходят в Game).
+    //очередность хода будет реализована в игре Michael
+
     public MySession(Hub hub, Session session, int number) {
         this.hub = hub;
         this.session = session;

@@ -8,7 +8,14 @@ public abstract class AbstractMessage { //От этого класса насл�
         return CLASS_NAME;
     }
 
+    //TODO (IvchenkoAlexandr) Бесполезное убрать.
+
     abstract public AbstractMessage apply(MySession mySession) throws GameErrors; //для реализации шаблона декоратор
 
+    //TODO (IvchenkoAlexandr) зачем метод getValues? Если считаешь, что он нужен - надо обсудить.
+    @Deprecated
     abstract public void getValues(Game game);
+
+    //TODO (IvchenkoAlexandr) раз этот класс является и запросом и ответом, то должен быть конструктор для создания ответов
+
 }
