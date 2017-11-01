@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./Button", "./Board", "./MessageBox"], function (require, exports, Button_1, Board_1, MessageBox_1) {
+define(["require", "exports", "./Button", "./Board", "./MessageBox", "./Dices"], function (require, exports, Button_1, Board_1, MessageBox_1, Dices_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -53,7 +53,7 @@ define(["require", "exports", "./Button", "./Board", "./MessageBox"], function (
             TweenLite.fromTo(logo, 3, { alpha: 1 }, { alpha: 0 });
         };
         Game.prototype.set_menu = function () {
-            var startBtn = new Button_1.Button('GameStart');
+            var startBtn = new Button_1.Button('GameStart', 'test', 1000);
             startBtn.on('GameStart', this.GameStart.bind(this, startBtn));
             this.addChild(startBtn);
             startBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
@@ -70,7 +70,12 @@ define(["require", "exports", "./Button", "./Board", "./MessageBox"], function (
             this.addChild(MsgBox);
             var redStyle = new TextStyle({ fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center' });
             setTimeout(MsgBox.show.bind(MsgBox, 'Hello', 2000, redStyle), 1000);
-            setTimeout(MsgBox.show.bind(MsgBox, 'It is a test\n message box', 5000, redStyle), 6000);
+            setTimeout(MsgBox.show.bind(MsgBox, 'Roll a dice !', 2000, redStyle), 4000);
+            var dice = new Dices_1.Dices();
+            dice.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
+            setTimeout(function () {
+                this.addChild(dice);
+            }.bind(this), 7000);
         };
         // Params >>------------------------------------------------------------<<<<
         Game.WIDTH = 1024;

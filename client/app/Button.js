@@ -16,21 +16,34 @@ define(["require", "exports"], function (require, exports) {
     var Sprite = PIXI.Sprite;
     var Button = (function (_super) {
         __extends(Button, _super);
-        function Button(event) {
+        function Button(event, icon, timeToWork) {
             var _this = _super.call(this) || this;
             _this._event = event;
+            _this._icon = icon;
+            _this._timeToWork = timeToWork;
             _this.configure();
             return _this;
         }
         Button.prototype.configure = function () {
-            var icon = Sprite.fromImage('assets/buttons/test.png');
+            var icon = Sprite.fromImage('assets/buttons/' + this._icon + '.png');
             icon.interactive = true;
             icon.buttonMode = true;
             icon.anchor.set(0.5);
             icon.on('pointerup', function () {
-                // Game.EVENTS.emit(this._event, this);
                 this.emit(this._event);
+                icon.alpha = 0.5;
+                icon.interactive = false;
+                setTimeout(function () {
+                    icon.alpha = 1;
+                    icon.interactive = true;
+                }, this._timeToWork);
             }, this);
+            icon.on('pointerdown', function () {
+                icon.alpha = 0.5;
+            });
+            icon.on('pointerupoutside', function () {
+                icon.alpha = 1;
+            });
             this.addChild(icon);
         };
         return Button;

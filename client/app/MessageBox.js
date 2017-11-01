@@ -29,14 +29,6 @@ define(["require", "exports", "./Game"], function (require, exports, Game_1) {
             image.y = Game_1.Game.HEIGHT / 2;
             this.addChild(image);
             TweenLite.set(this, { alpha: 0 });
-            this.on('popUp', function () {
-                TweenLite.set(this, { x: 0, y: 0 });
-                TweenLite.to(this, 1, { alpha: 1 });
-            });
-            this.on('popOut', function () {
-                console.log('popOut');
-                TweenLite.to(this, 1, { x: 2 * Game_1.Game.WIDTH });
-            });
         };
         MessageBox.prototype.show = function (message, duration, styleMsg) {
             var textMsg = new PIXI.Text(message);
@@ -44,14 +36,21 @@ define(["require", "exports", "./Game"], function (require, exports, Game_1) {
             textMsg.anchor.set(0.5);
             textMsg.position.set(Game_1.Game.WIDTH / 2, Game_1.Game.HEIGHT / 2);
             this.addChild(textMsg);
-            this.emit('popUp', this);
+            this.popUp();
             setTimeout(function () {
                 setTimeout(function () {
                     this.removeChild(textMsg);
                 }.bind(this), 1000);
-                this.emit('popOut', this);
+                this.popOut();
             }.bind(this), duration);
-            // Знаю что можно было textMsg сделать как постоянное поле объекта. Я тут просто тестировал знания передачи контекста.
+        };
+        MessageBox.prototype.popUp = function () {
+            TweenLite.set(this, { x: 0, y: 0 });
+            TweenLite.to(this, 1, { alpha: 1 });
+        };
+        MessageBox.prototype.popOut = function () {
+            console.log('popOut');
+            TweenLite.to(this, 1, { x: 2 * Game_1.Game.WIDTH });
         };
         return MessageBox;
     }(Container));

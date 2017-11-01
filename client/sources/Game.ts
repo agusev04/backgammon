@@ -11,6 +11,7 @@ import {Button} from "./Button";
 import {Board} from "./Board";
 import {MessageBox} from "./MessageBox";
 import TextStyle = PIXI.TextStyle;
+import {Dices} from "./Dices";
 
 export class Game extends Container
 {
@@ -61,7 +62,7 @@ export class Game extends Container
 
     protected set_menu()
     {
-        let startBtn = new Button('GameStart');
+        let startBtn = new Button('GameStart', 'test', 1000);
         startBtn.on('GameStart', this.GameStart.bind(this, startBtn));
         this.addChild(startBtn);
         startBtn.position.set(Game.WIDTH/2, Game.HEIGHT/2);
@@ -82,7 +83,12 @@ export class Game extends Container
 
         setTimeout(MsgBox.show.bind(MsgBox, 'Hello', 2000, redStyle),1000);
 
-        setTimeout(MsgBox.show.bind(MsgBox, 'It is a test\n message box', 5000, redStyle),6000);
+        setTimeout(MsgBox.show.bind(MsgBox, 'Roll a dice !', 2000, redStyle),4000);
+        let dice = new Dices();
+        dice.position.set(Game.WIDTH/2, Game.HEIGHT/2);
+        setTimeout(function () {
+            this.addChild(dice);
+        }.bind(this), 7000);
     }
     // Private >>-----------------------------------------------------------<<<<
 }

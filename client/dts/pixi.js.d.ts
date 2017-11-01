@@ -3466,7 +3466,7 @@ declare namespace pixi {
 
 declare const createjs:any;
 declare const TweenLite:any;
-
+declare const TweenMax:any;
 //tslint:disable-next-line:no-single-declare-module 
 declare module "pixi.js" {
     export = PIXI;

@@ -20,6 +20,8 @@ var Sprite = PIXI.Sprite;
 var EventEmitter = PIXI.utils.EventEmitter;
 var Button_1 = require("./Button");
 var Board_1 = require("./Board");
+var MessageBox_1 = require("./MessageBox");
+var TextStyle = PIXI.TextStyle;
 var Game = (function (_super) {
     __extends(Game, _super);
     // Init >>--------------------------------------------------------------<<<<
@@ -65,11 +67,12 @@ var Game = (function (_super) {
         // let chip = new Chip(0, false);
         // this.addChild(chip);
         var GameBoard = new Board_1.Board();
-        var MsgBox = new MessageBox();
+        var MsgBox = new MessageBox_1.MessageBox();
         this.addChild(GameBoard);
         this.addChild(MsgBox);
-        setTimeout(function () {
-        }, 1000);
+        var redStyle = new TextStyle({ fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center' });
+        setTimeout(MsgBox.show.bind(MsgBox, 'Hello', 2000, redStyle), 1000);
+        setTimeout(MsgBox.show.bind(MsgBox, 'It is a test\n message box', 5000, redStyle), 6000);
     };
     // Params >>------------------------------------------------------------<<<<
     Game.WIDTH = 1024;
