@@ -62,6 +62,7 @@ public class RequestHandler {
         } catch (IOException | EncodeException e) {
             e.printStackTrace();
         }
+        gameStart = new GameStart(); // больше памяти ради тестов
         gameStart.setEnemyUserName(players[0].getName());
         try {
             players[1].getSession().getBasicRemote().sendObject(gameStart);

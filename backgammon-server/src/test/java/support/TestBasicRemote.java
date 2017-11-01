@@ -1,5 +1,7 @@
 package support;
 
+import server.transport.GameStart;
+
 import javax.websocket.EncodeException;
 import javax.websocket.RemoteEndpoint;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.nio.ByteBuffer;
 class TestBasicRemote implements RemoteEndpoint.Basic {
 
     private String sessionId;
+
 
     TestBasicRemote(String sessionId) {
         this.sessionId = sessionId;
@@ -47,8 +50,14 @@ class TestBasicRemote implements RemoteEndpoint.Basic {
 
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
+        TestGameStartSingleton testGameStartSingleton = TestGameStartSingleton.getInstance();
+        testGameStartSingleton.setStarts((GameStart)data);
 
     }
+
+
+
+
 
     @Override
     public void setBatchingAllowed(boolean batchingAllowed) throws IOException {

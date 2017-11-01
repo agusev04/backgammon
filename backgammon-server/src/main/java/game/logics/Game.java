@@ -63,6 +63,13 @@ public class Game {
 
     public void setPlayer(Player player) {
         //TODO Миша, по сути здесь определяется кто белый, кто черный 0 - белый, 1 - черный (с)Саша
+        char color;
+        if(numberOfPlayer==0){
+            color = 'w';
+        }else{
+            color = 'b';
+        }
+        player.setColor(color);
         players[numberOfPlayer] = player;
         numberOfPlayer++;
     }

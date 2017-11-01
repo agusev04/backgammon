@@ -1,16 +1,16 @@
 package support;
 
-import server.MySession;
+import game.logics.Player;
 import server.RequestHandler;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
-class TestRequestHandler extends RequestHandler{
+class TestRequestHandler extends RequestHandler {
 
     TestRequestHandler() {
     }
 
-    HashMap<Integer, MySession> getSessions() {
-        return sessions;
+    ConcurrentHashMap<Integer, Player> getPlayers() {
+        return players;
     }
 }
