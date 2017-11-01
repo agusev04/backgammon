@@ -4,8 +4,20 @@ import game.gameobjects.*;
 
 import java.util.Random;
 
+import static game.logics.GameErrors.UNABLE_THROW_DICES;
+
 public class Game {
     GameTable table = new GameTable();
+
+    //Alexandr начал
+    Player players[] = new Player[2];
+    int numberOfPlayer = 0;
+
+    Player playerThrow = null; //Миша, я могу кидать тебе игрока который постучался на сервер, а ты будешь сравнивать
+    Player playerMove = null;
+
+
+    //закончил
 
 //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
 //    у каждого должен быть свой флаг ход\ожидание
@@ -37,10 +49,31 @@ public class Game {
         return table;
     }
 
-    public int throwDice(){
+    public int throwDice(Player player) throws GameErrors {
         int resalt = 0;
-        Random random = new Random();
-        resalt = 10*(random.nextInt(5)+1)+random.nextInt(5)+1;
+        if(playerThrow == player) {
+
+            Random random = new Random();
+            resalt = 10 * (random.nextInt(5) + 1) + random.nextInt(5) + 1;
+        }else{
+            throw UNABLE_THROW_DICES;
+        }
         return resalt;
     }
+
+    public void setPlayer(Player player){
+         //TODO Миша, по сути здесь определяется кто белый, кто черный 0 - белый, 1 - черный (с)Саша
+        players[numberOfPlayer] = player;
+        numberOfPlayer++;
+    }
+
+    public int getNumberOfPlayer() {
+        return numberOfPlayer;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+
 }

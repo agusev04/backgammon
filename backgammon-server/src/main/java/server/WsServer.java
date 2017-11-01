@@ -1,6 +1,8 @@
 package server;
 
 
+import server.transport.AbstractMessage;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
@@ -34,9 +36,6 @@ public class WsServer {
 
     @OnError
     public void onError(Throwable e){
-        //TODO (IvchenkoAlexandr) Зачем System.out.println("ERROR"); ? e.printStackTrace() и так выведет ошибку в консоль,
-        // в том числе и слово Error или Exception
-        System.out.println("ERROR");
         e.printStackTrace();
     }
 }

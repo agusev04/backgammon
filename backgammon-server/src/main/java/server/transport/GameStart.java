@@ -1,17 +1,16 @@
-package server;
+package server.transport;
 
 import game.logics.Game;
+import game.logics.Player;
+import server.transport.AbstractMessage;
 
 public class GameStart extends AbstractMessage {
     String enemyUserName;
     @Override
-    public AbstractMessage apply(MySession mySession) {
+    public AbstractMessage apply(Player player) {
         return null;
     }
 
-    @Override
-    public void getValues(Game game) {
-    }
 
     public void setEnemyUserName(String enemyUserName) {
         this.enemyUserName = enemyUserName;

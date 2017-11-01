@@ -1,6 +1,9 @@
-package server;
+package server.transport;
 
 import game.logics.Game;
+import game.logics.GameErrors;
+import game.logics.Player;
+
 public class Error extends AbstractMessage {
     int cod;
     String message;
@@ -9,14 +12,10 @@ public class Error extends AbstractMessage {
     //TODO (Michael) Подумать над названием, чтобы не было путаницы с GameErrors и вообще о связи с GameErrors.
 
     @Override
-    public AbstractMessage apply(MySession mySession) throws GameErrors {
+    public AbstractMessage apply(Player player) {
         return null;
     }
 
-    @Override
-    public void getValues(Game game) {
-
-    }
 
     public void setError(GameErrors error){
         cod = error.getCod();

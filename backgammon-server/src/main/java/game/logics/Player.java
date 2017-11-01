@@ -1,12 +1,17 @@
 package game.logics;
 
 
+import javax.websocket.Session;
+
 public class Player {  //класс игрока
     String name;
     char color; // 'w' or 'b'
 
     Game game;
-
+    // Alexandr начал добавлять
+    Session session;
+    int number; //это номер в массиве в классе Game
+    // закончил добавлять
     //TODO (Michael) исправить, как было в задаче с изменением связанного кода
 
     public Player(String name, char color) { //конструктор по умолчанию для игрока
@@ -17,11 +22,17 @@ public class Player {  //класс игрока
 
     }
 
+    public Player(Game game, Session session, int number) {
+        this.game = game;
+        this.session = session;
+        this.number = number;
+    }
+
     public void setColor(char color) {
         this.color = color;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws GameErrors {
         this.name = name;
     }
 
@@ -30,7 +41,6 @@ public class Player {  //класс игрока
     }
 
     public Game getGame() {
-
         return game;
     }
 
@@ -42,5 +52,25 @@ public class Player {  //класс игрока
     public void changeParam(String name, char color){
         this.name = name;
         this.color = color;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public char getColor() {
+        return color;
     }
 }

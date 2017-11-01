@@ -5,6 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import server.transport.AbstractMessage;
+import server.transport.Enter;
+import server.transport.ThrowCube;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
@@ -56,7 +59,7 @@ public class MessageDecoder implements Decoder.Text<AbstractMessage>{
             String className = object.get("CLASS_NAME").getAsString();
             Gson gson = new Gson();
             AbstractMessage abstractMessage; // можно сделать полем класс, чтобы лишний раз не парсить????
-            //TODO (Alexandr) think about it
+            //TODO (Alexandr) think about it,  warning
             switch (className){
                 case "Enter":
                     abstractMessage = gson.fromJson(s, Enter.class);

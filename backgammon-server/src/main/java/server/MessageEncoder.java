@@ -2,6 +2,7 @@ package server;
 
 
 import com.google.gson.Gson;
+import server.transport.AbstractMessage;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;

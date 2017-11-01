@@ -1,8 +1,10 @@
-package server;
+package server.transport;
 
 
 import game.logics.ChipsPositions;
 import game.logics.Game;
+import game.logics.Player;
+import server.transport.AbstractMessage;
 
 import java.util.ArrayList;
 
@@ -20,8 +22,8 @@ public class GameState extends AbstractMessage {
 
     //TODO (Michael) Оформить как транспортный объект.
 
-    @Override
-    public void getValues(Game game){
+
+    public void setValues(Game game){
         ChipsPositions positions = game.getTable().getGameState();
         whitePositions = positions.getWhitePos();
         blackPositions = positions.getBlackPos();
@@ -29,7 +31,7 @@ public class GameState extends AbstractMessage {
 
     }
     @Override
-    public AbstractMessage apply(MySession mySession) {
+    public AbstractMessage apply(Player player) {
         return null;
     }
 
