@@ -1,6 +1,5 @@
 package server.transport;
 
-import game.logics.Game;
 import game.logics.GameErrors;
 import game.logics.Player;
 
@@ -17,7 +16,7 @@ public class Error extends AbstractMessage {
     }
 
 
-    public void setError(GameErrors error){
+    public void setError(GameErrors error) {
         cod = error.getCod();
         message = error.getMessage();
     }

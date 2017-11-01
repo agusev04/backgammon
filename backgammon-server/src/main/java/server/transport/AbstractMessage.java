@@ -1,7 +1,5 @@
 package server.transport;
 
-import game.logics.Game;
-import game.logics.GameErrors;
 import game.logics.Player;
 
 public abstract class AbstractMessage { //От этого класса наследуются передаваемые объекты

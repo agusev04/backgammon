@@ -1,6 +1,5 @@
 package server.transport;
 
-import game.logics.Game;
 import game.logics.GameErrors;
 import game.logics.Player;
 
@@ -22,7 +21,7 @@ public class Enter extends AbstractMessage {
             gameState.setTurn("");
             gameState.setTableName(player.getGame().getPlayers()[0].getName() + "s backgammon table created");
             message = gameState;
-        }catch (GameErrors gameErrors){
+        } catch (GameErrors gameErrors) {
             Error error = new Error();
             error.setError(gameErrors);
             message = error;

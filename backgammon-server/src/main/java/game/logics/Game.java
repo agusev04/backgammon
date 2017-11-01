@@ -1,6 +1,6 @@
 package game.logics;
 
-import game.gameobjects.*;
+import game.gameobjects.GameTable;
 
 import java.util.Random;
 
@@ -37,11 +37,11 @@ public class Game {
     //TODO (Michael) Оппонет должен запрашиваться отсюда
 
 
-    public  void setPlayer1(Player player1){
+    public void setPlayer1(Player player1) {
         this.player1 = player1;
     }
 
-    public  void setPlayer2(Player player2){
+    public void setPlayer2(Player player2) {
         this.player2 = player2;
     }
 
@@ -51,18 +51,18 @@ public class Game {
 
     public int throwDice(Player player) throws GameErrors {
         int resalt = 0;
-        if(playerThrow == player) {
+        if (playerThrow == player) {
 
             Random random = new Random();
             resalt = 10 * (random.nextInt(5) + 1) + random.nextInt(5) + 1;
-        }else{
+        } else {
             throw UNABLE_THROW_DICES;
         }
         return resalt;
     }
 
-    public void setPlayer(Player player){
-         //TODO Миша, по сути здесь определяется кто белый, кто черный 0 - белый, 1 - черный (с)Саша
+    public void setPlayer(Player player) {
+        //TODO Миша, по сути здесь определяется кто белый, кто черный 0 - белый, 1 - черный (с)Саша
         players[numberOfPlayer] = player;
         numberOfPlayer++;
     }

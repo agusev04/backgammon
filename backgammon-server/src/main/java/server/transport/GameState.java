@@ -4,7 +4,6 @@ package server.transport;
 import game.logics.ChipsPositions;
 import game.logics.Game;
 import game.logics.Player;
-import server.transport.AbstractMessage;
 
 import java.util.ArrayList;
 
@@ -16,30 +15,25 @@ public class GameState extends AbstractMessage {
     char color;
 
 
-
     String tableName;
     String turn;
 
     //TODO (Michael) Оформить как транспортный объект.
 
 
-    public void setValues(Game game){
+    public void setValues(Game game) {
         ChipsPositions positions = game.getTable().getGameState();
         whitePositions = positions.getWhitePos();
         blackPositions = positions.getBlackPos();
         cubeValue = 0;
-
     }
+
     @Override
     public AbstractMessage apply(Player player) {
         return null;
     }
 
-    public void setColor(char color){
-        this.color = color;
-    }
-
-    public void setTurn(String turn){
+    public void setTurn(String turn) {
         this.turn = turn;
     }
 
@@ -49,6 +43,10 @@ public class GameState extends AbstractMessage {
 
     public char getColor() {
         return color;
+    }
+
+    public void setColor(char color) {
+        this.color = color;
     }
 }
 

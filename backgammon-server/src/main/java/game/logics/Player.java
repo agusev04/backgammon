@@ -18,7 +18,7 @@ public class Player {  //класс игрока
 
     }
 
-    public Player(){
+    public Player() {
 
     }
 
@@ -28,16 +28,12 @@ public class Player {  //класс игрока
         this.number = number;
     }
 
-    public void setColor(char color) {
-        this.color = color;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) throws GameErrors {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Game getGame() {
@@ -49,7 +45,7 @@ public class Player {  //класс игрока
     }
 
     @Deprecated
-    public void changeParam(String name, char color){
+    public void changeParam(String name, char color) {
         this.name = name;
         this.color = color;
     }
@@ -72,5 +68,9 @@ public class Player {  //класс игрока
 
     public char getColor() {
         return color;
+    }
+
+    public void setColor(char color) {
+        this.color = color;
     }
 }

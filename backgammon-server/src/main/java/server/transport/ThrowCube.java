@@ -1,15 +1,7 @@
 package server.transport;
 
-import game.logics.Game;
 import game.logics.GameErrors;
 import game.logics.Player;
-import server.transport.AbstractMessage;
-import server.transport.CubeValue;
-
-import javax.websocket.EncodeException;
-import java.io.IOException;
-
-import static game.logics.GameErrors.UNABLE_THROW_DICES;
 
 public class ThrowCube extends AbstractMessage {
 

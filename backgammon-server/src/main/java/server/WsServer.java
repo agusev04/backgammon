@@ -15,27 +15,27 @@ import javax.websocket.server.ServerEndpoint;
 public class WsServer {
     private static final RequestHandler REQUEST_HANDLER = new RequestHandler();
 
-    public WsServer(){
+    public WsServer() {
         System.out.println("wsServer sreated");
     }
 
     @OnOpen
-    public void onOpen(Session session){
+    public void onOpen(Session session) {
         System.out.println("Open Connection ..." + session.getId());
     }
 
     @OnClose
-    public void onClose(Session session){
+    public void onClose(Session session) {
         System.out.println("Close Connection ...");
     }
 
     @OnMessage
-    public AbstractMessage onMessage(AbstractMessage pack, Session session){
+    public AbstractMessage onMessage(AbstractMessage pack, Session session) {
         return REQUEST_HANDLER.request(pack, session);
     }
 
     @OnError
-    public void onError(Throwable e){
+    public void onError(Throwable e) {
         e.printStackTrace();
     }
 }

@@ -15,7 +15,7 @@ public class GameTable {
         System.out.println("creates GAMETABLE");
         cells = new Cell[26];
 
-        for(int i = 0; i < 26; i++){
+        for (int i = 0; i < 26; i++) {
             cells[i] = new Cell();
         }
 
@@ -28,7 +28,8 @@ public class GameTable {
         cells[19].setCell(Cell.WHITE, 5);
         cells[24].setCell(Cell.BLACK, 2);
     }
-    public ChipsPositions getGameState(){
+
+    public ChipsPositions getGameState() {
         return new ChipsPositions(cells);
     }
 }
