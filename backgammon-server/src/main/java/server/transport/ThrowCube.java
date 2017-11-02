@@ -1,10 +1,13 @@
 package server.transport;
 
-import game.logics.GameErrors;
+import game.logics.GameError;
 import game.logics.Player;
 
+/**
+ * Класс {@link ThrowCube} имплементирует {@link AbstractMessage}, реализует запрос от клиента
+ * на осуществление броска кубика
+ */
 public class ThrowCube extends AbstractMessage {
-
 
     @Override
     public AbstractMessage apply(Player player) {
@@ -13,10 +16,8 @@ public class ThrowCube extends AbstractMessage {
             CubeValue cubeValue = new CubeValue();
             cubeValue.setCubeValues(player);
             cubeMessage = cubeValue;
-        } catch (GameErrors gameErrors) {
-            Error error = new Error();
-            error.setError(gameErrors);
-            cubeMessage = error;
+        } catch (GameError gameErrors) {
+            cubeMessage = new ErrorMessage(gameErrors);
         }
 
         return cubeMessage;

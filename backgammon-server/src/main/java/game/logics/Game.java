@@ -1,17 +1,18 @@
 package game.logics;
 
 import game.gameobjects.GameTable;
+import server.transport.GameStart;
 
 import java.util.Random;
 
-import static game.logics.GameErrors.UNABLE_THROW_DICES;
+import static game.logics.GameError.UNABLE_THROW_DICES;
 
 public class Game {
     GameTable table = new GameTable();
 
     //Alexandr начал
     Player players[] = new Player[2];
-    int numberOfPlayer = 0;
+    int numberOfPlayers = 0;
 
     Player playerThrow = null; //Миша, я могу кидать тебе игрока который постучался на сервер, а ты будешь сравнивать
     Player playerMove = null;
@@ -49,7 +50,7 @@ public class Game {
         return table;
     }
 
-    public int throwDice(Player player) throws GameErrors {
+    public int throwDice(Player player) throws GameError {
         int resalt = 0;
         if (playerThrow == player) {
 
@@ -61,26 +62,34 @@ public class Game {
         return resalt;
     }
 
-    public void setPlayer(Player player) {
+    public void addPlayer(Player player) {
         //TODO Миша, по сути здесь определяется кто белый, кто черный 0 - белый, 1 - черный (с)Саша
         char color;
-        if(numberOfPlayer==0){
+
+        if (numberOfPlayers == 0) {
             color = 'w';
-        }else{
+        } else {
             color = 'b';
         }
         player.setColor(color);
-        players[numberOfPlayer] = player;
-        numberOfPlayer++;
+        players[numberOfPlayers] = player;
+        numberOfPlayers++;
+
     }
 
-    public int getNumberOfPlayer() {
-        return numberOfPlayer;
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 
     public Player[] getPlayers() {
         return players;
     }
 
+    public void sendGameStart() {
+        GameStart gameStart = new GameStart(players[1].getName());
+        players[0].sendMessage(gameStart);
+        gameStart = new GameStart(players[0].getName());
+        players[1].sendMessage(gameStart);
+    }
 
 }

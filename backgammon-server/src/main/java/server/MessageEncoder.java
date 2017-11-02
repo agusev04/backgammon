@@ -7,6 +7,9 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
+/**
+ * Класс {@link MessageDecoder} реализует парсинг наследников {@link AbstractMessage} в JSON стоки
+ */
 public class MessageEncoder implements Encoder.Text<AbstractMessage> {
 
     @Override

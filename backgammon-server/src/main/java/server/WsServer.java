@@ -1,6 +1,5 @@
 package server;
 
-
 import server.transport.AbstractMessage;
 
 import javax.websocket.*;
@@ -16,17 +15,17 @@ public class WsServer {
     private static final RequestHandler REQUEST_HANDLER = new RequestHandler();
 
     public WsServer() {
-        System.out.println("wsServer sreated");
+
     }
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("Open Connection ..." + session.getId());
+        System.out.println("WsServer: Open Connection " + session.getId());
     }
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("Close Connection ...");
+        System.out.println("WsServer: Close Connection");
     }
 
     @OnMessage
@@ -36,6 +35,5 @@ public class WsServer {
 
     @OnError
     public void onError(Throwable e) {
-        e.printStackTrace();
     }
 }

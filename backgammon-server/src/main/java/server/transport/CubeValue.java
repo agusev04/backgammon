@@ -1,8 +1,12 @@
 package server.transport;
 
-import game.logics.GameErrors;
+import game.logics.GameError;
 import game.logics.Player;
 
+/**
+ * Класс {@link CubeValue} имплементирует {@link AbstractMessage}, содержит информацию о
+ * значениях кубиков для передачи клиентам
+ */
 public class CubeValue extends AbstractMessage {
     int cubeValues;
 
@@ -11,7 +15,7 @@ public class CubeValue extends AbstractMessage {
         return null;
     }
 
-    public void setCubeValues(Player player) throws GameErrors {
+    public void setCubeValues(Player player) throws GameError {
         this.cubeValues = player.getGame().throwDice(player);
     }
 }

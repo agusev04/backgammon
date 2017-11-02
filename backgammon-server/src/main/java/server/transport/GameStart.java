@@ -2,16 +2,19 @@ package server.transport;
 
 import game.logics.Player;
 
+/**
+ * Класс {@link GameStart} имплементирует {@link AbstractMessage}, содержит информации о начале игры
+ * клиенту, а также имя противника
+ */
 public class GameStart extends AbstractMessage {
-    protected String enemyUserName;
+    String enemyUserName;
 
     @Override
     public AbstractMessage apply(Player player) {
         return null;
     }
 
-
-    public void setEnemyUserName(String enemyUserName) {
+    public GameStart(String enemyUserName) {
         this.enemyUserName = enemyUserName;
     }
 

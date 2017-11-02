@@ -1,7 +1,11 @@
 package game.logics;
 
 
+import server.transport.AbstractMessage;
+
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
+import java.io.IOException;
 
 public class Player {  //класс игрока
     String name;
@@ -32,7 +36,7 @@ public class Player {  //класс игрока
         return name;
     }
 
-    public void setName(String name) throws GameErrors {
+    public void setName(String name) throws GameError {
         this.name = name;
     }
 
@@ -72,5 +76,13 @@ public class Player {  //класс игрока
 
     public void setColor(char color) {
         this.color = color;
+    }
+
+    public void sendMessage(AbstractMessage abstractMessage) {
+        try {
+            session.getBasicRemote().sendObject(abstractMessage);
+        } catch (IOException | EncodeException e) {
+            e.printStackTrace();
+        }
     }
 }

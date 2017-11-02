@@ -1,8 +1,8 @@
 package game.logics;
 
-public class GameErrors extends Throwable {
-    public static final GameErrors UNABLE_THROW_DICES
-            = new GameErrors(2, "you can not throw dices"); //(c) Alexandr
+public class GameError extends Throwable {
+    public static final GameError UNABLE_THROW_DICES
+            = new GameError(2, "you can not throw dices"); //(c) Alexandr
     //TODO (Michael) подумать, как лучше назвать этот класс
 
     //TODO (Michael) здесь должны быть все ошибки
@@ -11,9 +11,9 @@ public class GameErrors extends Throwable {
     int cod;
     String message;
 
-    GameErrors(int cod, String message) {
-        cod = cod;
-        message = message;
+    public GameError(int cod, String message) {
+        this.cod = cod;
+        this.message = message;
     }
 
     public int getCod() {
