@@ -53,9 +53,8 @@ public class Game {
     public int throwDice(Player player) throws GameError {
         int resalt = 0;
         if (playerThrow == player) {
-
             Random random = new Random();
-            resalt = 10 * (random.nextInt(5) + 1) + random.nextInt(5) + 1;
+            resalt = 10 * (random.nextInt(6) + 1) + random.nextInt(6) + 1;
         } else {
             throw UNABLE_THROW_DICES;
         }
@@ -92,4 +91,12 @@ public class Game {
         players[1].sendMessage(gameStart);
     }
 
+
+//    public boolean getTurn() {
+//        boolean turn;
+//        if() {
+//            turn = false;
+//        } else turn = true;
+//        return turn;
+//    }
 }

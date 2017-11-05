@@ -5,6 +5,9 @@ import game.logics.ChipsPositions;
 public class GameTable {
     //TODO (Michael) подумать, как лучше назвать этот класс
 
+    public static final int WHITE_OUT = 0;
+    public static final int BLACK_OUT = 25;
+
     public Cell[] cells;
 
     public GameTable() {  // 0 и 25 ячейки технологические, в них будут храниться фишки которые вышли с поля.

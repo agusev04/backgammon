@@ -31,7 +31,7 @@ public class MessageFactory {
             case "FinalMessage":
                 break;
             default:
-                abstractMessage = new ErrorMessage(new GameError(6, "WTF!!!")); //TODO добавить
+                abstractMessage = new ErrorMessage(GameError.UNKNOWN_REQUEST); //TODO добавить
                 break;
         }
         return abstractMessage;

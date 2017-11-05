@@ -8,7 +8,7 @@ import game.logics.Player;
  * содержит информацию об ошибке, котораю отправится клиенту
  */
 public class ErrorMessage extends AbstractMessage {
-    int cod;
+    int code;
     String message;
 
     //TODO (Michael) Оформить как транспортный объект.
@@ -20,7 +20,7 @@ public class ErrorMessage extends AbstractMessage {
     }
 
     public ErrorMessage(GameError error){
-        cod = error.getCod();
+        code = error.getCode();
         message = error.getMessage();
     }
 

@@ -1,9 +1,12 @@
 package server;
 
+import game.logics.GameError;
 import server.transport.AbstractMessage;
+import server.transport.ErrorMessage;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 
 /**
  * Oleg O. Plotnikov
@@ -11,7 +14,7 @@ import javax.websocket.server.ServerEndpoint;
  * Copyright 2017 Connective Games LLC. All rights reserved.
  */
 @ServerEndpoint(value = "/ws", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
-public class WsServer {
+public class WsServer  {
     private static final RequestHandler REQUEST_HANDLER = new RequestHandler();
 
     public WsServer() {
@@ -34,6 +37,15 @@ public class WsServer {
     }
 
     @OnError
-    public void onError(Throwable e) {
+    public void onError(Throwable e, Session session)  {
+        System.out.println("WsServer: .......");
+        e.printStackTrace();
+        ErrorMessage errorMessage = new ErrorMessage(GameError.UNKNOWN_REQUEST);
+
+        try {
+            session.getBasicRemote().sendObject(errorMessage);
+        } catch (EncodeException | IOException e1) {
+            e1.printStackTrace();
+        }
     }
 }

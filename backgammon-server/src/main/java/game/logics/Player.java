@@ -7,6 +7,8 @@ import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
 
+import static game.logics.GameError.INCORRECT_REQUEST;
+
 public class Player {  //класс игрока
     String name;
     char color; // 'w' or 'b'
@@ -38,6 +40,9 @@ public class Player {  //класс игрока
 
     public void setName(String name) throws GameError {
         this.name = name;
+        if (this.name.equals(null) || this.name.equals("")) {
+            throw new GameError(INCORRECT_REQUEST.getCode(), INCORRECT_REQUEST.getMessage());
+        }
     }
 
     public Game getGame() {
@@ -46,6 +51,7 @@ public class Player {  //класс игрока
 
     public void setGame(Game game) {
         this.game = game;
+
     }
 
     @Deprecated

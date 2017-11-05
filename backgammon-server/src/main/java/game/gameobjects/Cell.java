@@ -14,9 +14,9 @@ public class Cell {
         count = 0;
     }
 
-    Cell(char cl, int cn) {
-        color = cl;
-        count = cn;
+    Cell(char color, int count) {
+        this.color = color;
+        this.count = count;
     }
 
     public char getColor() {
@@ -35,12 +35,12 @@ public class Cell {
         this.count = count;
     }
 
-    @Deprecated
-    public void setCell(char cl, int cn) { //TODO (Michael) сокращенные названия параметров затрудняют работу
+
+    public void setCell(char color, int count) { //TODO (Michael) сокращенные названия параметров затрудняют работу
         //TODO (Michael) Некорретный метод, она позволяет ячейке менять цвет и проставлять любое число в поле, а это
         // правилами запрещено. Такое мы делаем только при создании стола, значит лучще эти действия производить в конструкторе.
         //А функциями делать то, что можно - прибавлять к числу фишек 1. Сбрасывать в 0 (при съедении фишки противника).
-        color = cl;
-        count = cn;
+        this.color = color;
+        this.count = count;
     }
 }
