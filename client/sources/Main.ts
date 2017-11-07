@@ -1,5 +1,6 @@
 import Application = PIXI.Application;
 import {Game} from "./Game";
+import {Board} from "./Board";
 
 let application:Application = new Application({backgroundColor: 0x000000 });
 document.body.appendChild(application.view);
@@ -17,6 +18,8 @@ function eventListenerResize():void
     application.stage.scale.y = scale;
 
     application.render();
+
+
 }
 
 eventListenerResize();

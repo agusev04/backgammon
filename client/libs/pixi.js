@@ -9951,7 +9951,7 @@ var DisplayObject = function (_EventEmitter) {
             throw new Error('setParent: Argument must be a Container');
         }
 
-        container.addChild(this);
+        container.addChild({bg_skin: this});
 
         return container;
     };
