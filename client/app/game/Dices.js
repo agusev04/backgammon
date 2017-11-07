@@ -1,4 +1,4 @@
-///<reference path="../dts/pixi.js.d.ts"/>
+///<reference path="../../dts/pixi.js.d.ts"/>
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./components/Button"], function (require, exports, Button_1) {
+define(["require", "exports", "../components/Button"], function (require, exports, Button_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Container = PIXI.Container;
