@@ -8,14 +8,18 @@ import game.logics.Player;
  * значениях кубиков для передачи клиентам
  */
 public class CubeValue extends AbstractMessage {
-    int cubeValues;
+    protected int cubeValues;
+
+    public CubeValue(Player player) throws GameError {
+        this.cubeValues = player.getGame().throwDice(player);
+    }
 
     @Override
     public AbstractMessage apply(Player player) {
         return null;
     }
 
-    public void setCubeValues(Player player) throws GameError {
-        this.cubeValues = player.getGame().throwDice(player);
+    public int getCubeValues() {
+        return cubeValues;
     }
 }

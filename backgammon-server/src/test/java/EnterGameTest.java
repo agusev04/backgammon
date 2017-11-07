@@ -12,13 +12,13 @@ public class EnterGameTest extends AbstractTest {
 
         assertEquals(1, getPlayers().size());
         assertNotNull(getPlayers().get(0));
-        assertEquals('w', gameState.getColor());
+        assertEquals('W', gameState.getColor());
 
         /*second player enters*/
         GameState gameState2 = enter("1", "user 2");
         assertEquals(2, getPlayers().size());
         assertNotNull(getPlayers().get(1));
-        assertEquals('b', gameState2.getColor());
+        assertEquals('B', gameState2.getColor());
 
 
     }

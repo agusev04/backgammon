@@ -4,6 +4,7 @@ import support.AbstractTest;
 import support.TestGameStartSingleton;
 
 public class GameStartTest extends AbstractTest {
+
     public void testEnter() throws Exception {
         assertTrue(getPlayers().isEmpty());
 

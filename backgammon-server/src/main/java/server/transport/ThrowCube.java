@@ -11,16 +11,19 @@ public class ThrowCube extends AbstractMessage {
 
     @Override
     public AbstractMessage apply(Player player) {
-        AbstractMessage cubeMessage = null;
+        AbstractMessage message = null;
         try {
-            CubeValue cubeValue = new CubeValue();
-            cubeValue.setCubeValues(player);
-            cubeMessage = cubeValue;
+            CubeValue cubeValues = new CubeValue(player);
+            message = cubeValues;
+            player.getGame().sendObject(message);
+            message = new PossiblePositions(player, cubeValues.getCubeValues());
+
         } catch (GameError gameErrors) {
-            cubeMessage = new ErrorMessage(gameErrors);
+            message = new ErrorMessage(gameErrors);
         }
 
-        return cubeMessage;
+
+        return message;
     }
 
 }

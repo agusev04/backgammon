@@ -7,6 +7,8 @@ public class GameTable {
 
     public static final int WHITE_OUT = 0;
     public static final int BLACK_OUT = 25;
+    public static final int WHITE_HOME = 19;
+    public static final int BLAKE_HOME = 6;
 
     public Cell[] cells;
 
@@ -33,5 +35,9 @@ public class GameTable {
 
     public ChipsPositions getGameState() {
         return new ChipsPositions(cells);
+    }
+
+    public Cell[] getCells() {
+        return cells;
     }
 }
