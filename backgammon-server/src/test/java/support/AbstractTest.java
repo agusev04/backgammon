@@ -2,10 +2,7 @@ package support;
 
 import game.logics.Player;
 import junit.framework.TestCase;
-import server.transport.Enter;
-import server.transport.GameStart;
-import server.transport.GameState;
-import server.transport.PossiblePositions;
+import server.transport.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 

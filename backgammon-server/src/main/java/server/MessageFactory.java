@@ -2,10 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import game.logics.GameError;
-import server.transport.AbstractMessage;
-import server.transport.Enter;
-import server.transport.ErrorMessage;
-import server.transport.ThrowCube;
+import server.transport.*;
 
 /**
  * Класс {@link MessageFactory} реализует паттер фабричный метод для генерации
@@ -24,7 +21,8 @@ public class MessageFactory {
                 break;
             case "ErrorMessage":
                 break;
-            case "SuccessMessage":
+            case "TestThrowCube":
+                abstractMessage = gson.fromJson(jsonObject, TestThrowCube.class);
                 break;
             case "MoveMessage":
                 break;

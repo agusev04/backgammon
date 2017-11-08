@@ -14,6 +14,10 @@ public class CubeValue extends AbstractMessage {
         this.cubeValues = player.getGame().throwDice(player);
     }
 
+    public CubeValue(int cubeValues){
+        this.cubeValues = cubeValues;
+    }
+
     @Override
     public AbstractMessage apply(Player player) {
         return null;

@@ -51,22 +51,20 @@ class TestBasicRemote implements RemoteEndpoint.Basic {
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
         TestGameStartSingleton testGameStartSingleton = TestGameStartSingleton.getInstance();
-        testGameStartSingleton.setStarts((GameStart)data);
-
-    }
-
-
-
-
-
-    @Override
-    public void setBatchingAllowed(boolean batchingAllowed) throws IOException {
+        if (GameStart.class.isInstance(data)) {
+            testGameStartSingleton.setStarts((GameStart) data);
+        }
 
     }
 
     @Override
     public boolean getBatchingAllowed() {
         return false;
+    }
+
+    @Override
+    public void setBatchingAllowed(boolean batchingAllowed) throws IOException {
+
     }
 
     @Override

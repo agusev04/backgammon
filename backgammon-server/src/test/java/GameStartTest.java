@@ -5,7 +5,7 @@ import support.TestGameStartSingleton;
 
 public class GameStartTest extends AbstractTest {
 
-    public void testEnter() throws Exception {
+    public void testGameStart() throws Exception {
         assertTrue(getPlayers().isEmpty());
 
         /*first player enters*/
@@ -17,7 +17,7 @@ public class GameStartTest extends AbstractTest {
 
 
         TestGameStartSingleton testGameStartSingleton = TestGameStartSingleton.getInstance();
-        GameStart[]starts = testGameStartSingleton.getStarts();
+        GameStart[] starts = testGameStartSingleton.getStarts();
 
         assertNotNull(starts);
 
