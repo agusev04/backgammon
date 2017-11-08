@@ -29,7 +29,7 @@ var Board = (function (_super) {
         this.bg = Sprite.fromImage('assets/board.png');
         this.bg.width = Game_1.Game.WIDTH;
         this.bg.height = Game_1.Game.HEIGHT;
-        TweenLite.set(this.bg, { alpha: 1, x: Game_1.Game.WIDTH });
+        TweenLite.set(this.bg, { alpha: 0, x: Game_1.Game.WIDTH * 2 });
         this.addChild(this.bg);
     };
     Board.prototype.show = function () {

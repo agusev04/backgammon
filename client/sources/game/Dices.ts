@@ -9,64 +9,63 @@ declare let TweenLite: any;
 
 export class Dices extends Container
 {
-    private _val_1:number;
-    private _val_2:number;
+    private _val1:number;
+    private _val2:number;
+    private _dice1: Sprite;
+    private _dice2: Sprite;
+    private _animation: any;
     constructor()
     {
         super();
+        this._dice1 = new Sprite();
+        this._dice2 = new Sprite();
         this.configure();
     }
 
     protected configure()
     {
-        let roll = new Button('DiceRoll', 'test', 2000);
-        this.addChild(roll);
-        roll.position.set(0, 70);
-        let animation: any  = [];
+        this._animation = [];
         for (let i=0; i < 30;i++)
         {
-            animation.push(new PIXI.Rectangle(100 * i,0,100,100));
+            this._animation.push(new PIXI.Rectangle(100 * i,0,100,100));
         }
-        let Dice_1 = new Sprite();
-        let Dice_2 = new Sprite();
         let base:BaseTexture = BaseTexture.fromImage('assets/dice.png');
-        Dice_1.visible = false;
-        Dice_2.visible = false;
-        Dice_1.texture = new Texture(base);
-        Dice_2.texture = new Texture(base);
+        this._dice1.visible = false;
+        this._dice2.visible = false;
+        this._dice1.texture = new Texture(base);
+        this._dice2.texture = new Texture(base);
 
-        Dice_1.anchor.set(0.5);
-        Dice_2.anchor.set(0.5);
-        Dice_1.position.set(- 50, 0);
-        Dice_2.position.set(50, 0);
-        this.addChild(Dice_1);
-        this.addChild(Dice_2);
-        // this.animate(Dice_1, animation);
-        // this.animate(Dice_2, animation);
-        roll.on('DiceRoll', this.animate.bind(this, Dice_1, animation, this._val_1));
-        roll.on('DiceRoll', this.animate.bind(this, Dice_2, animation, this._val_2));
+        this._dice1.anchor.set(0.5);
+        this._dice2.anchor.set(0.5);
+        this._dice1.position.set(- 50, 0);
+        this._dice2.position.set(50, 0);
+        this.addChild(this._dice1);
+        this.addChild(this._dice2);
     }
 
-    protected animate(sprite: Sprite, animation: any, value:number)
+    protected animate(val1:number, val2:number)
     {
-        sprite.visible = true;
+        this._dice1.visible = true;
+        this._dice2.visible = true;
         for (let i=0; i < 24;i++)
         {
             setTimeout(function () {
-                sprite.texture.frame = animation[i];
+                this._dice1.texture.frame = this._animation[i];
+                this._dice2.texture.frame = this._animation[i];
             }.bind(this), i * 80);
         }
-        let side = Math.floor(Math.random() * (6)) + 24;
         setTimeout(function () {
-            sprite.texture.frame = animation[side];
-        }, 1920)
+            this._dice1.texture.frame = this._animation[23 + val1];
+            this._dice2.texture.frame = this._animation[23 + val2];
+        }.bind(this), 1920)
     }
 
-    // public setValue(val_1:number, val_2:number)
-    // {
-    //     this._val_1 = val_1;
-    //     this._val_2 = val_2;
-    // }
+    public throw(val1:number, val2:number)
+    {
+        this._val1 = val1;
+        this._val2 = val2;
+        this.animate(this._val1, this._val2);
+    }
 
     // TODO С анимацией и без. Вернуть какой-то результат, что кубики выброшены.
     // TODO Сделать msgBox еще один.

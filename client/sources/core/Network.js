@@ -31,19 +31,29 @@ var Network = (function (_super) {
         }
     };
     Network.prototype.enter = function () {
-        // получил ГС
+        // Посылаем Enter, на него приходит ГС.
         this.emit(Network.EVENT_DATA, {
-            name: 'GameState'
+            CLASS_NAME: "GameState",
+            whitePositions: [103, 305, 2404, 2103],
+            blackPositions: [403, 905, 1803, 1604],
+            cubeValues: 0,
+            color: 0,
+            turn: "Jp",
+            tableName: "Bill's table"
         });
         setTimeout(function () {
             this.emit(Network.EVENT_DATA, {
-                name: 'MakeMove'
+                CLASS_NAME: 'GameStart',
+                enemyUserName: 'Ivan'
             });
-        }.bind(this), 5000);
+        }.bind(this), 8000);
     };
     Network.prototype.open = function () {
         // подключение
-        this.emit(Network.EVENT_CONNECTED);
+        setTimeout(function () {
+            console.log('Connection succeed.');
+            this.emit(Network.EVENT_CONNECTED);
+        }.bind(this), 1000);
     };
     Network.prototype.close = function () {
     };

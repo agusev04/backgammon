@@ -25,7 +25,7 @@ export class Board extends Container
         this.bg = Sprite.fromImage('assets/board.png');
         this.bg.width = Game.WIDTH;
         this.bg.height = Game.HEIGHT;
-        TweenLite.set(this.bg, {alpha :1, x: Game.WIDTH });
+        TweenLite.set(this.bg, {alpha :0, x: Game.WIDTH*2 });
         this.addChild(this.bg);
     }
 

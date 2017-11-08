@@ -39,26 +39,30 @@ var Game = (function (_super) {
         this.set_logo();
         // Menu screen >>---------------------------------------------------<<<<
         setTimeout(this.set_menu.bind(this), 3000);
-        this._startBtn = new Button_1.Button('GameStart', 'test', 1000);
+        this._startBtn = new Button_1.Button('GameStart', 'test', 5000);
         this._board = new Board_1.Board();
         this._msgBox = new MessageBox_1.MessageBox();
         this._dices = new Dices_1.Dices();
         this._network = new Network_1.Network();
         this._network.on(Network_1.Network.EVENT_CONNECTED, this.eventConnected, this);
         this._network.on(Network_1.Network.EVENT_DATA, this.eventData, this);
-        this._network.open();
         this.addChild(this._board);
+        this.addChild(this._msgBox);
     };
     Game.prototype.eventConnected = function () {
+        console.log('Sending enter request...');
         this._network.enter();
     };
     Game.prototype.eventData = function (data) {
-        switch (data.name) {
+        switch (data.CLASS_NAME) {
             case 'GameState':
+                console.log('GameState reached from server. Waiting for opponent...');
                 this._board.drawState(data);
+                this.LoadGame();
                 break;
-            case 'MakeMove':
-                this._board.moveChips(data);
+            case 'GameStart':
+                console.log('Your opponent is: ' + data.enemyUserName);
+                this.GameStart();
                 break;
         }
     };
@@ -78,22 +82,26 @@ var Game = (function (_super) {
         TweenLite.fromTo(logo, 3, { alpha: 1 }, { alpha: 0 });
     };
     Game.prototype.set_menu = function () {
-        this._startBtn.on('GameStart', this.GameStart.bind(this, this._startBtn));
+        this._startBtn.on('GameStart', this.openConnection, this);
         this._startBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
         this.addChild(this._startBtn);
     };
+    Game.prototype.openConnection = function () {
+        console.log('Connecting to server...');
+        this._network.open();
+    };
     // Events >>------------------------------------------------------------<<<<
-    Game.prototype.GameStart = function (startBtn) {
-        console.log(this, 'TestLog');
-        this.removeChild(startBtn);
+    Game.prototype.LoadGame = function () {
+        this.removeChild(this._startBtn);
         this._board.show();
         var redStyle = new TextStyle({ fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center' });
+        this.addChild(this._msgBox);
         setTimeout(this._msgBox.show.bind(this._msgBox, 'Hello', 2000, redStyle), 1000);
         setTimeout(this._msgBox.show.bind(this._msgBox, 'Roll a dice !', 2000, redStyle), 4000);
         this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
-        setTimeout(function () {
-            this.addChild(this._dices);
-        }.bind(this), 7000);
+    };
+    Game.prototype.GameStart = function () {
+        this.addChild(this._dices);
     };
     // Params >>------------------------------------------------------------<<<<
     Game.WIDTH = 1024;

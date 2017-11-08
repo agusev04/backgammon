@@ -36,6 +36,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             // Menu screen >>---------------------------------------------------<<<<
             setTimeout(this.set_menu.bind(this), 3000);
             this._startBtn = new Button_1.Button('GameStart', 'test', 5000);
+            this._throwBtn = new Button_1.Button('DiceRoll', 'test', 2000);
             this._board = new Board_1.Board();
             this._msgBox = new MessageBox_1.MessageBox();
             this._dices = new Dices_1.Dices();
@@ -54,11 +55,17 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 case 'GameState':
                     console.log('GameState reached from server. Waiting for opponent...');
                     this._board.drawState(data);
-                    this.LoadGame();
+                    this.loadGame();
                     break;
                 case 'GameStart':
                     console.log('Your opponent is: ' + data.enemyUserName);
-                    this.GameStart();
+                    this.gameStart();
+                    break;
+                case 'CubeValue':
+                    var first = (data.cubeValues - data.cubeValues % 10) / 10;
+                    var second = data.cubeValues % 10;
+                    console.log('Values from server: ' + first + ', ' + second);
+                    this.throwCubes(first, second);
                     break;
             }
         };
@@ -82,22 +89,35 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this._startBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
             this.addChild(this._startBtn);
         };
+        Game.prototype.set_cube = function () {
+            this._throwBtn.on('DiceRoll', this.requestCubes, this);
+            this._throwBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
+            this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2 - 150);
+            this.addChild(this._throwBtn);
+            this.addChild(this._dices);
+        };
         Game.prototype.openConnection = function () {
             console.log('Connecting to server...');
             this._network.open();
         };
+        Game.prototype.requestCubes = function () {
+            console.log('Requesting values from server...');
+            this._network.throwDices();
+        };
         // Events >>------------------------------------------------------------<<<<
-        Game.prototype.LoadGame = function () {
+        Game.prototype.loadGame = function () {
             this.removeChild(this._startBtn);
             this._board.show();
             var redStyle = new TextStyle({ fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center' });
             this.addChild(this._msgBox);
             setTimeout(this._msgBox.show.bind(this._msgBox, 'Hello', 2000, redStyle), 1000);
             setTimeout(this._msgBox.show.bind(this._msgBox, 'Roll a dice !', 2000, redStyle), 4000);
-            this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
         };
-        Game.prototype.GameStart = function () {
-            this.addChild(this._dices);
+        Game.prototype.gameStart = function () {
+            this.set_cube();
+        };
+        Game.prototype.throwCubes = function (first, second) {
+            this._dices.throw(first, second);
         };
         // Params >>------------------------------------------------------------<<<<
         Game.WIDTH = 1024;

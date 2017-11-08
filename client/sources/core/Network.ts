@@ -7,7 +7,8 @@ export class Network extends EventEmitter
     public static EVENT_CONNECTED:string = 'Connected';
     public static EVENT_DATA:string = 'Data';
 
-    constructor(){
+    constructor()
+    {
         super();
 
     }
@@ -31,12 +32,12 @@ export class Network extends EventEmitter
     {
         // Посылаем Enter, на него приходит ГС.
         this.emit(Network.EVENT_DATA, {
-            CLASS_NAME: "GameState",
+            CLASS_NAME: 'GameState',
             whitePositions: [ 103, 305, 2404, 2103 ],
             blackPositions:[ 403, 905, 1803, 1604 ],
             cubeValues: 0,
             color: 0,
-            turn: "Jp",
+            turn: 'Jp',
             tableName:"Bill's table"
         });
         setTimeout(function () {
@@ -50,13 +51,24 @@ export class Network extends EventEmitter
     public open():void
     {
         // подключение
-        console.log('Connection succeed');
-        this.emit(Network.EVENT_CONNECTED);
+        setTimeout(function () {
+            console.log('Connection succeed.');
+            this.emit(Network.EVENT_CONNECTED);
+        }.bind(this), 1000);
 
     }
 
-    public close()
+    public close():void
     {
 
+    }
+
+    public throwDices():void
+    {
+        // Запрос на бросок кубика.
+        this.emit(Network.EVENT_DATA, {
+            CLASS_NAME: 'CubeValue',
+            cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1
+        })
     }
 }

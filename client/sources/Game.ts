@@ -19,6 +19,7 @@ export class Game extends Container
     public static WIDTH:number = 1024;
     public static HEIGHT:number = 768;
     private _startBtn:Button;
+    private _throwBtn:Button;
     private _dices:Dices;
     private _msgBox:MessageBox;
     private _board:Board;
@@ -42,6 +43,7 @@ export class Game extends Container
         // Menu screen >>---------------------------------------------------<<<<
         setTimeout(this.set_menu.bind(this), 3000);
         this._startBtn = new Button('GameStart', 'test', 5000);
+        this._throwBtn = new Button('DiceRoll', 'test', 2000);
         this._board = new Board();
         this._msgBox = new MessageBox();
         this._dices = new Dices();
@@ -55,7 +57,7 @@ export class Game extends Container
 
     protected eventConnected():void
     {
-        console.log('Sending enter request...')
+        console.log('Sending enter request...');
         this._network.enter();
     }
 
@@ -66,11 +68,17 @@ export class Game extends Container
             case 'GameState':
                 console.log('GameState reached from server. Waiting for opponent...');
                 this._board.drawState(data);
-                this.LoadGame();
+                this.loadGame();
                 break;
             case 'GameStart':
                 console.log('Your opponent is: ' + data.enemyUserName);
-                this.GameStart();
+                this.gameStart();
+                break;
+            case 'CubeValue':
+                let first = (data.cubeValues - data.cubeValues % 10)/10;
+                let second = data.cubeValues % 10;
+                console.log('Values from server: ' + first + ', ' + second);
+                this.throwCubes(first, second);
                 break;
         }
     }
@@ -101,14 +109,29 @@ export class Game extends Container
         this.addChild(this._startBtn);
     }
 
+    protected set_cube()
+    {
+        this._throwBtn.on('DiceRoll', this.requestCubes, this);
+        this._throwBtn.position.set(Game.WIDTH/2, Game.HEIGHT/2);
+        this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2 - 150);
+        this.addChild(this._throwBtn);
+        this.addChild(this._dices);
+    }
+
     protected openConnection()
     {
         console.log('Connecting to server...');
         this._network.open();
     }
 
+    protected requestCubes()
+    {
+        console.log('Requesting values from server...');
+        this._network.throwDices();
+    }
+
     // Events >>------------------------------------------------------------<<<<
-    protected LoadGame()
+    protected loadGame()
     {
         this.removeChild(this._startBtn);
         this._board.show();
@@ -116,13 +139,16 @@ export class Game extends Container
         this.addChild(this._msgBox);
         setTimeout(this._msgBox.show.bind(this._msgBox, 'Hello', 2000, redStyle),1000);
         setTimeout(this._msgBox.show.bind(this._msgBox, 'Roll a dice !', 2000, redStyle),4000);
-
-        this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2);
     }
 
-    protected GameStart()
+    protected gameStart()
     {
-        this.addChild(this._dices);
+        this.set_cube();
+    }
+
+    protected throwCubes(first:number, second:number)
+    {
+        this._dices.throw(first, second);
     }
     // Private >>-----------------------------------------------------------<<<<
 }
