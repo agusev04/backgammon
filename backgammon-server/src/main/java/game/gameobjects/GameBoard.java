@@ -2,17 +2,18 @@ package game.gameobjects;
 
 import game.logics.ChipsPositions;
 
-public class GameTable {
-    //TODO (Michael) подумать, как лучше назвать этот класс
+
+
+public class GameBoard {
 
     public static final int WHITE_OUT = 0;
     public static final int BLACK_OUT = 25;
     public static final int WHITE_HOME = 19;
-    public static final int BLAKE_HOME = 6;
+    public static final int BLACK_HOME = 6;
 
     public Cell[] cells;
 
-    public GameTable() {
+    public GameBoard() {
         cells = new Cell[26];
 
         for (int i = WHITE_OUT; i <= BLACK_OUT; i++) {
@@ -27,6 +28,11 @@ public class GameTable {
         cells[17].setCell(Cell.WHITE, 3);
         cells[19].setCell(Cell.WHITE, 5);
         cells[24].setCell(Cell.BLACK, 2);
+    }
+
+    public void moveChip(int from, int to) {
+        cells[from].setCell(cells[from].getColor(), cells[from].getCount()-1);
+        cells[to].setCell(cells[from].getColor(), cells[to].getCount()+1);
     }
 
     public ChipsPositions getGameState() {

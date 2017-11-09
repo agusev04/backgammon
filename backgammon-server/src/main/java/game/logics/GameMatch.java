@@ -29,7 +29,7 @@ public class GameMatch {
         int waiting_turn = 0;  // ожидание хода
         int waiting_throw_dice = 1; // ожидание броска кубика
         int waiting_move_chip = 2; // ожидание перемещения фишки
-        int the_final = 3; //конец игры
+        int the_final = 3; //
 
 //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
 //    у каждого должен быть свой флаг ход\ожидание
@@ -161,7 +161,7 @@ public class GameMatch {
             for (int i = 0; i < cells.length; i++) {
                 if ((cells[i].getColor() == color)) {
                     if (color == BLACK) {
-                        if (cells[i].getCount() > BLAKE_HOME) {
+                        if (cells[i].getCount() > BLACK_HOME) {
                             resualt = -1;
                             break;
                         }

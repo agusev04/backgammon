@@ -13,23 +13,21 @@ public class Player {  //класс игрока
     String name;
     char color; // 'w' or 'b'
 
-    Game game;
+    GameMatch gameMatch;
     // Alexandr начал добавлять
     Session session;
-    int number; //это номер в массиве в классе Game
+    int number; //это номер в массиве в классе GameMatch
     // закончил добавлять
     //TODO (Michael) исправить, как было в задаче с изменением связанного кода
 
     public Player(String name, char color) { //конструктор по умолчанию для игрока
-
     }
 
     public Player() {
-
     }
 
-    public Player(Game game, Session session, int number) {
-        this.game = game;
+    public Player(GameMatch gameMatch, Session session, int number) {
+        this.gameMatch = gameMatch;
         this.session = session;
         this.number = number;
     }
@@ -45,12 +43,12 @@ public class Player {  //класс игрока
         this.name = name;
     }
 
-    public Game getGame() {
-        return game;
+    public GameMatch getGameMatch() {
+        return gameMatch;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGameMatch(GameMatch gameMatch) {
+        this.gameMatch = gameMatch;
 
     }
 
