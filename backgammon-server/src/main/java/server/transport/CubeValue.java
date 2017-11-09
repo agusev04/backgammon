@@ -12,6 +12,7 @@ public class CubeValue extends AbstractMessage {
 
     public CubeValue(Player player) throws GameError {
         this.cubeValues = player.getGame().throwDice(player);
+        //TODO (IvchenkoAlexandr) это надо из конструктора убрать, такой логики в конструкторах быть не должно
     }
 
     public CubeValue(int cubeValues){

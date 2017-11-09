@@ -39,10 +39,10 @@ public class Player {  //класс игрока
     }
 
     public void setName(String name) throws GameError {
-        this.name = name;
-        if (this.name.equals(null) || this.name.equals("")) {
-            throw new GameError(INCORRECT_REQUEST.getCode(), INCORRECT_REQUEST.getMessage());
+        if (name == null || name.equals("")) {
+            throw INCORRECT_REQUEST;
         }
+        this.name = name;
     }
 
     public Game getGame() {

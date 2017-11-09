@@ -11,7 +11,7 @@ public class GameError extends Throwable {
     int code;
     String message;
 
-    public GameError(int code, String message) {
+    private GameError(int code, String message) {
         this.code = code;
         this.message = message;
     }

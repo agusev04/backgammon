@@ -17,6 +17,10 @@ public class GameStartTest extends AbstractTest {
 
 
         TestGameStartSingleton testGameStartSingleton = TestGameStartSingleton.getInstance();
+        //TODO (IvchenkoAlexandr) этого синглтона не нужно, ты сперва посмотри, что уже есть, а потом велосипед изобретай :)
+        //Есть Тестовая сессия, в ней есть TestBasicRemote.sendText по сути это и есть то, куда отправляется сообщение игроку.
+        //сейчас там просто пишется в sout, можно куда-то сохранять (например, в тестовую сессию).
+        //Оттуда брать и проверять
         GameStart[] starts = testGameStartSingleton.getStarts();
 
         assertNotNull(starts);

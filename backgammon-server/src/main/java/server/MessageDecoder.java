@@ -22,6 +22,7 @@ public class MessageDecoder implements Decoder.Text<AbstractMessage> {
         JsonObject object = element.getAsJsonObject();
         String className = object.get("CLASS_NAME").getAsString();
         AbstractMessage abstractMessage = null;
+        //TODO (IvchenkoAlexandr) фабрику синглтоном сделать
         MessageFactory messageFactory = new MessageFactory();
         abstractMessage = messageFactory.makeMessage(className, jsonObject);
 

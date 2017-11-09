@@ -9,6 +9,11 @@ import server.transport.*;
  * наследника{@link AbstractMessage}
  */
 public class MessageFactory {
+
+    //TODO (IvchenkoAlexandr) это не фабричный метод, это обычная фабрика и то...
+    // тот же свитч просто в отдельный клаас перенес.
+    //Сделай тут тогда уже Map c классами по именам
+
     public AbstractMessage makeMessage(String className, String jsonObject) {
         AbstractMessage abstractMessage = null;
         Gson gson = new Gson();
