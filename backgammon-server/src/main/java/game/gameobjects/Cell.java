@@ -2,9 +2,9 @@ package game.gameobjects;
 
 
 public class Cell {
-    public static final char WHITE = 'W';
-    public static final char BLACK = 'B';
-    public static final char NULL = 'N';
+    public static final char WHITE = 'w';
+    public static final char BLACK = 'b';
+    public static final char NULL = 'n';
     public char color; // цвет
     public int count;  // количество
 

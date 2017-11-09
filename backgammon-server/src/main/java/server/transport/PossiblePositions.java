@@ -8,7 +8,7 @@ public class PossiblePositions extends AbstractMessage {
     ArrayList<Integer> possiblePositions = new ArrayList<>();
     int positionQuantity;
     public PossiblePositions(Player player, int cubeValues) {
-        possiblePositions = player.getGame().getPossiblePositions(player.getColor(), cubeValues);
+        possiblePositions = player.getGameMatch().getPossiblePositions(player.getColor(), cubeValues);
         positionQuantity = possiblePositions.size();
     }
 

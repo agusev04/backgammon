@@ -16,7 +16,7 @@ public class TestThrowCube extends AbstractMessage {
         message = cubeValues;
         System.out.println("TestThrowCube: Player " + player.getName() +
                 "ask to calculate possible position for values" + cubeValue / 10 + " and " + cubeValue % 10);
-        player.getGame().sendObject(message);
+        player.getGameMatch().sendObject(message);
         message = new PossiblePositions(player, cubeValues.getCubeValues());
 
         return message;

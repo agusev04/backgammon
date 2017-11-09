@@ -1,6 +1,6 @@
 package server;
 
-import game.logics.Game;
+import game.logics.GameMatch;
 import game.logics.Player;
 import server.transport.AbstractMessage;
 import server.transport.ErrorMessage;
@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RequestHandler {
 
     protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<>();
-    protected volatile Game currentGame = null;
-    protected ArrayList<Game> gameArrayList = new ArrayList<>();
+    protected volatile GameMatch currentGameMatch = null;
+    protected ArrayList<GameMatch> gameMatchArrayList = new ArrayList<>();
 
 
     public AbstractMessage request(AbstractMessage pack, Session session) {
@@ -44,24 +44,24 @@ public class RequestHandler {
     private AbstractMessage registration(Session session, AbstractMessage pack) {
         Player thisPlayer;
         AbstractMessage abstractMessage = null;
-        if (currentGame == null) {
-            currentGame = new Game();
-            gameArrayList.add(currentGame);
+        if (currentGameMatch == null) {
+            currentGameMatch = new GameMatch();
+            gameMatchArrayList.add(currentGameMatch);
         }
-        if (currentGame.getNumberOfPlayers() == 2) {
-            currentGame = new Game();
-            gameArrayList.add(currentGame);
+        if (currentGameMatch.getNumberOfPlayers() == 2) {
+            currentGameMatch = new GameMatch();
+            gameMatchArrayList.add(currentGameMatch);
         }
-        thisPlayer = new Player(currentGame, session, currentGame.getNumberOfPlayers());
-        currentGame.addPlayer(thisPlayer); //TODO здесь уже может броситься игрокам GameStart если вызывать из Game
+        thisPlayer = new Player(currentGameMatch, session, currentGameMatch.getNumberOfPlayers());
+        currentGameMatch.addPlayer(thisPlayer); //TODO здесь уже может броситься игрокам GameStart если вызывать из GameMatch
         abstractMessage = pack.apply(thisPlayer);//TODO здесь второму игроку имя присвоится, один GameStart будет без имени
-        if (currentGame.getNumberOfPlayers() == 2) {
-            currentGame.sendGameStart();
+        if (currentGameMatch.getNumberOfPlayers() == 2) {
+            currentGameMatch.sendGameStart();
         }
 
         players.put(Integer.parseInt(session.getId()), thisPlayer);
-   /*     if (currentGame.getNumberOfPlayers() == 2) {
-            this.sendGameStart(currentGame);
+   /*     if (currentGameMatch.getNumberOfPlayers() == 2) {
+            this.sendGameStart(currentGameMatch);
         } */
         return abstractMessage;
     }
@@ -69,7 +69,7 @@ public class RequestHandler {
     //TODO (IvchenkoAlexandr) нужно подумать, куда этот код перенести.
     // По сути это рассылка сообщений всем игрокам подключенным к игре (матчу, игровому сеансу).
 
-    /*private void sendGameStart(Game game) {
+    /*private void sendGameStart(GameMatch game) {
         Player players[] = game.getPlayers();
         GameStart gameStart = new GameStart(players[1].getName()); //
         try {
@@ -86,7 +86,7 @@ public class RequestHandler {
     }
     */
 
-    public ArrayList<Game> getGameArrayList() {
-        return gameArrayList;
+    public ArrayList<GameMatch> getGameMatchArrayList() {
+        return gameMatchArrayList;
     }
 }

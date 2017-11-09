@@ -11,9 +11,6 @@ public class ErrorMessage extends AbstractMessage {
     int code;
     String message;
 
-    //TODO (Michael) Оформить как транспортный объект.
-    //TODO (Michael) Подумать над названием, чтобы не было путаницы с GameError и вообще о связи с GameError.
-
     @Override
     public AbstractMessage apply(Player player) {
         return null;

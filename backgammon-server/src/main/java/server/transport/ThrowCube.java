@@ -15,7 +15,7 @@ public class ThrowCube extends AbstractMessage {
         try {
             CubeValue cubeValues = new CubeValue(player);
             message = cubeValues;
-            player.getGame().sendObject(message);
+            player.getGameMatch().sendObject(message);
             message = new PossiblePositions(player, cubeValues.getCubeValues());
 
         } catch (GameError gameErrors) {

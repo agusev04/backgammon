@@ -3,7 +3,7 @@ import server.transport.GameState;
 import support.AbstractTest;
 import support.TestGameStartSingleton;
 
-public class GameStartTest extends AbstractTest {
+public class GameMatchStartTest extends AbstractTest {
 
     public void testGameStart() throws Exception {
         assertTrue(getPlayers().isEmpty());

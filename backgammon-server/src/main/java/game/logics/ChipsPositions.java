@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class ChipsPositions {
 
-    ArrayList<Integer> whitePos = new ArrayList<Integer>(); // массив для записи позиций белых фишек
-    ArrayList<Integer> blackPos = new ArrayList<Integer>(); // массив для записи позиций черных фишек
+    ArrayList<Integer> whitePos = new ArrayList<>(); // массив для записи позиций белых фишек
+    ArrayList<Integer> blackPos = new ArrayList<>(); // массив для записи позиций черных фишек
 
     public ChipsPositions(Cell[] cells) {
         for (int i = 0; i < cells.length; i++) {

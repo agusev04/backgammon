@@ -19,8 +19,8 @@ public class Enter extends AbstractMessage {
         AbstractMessage message = null;
         try {
             player.setName(myUserName);
-            GameState gameState = new GameState(player.getGame(), "",
-                    player.getGame().getPlayers()[0].getName() + "s backgammon table created",
+            GameState gameState = new GameState(player.getGameMatch(), "",
+                    player.getGameMatch().getWhitePlayer().getName() + "s backgammon table created",
                     player.getColor());
             message = gameState;
         } catch (GameError gameErrors) {
