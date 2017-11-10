@@ -19,19 +19,31 @@ public class GameMatch {
         GameBoard table = new GameBoard();
         Player players[] = new Player[2];
         int numberOfPlayers = 0;
+
         Player playerThrow = null; //Миша, я могу кидать тебе игрока который постучался на сервер, а ты будешь сравнивать
         Player playerMove = null;
-        boolean turnWhite = false;
-        boolean turnBlack = false;
+
+        boolean turnWhite = false; // если try - ход белых, иначе - ход черных
+
+        int whitePlayerCondition = waiting_turn;
+        int blackPlayerCondition = waiting_turn;
 
         /* Игровые состояния */
 
-        int waiting_turn = 0;  // ожидание хода
-        int waiting_throw_dice = 1; // ожидание броска кубика
-        int waiting_move_chip = 2; // ожидание перемещения фишки
-        int the_final = 3; //
+        public static final int waiting_turn = 0;  // ожидание хода
+        public static final int waiting_throw_dice = 1; // ожидание броска кубика
+        public static final int waiting_move_chip = 2; // ожидание перемещения фишки
+        public static final int the_final = 3; //
 
-//    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
+    public int getWhitePlayerCondition() {
+        return whitePlayerCondition;
+    }
+
+    public int getBlackPlayerCondition() {
+        return blackPlayerCondition;
+    }
+
+    //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
 //    у каждого должен быть свой флаг ход\ожидание
 
         Player whitePlayer;
@@ -41,7 +53,7 @@ public class GameMatch {
 
         //TODO (Michael) Логика, кто белый, а кто черный, должна быть организована здесь. !!
         //TODO (Michael) Логика, чей ход - тоже  здесь.
-        //TODO (Michael) Логика, можно ли сейчас бросить кубик - тоже.
+        //TODO (Michael) Логика, можно ли сейчас бросить кубик - тоже. !!
         //TODO (Michael) Значение кубика должно быть тоже здесь. !!
         //TODO (Michael) Оппонет должен запрашиваться отсюда
 
@@ -55,6 +67,8 @@ public class GameMatch {
             if (playerThrow == player) {
                 Random random = new Random();
                 resalt = 10 * (random.nextInt(6) + 1) + random.nextInt(6) + 1;
+                playerThrow = null;
+                playerMove = player;
             } else {
                 throw UNABLE_THROW_DICES;
             }
@@ -69,10 +83,11 @@ public class GameMatch {
             char color;
             if (numberOfPlayers == 0) {
                 whitePlayer = player;
-                color = Cell.WHITE;
+                color = WHITE;
             } else {
                 blackPlayer = player;
-                color = Cell.BLACK;
+                color = BLACK;
+                whitePlayerCondition = waiting_throw_dice;
                 turnWhite = true;
                 playerThrow = whitePlayer;
             }
@@ -100,8 +115,8 @@ public class GameMatch {
         }
 
         public void sendObject(AbstractMessage abstractMessage) {
-            players[0].sendMessage(abstractMessage);
-            players[1].sendMessage(abstractMessage);
+            whitePlayer.sendMessage(abstractMessage);
+            blackPlayer.sendMessage(abstractMessage);
         }
 
         public ArrayList<Integer> getPossiblePositions(char color, int cubeValues) {
