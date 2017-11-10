@@ -23,37 +23,14 @@ public class MessageDecoder implements Decoder.Text<AbstractMessage> {
         String className = object.get("CLASS_NAME").getAsString();
         AbstractMessage abstractMessage = null;
         //TODO (IvchenkoAlexandr) фабрику синглтоном сделать
-        MessageFactory messageFactory = new MessageFactory();
+        MessageFactory messageFactory = MessageFactory.getMessageFactory();
         abstractMessage = messageFactory.makeMessage(className, jsonObject);
 
         return abstractMessage;
     }
 
     @Override
-    public boolean willDecode(String jsonObject) { //проверяет можно ли получаемый джэсон объект декодировать!
-        /*boolean resutlt;
-        System.out.println("DecorerClass check JSON string: " + s);
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(s);
-            JsonObject object;
-            object = element.getAsJsonObject();
-            String className = object.get("CLASS_NAME").getAsString();
-            Gson gson = new Gson();
-            AbstractMessage abstractMessage; // можно сделать полем класс, чтобы лишний раз не парсить????
-
-            switch (className) {
-                case "Enter":
-                    abstractMessage = gson.fromJson(s, Enter.class);
-                    resutlt = true;
-                    break;
-                case "ThrowCube":
-                    resutlt = true;
-                    break;
-                default:
-                    resutlt = false;
-                    break;
-            }
-            */
+    public boolean willDecode(String jsonObject) {
         return true;
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-class TestSession implements Session {
+public class TestSession implements Session {
 
     private String id;
     private TestBasicRemote testBasicRemote;
@@ -16,6 +16,10 @@ class TestSession implements Session {
     TestSession(String id) {
         this.id = id;
         this.testBasicRemote = new TestBasicRemote(id);
+    }
+
+    public TestBasicRemote getTestBasicRemote() {
+        return testBasicRemote;
     }
 
     @Override
@@ -74,23 +78,23 @@ class TestSession implements Session {
     }
 
     @Override
-    public void setMaxBinaryMessageBufferSize(int max) {
-
-    }
-
-    @Override
     public int getMaxBinaryMessageBufferSize() {
         return 0;
     }
 
     @Override
-    public void setMaxTextMessageBufferSize(int max) {
+    public void setMaxBinaryMessageBufferSize(int max) {
 
     }
 
     @Override
     public int getMaxTextMessageBufferSize() {
         return 0;
+    }
+
+    @Override
+    public void setMaxTextMessageBufferSize(int max) {
+
     }
 
     @Override

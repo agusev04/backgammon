@@ -1,6 +1,5 @@
 package server.transport;
 
-import game.logics.GameError;
 import game.logics.Player;
 
 /**
@@ -9,13 +8,9 @@ import game.logics.Player;
  */
 public class CubeValue extends AbstractMessage {
     protected int cubeValues;
+    //TODO (IvchenkoAlexandr) это надо из конструктора убрать, такой логики в конструкторах быть не должно
 
-    public CubeValue(Player player) throws GameError {
-        this.cubeValues = player.getGameMatch().throwDice(player);
-        //TODO (IvchenkoAlexandr) это надо из конструктора убрать, такой логики в конструкторах быть не должно
-    }
-
-    public CubeValue(int cubeValues){
+    public CubeValue(int cubeValues) {
         this.cubeValues = cubeValues;
     }
 

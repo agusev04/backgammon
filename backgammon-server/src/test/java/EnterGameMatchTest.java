@@ -1,8 +1,3 @@
-import game.gameobjects.Cell;
-import game.gameobjects.GameBoard;
-import game.logics.ChipsPositions;
-import server.transport.CubeValue;
-import server.transport.GameStart;
 import server.transport.GameState;
 import support.AbstractTest;
 
@@ -52,8 +47,8 @@ public class EnterGameMatchTest extends AbstractTest {
         assertEquals(expWhitePos.toString(), gameState2.getWhitePositions().toString());
         assertEquals(expBlackPos.toString(), gameState2.getBlackPositions().toString());
 
-        CubeValue cubeValue = throwDice("0");
-        int cubeValues = cubeValue.getCubeValues();
+        //     CubeValue cubeValue = throwDice("0");
+        //    int cubeValues = cubeValue.getCubeValues();
 //        проверить каждый кубик
 
 //        assertEquals();
@@ -74,28 +69,28 @@ public class EnterGameMatchTest extends AbstractTest {
         GameState gameState = enter("0", "11");
         GameState gameState2 = enter("1", "22");
 
-        getPlayers().get(0).getGameMatch().moveChip(1,10);
-        getPlayers().get(0).getGameMatch().moveChip(1,10);
+        getPlayers().get(0).getGameMatch().moveChip(1, 10);
+        getPlayers().get(0).getGameMatch().moveChip(1, 10);
 
-        getPlayers().get(0).getGameMatch().moveChip(17,18);
-        getPlayers().get(0).getGameMatch().moveChip(17,18);
-        getPlayers().get(0).getGameMatch().moveChip(17,19);
+        getPlayers().get(0).getGameMatch().moveChip(17, 18);
+        getPlayers().get(0).getGameMatch().moveChip(17, 18);
+        getPlayers().get(0).getGameMatch().moveChip(17, 19);
 
-        getPlayers().get(1).getGameMatch().moveChip(24,23);
-        getPlayers().get(1).getGameMatch().moveChip(24,23);
+        getPlayers().get(1).getGameMatch().moveChip(24, 23);
+        getPlayers().get(1).getGameMatch().moveChip(24, 23);
 
-        getPlayers().get(1).getGameMatch().moveChip(8,6);
-        getPlayers().get(1).getGameMatch().moveChip(8,7);
-        getPlayers().get(1).getGameMatch().moveChip(8,7);
+        getPlayers().get(1).getGameMatch().moveChip(8, 6);
+        getPlayers().get(1).getGameMatch().moveChip(8, 7);
+        getPlayers().get(1).getGameMatch().moveChip(8, 7);
 
 
         ArrayList<Integer> whitePositions1 = getPlayers().get(0).getGameMatch().getTable().getGameState().getWhitePos();
         ArrayList<Integer> whitePositions2 = getPlayers().get(1).getGameMatch().getTable().getGameState().getWhitePos();
-        assertEquals(whitePositions1, whitePositions2 );
+        assertEquals(whitePositions1, whitePositions2);
 
         ArrayList<Integer> blackPositions1 = getPlayers().get(0).getGameMatch().getTable().getGameState().getBlackPos();
         ArrayList<Integer> blackPositions2 = getPlayers().get(1).getGameMatch().getTable().getGameState().getBlackPos();
-        assertEquals(blackPositions1, blackPositions2 );
+        assertEquals(blackPositions1, blackPositions2);
 
         System.out.println();
         System.out.println("********************");

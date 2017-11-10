@@ -8,6 +8,7 @@ import game.logics.Player;
  */
 public abstract class AbstractMessage {
     //TODO (IvchenkoAlexandr) это не нужно, тебе и идея подсказывает. Имя класса и так хранится в любом объекте
+    //Так мне это нужно для JSON объкта.
     final String CLASS_NAME = this.getClass().getSimpleName();
 
     abstract public AbstractMessage apply(Player player);

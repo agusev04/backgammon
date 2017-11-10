@@ -4,10 +4,11 @@ import game.logics.Player;
 
 import java.util.ArrayList;
 
-public class PossiblePositions extends AbstractMessage {
-    ArrayList<Integer> possiblePositions = new ArrayList<>();
+public class PossibleMoves extends AbstractMessage {
+    ArrayList<Move> possiblePositions = new ArrayList<>();
     int positionQuantity;
-    public PossiblePositions(Player player, int cubeValues) {
+
+    public PossibleMoves(Player player, int cubeValues) {
         possiblePositions = player.getGameMatch().getPossiblePositions(player.getColor(), cubeValues);
         positionQuantity = possiblePositions.size();
     }
@@ -17,7 +18,7 @@ public class PossiblePositions extends AbstractMessage {
         return null;
     }
 
-    public ArrayList<Integer> getPossiblePositions() {
+    public ArrayList<Move> getPossiblePositions() {
         return possiblePositions;
     }
 

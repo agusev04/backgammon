@@ -53,8 +53,8 @@ public class RequestHandler {
             gameMatchArrayList.add(currentGameMatch);
         }
         thisPlayer = new Player(currentGameMatch, session, currentGameMatch.getNumberOfPlayers());
-        currentGameMatch.addPlayer(thisPlayer); //TODO здесь уже может броситься игрокам GameStart если вызывать из GameMatch
-        abstractMessage = pack.apply(thisPlayer);//TODO здесь второму игроку имя присвоится, один GameStart будет без имени
+        currentGameMatch.addPlayer(thisPlayer); // здесь уже может броситься игрокам GameStart если вызывать из GameMatch
+        abstractMessage = pack.apply(thisPlayer);// здесь второму игроку имя присвоится, один GameStart будет без имени
         if (currentGameMatch.getNumberOfPlayers() == 2) {
             currentGameMatch.sendGameStart();
         }
@@ -65,26 +65,6 @@ public class RequestHandler {
         } */
         return abstractMessage;
     }
-
-    //TODO (IvchenkoAlexandr) нужно подумать, куда этот код перенести.
-    // По сути это рассылка сообщений всем игрокам подключенным к игре (матчу, игровому сеансу).
-
-    /*private void sendGameStart(GameMatch game) {
-        Player players[] = game.getPlayers();
-        GameStart gameStart = new GameStart(players[1].getName()); //
-        try {
-            players[0].getSession().getBasicRemote().sendObject(gameStart);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
-        gameStart = new GameStart(players[0].getName()); // больше памяти ради тестов
-        try {
-            players[1].getSession().getBasicRemote().sendObject(gameStart);
-        } catch (IOException | EncodeException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 
     public ArrayList<GameMatch> getGameMatchArrayList() {
         return gameMatchArrayList;

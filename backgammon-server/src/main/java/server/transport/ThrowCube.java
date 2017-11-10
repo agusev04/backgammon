@@ -13,10 +13,10 @@ public class ThrowCube extends AbstractMessage {
     public AbstractMessage apply(Player player) {
         AbstractMessage message = null;
         try {
-            CubeValue cubeValues = new CubeValue(player);
+            CubeValue cubeValues = new CubeValue(player.getGameMatch().throwDice(player, null));
             message = cubeValues;
-            player.getGameMatch().sendObject(message);
-            message = new PossiblePositions(player, cubeValues.getCubeValues());
+            player.getGameMatch().sendObject(cubeValues);
+            message = new PossibleMoves(player, cubeValues.getCubeValues());
 
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);

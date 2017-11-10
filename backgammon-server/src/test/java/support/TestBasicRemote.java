@@ -9,13 +9,17 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 
-class TestBasicRemote implements RemoteEndpoint.Basic {
+public class TestBasicRemote implements RemoteEndpoint.Basic {
 
+    GameStart gameStart;
     private String sessionId;
-
 
     TestBasicRemote(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public GameStart getGameStart() {
+        return gameStart;
     }
 
     @Override
@@ -50,9 +54,9 @@ class TestBasicRemote implements RemoteEndpoint.Basic {
 
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
-        TestGameStartSingleton testGameStartSingleton = TestGameStartSingleton.getInstance();
+
         if (GameStart.class.isInstance(data)) {
-            testGameStartSingleton.setStarts((GameStart) data);
+            gameStart = (GameStart) data;
         }
 
     }
