@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "noImplicitAny" : true,
+    "module": "AMD",
+    "target": "es5",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "outDir": "app",
+    "listFiles": false
+  },
+  "compileOnSave": true,
+  "exclude": [],
+  "files": [
+    "./sources/Main.ts",
+    "./dts/pixi.js.d.ts",
+    "./dts/pixi-filters.d.ts"
+  ]
+}
