@@ -2,32 +2,33 @@ package game.logics;
 
 
 import game.gameobjects.Cell;
+import server.transport.ChipsPosition;
 
 import java.util.ArrayList;
 
 
 public class ChipsPositions {
 
-    ArrayList<Integer> whitePos = new ArrayList<>(); // массив для записи позиций белых фишек
-    ArrayList<Integer> blackPos = new ArrayList<>(); // массив для записи позиций черных фишек
+    ArrayList<ChipsPosition> whitePos = new ArrayList<>(); // массив для записи позиций белых фишек
+    ArrayList<ChipsPosition> blackPos = new ArrayList<>(); // массив для записи позиций черных фишек
 
     public ChipsPositions(Cell[] cells) {
         for (int i = 0; i < cells.length; i++) {
             if (cells[i].count > 0) {
                 if (cells[i].color == Cell.WHITE) {
-                    whitePos.add((i) * 100 + cells[i].count);
+                    whitePos.add(new ChipsPosition(i, cells[i].count));
                 } else if (cells[i].color == Cell.BLACK) {
-                    blackPos.add((i) * 100 + cells[i].count);
+                    blackPos.add(new ChipsPosition(i, cells[i].count));
                 }
             }
         }
     }
 
-    public ArrayList<Integer> getBlackPos() {  // передача полученный позиций черных фишек
+    public ArrayList<ChipsPosition> getBlackPos() {  // передача полученный позиций черных фишек
         return blackPos;
     }
 
-    public ArrayList<Integer> getWhitePos() {  // передеча полученных позиций белых фишек
+    public ArrayList<ChipsPosition> getWhitePos() {  // передеча полученных позиций белых фишек
         return whitePos;
     }
 }

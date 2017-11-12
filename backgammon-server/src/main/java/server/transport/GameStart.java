@@ -9,13 +9,13 @@ import game.logics.Player;
 public class GameStart extends AbstractMessage {
     String enemyUserName;
 
+    public GameStart(String enemyUserName) {
+        this.enemyUserName = enemyUserName;
+    }
+
     @Override
     public AbstractMessage apply(Player player) {
         return null;
-    }
-
-    public GameStart(String enemyUserName) {
-        this.enemyUserName = enemyUserName;
     }
 
     public String getEnemyUserName() {

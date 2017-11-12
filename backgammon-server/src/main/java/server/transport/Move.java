@@ -11,6 +11,7 @@ public class Move {
     public Move(int firstPosition, int secondPosition) {
         this.firstPosition = firstPosition;
         this.secondPosition = secondPosition;
+
     }
 
     @Override

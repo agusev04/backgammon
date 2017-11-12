@@ -11,14 +11,14 @@ public class ErrorMessage extends AbstractMessage {
     int code;
     String message;
 
+    public ErrorMessage(GameError error) {
+        code = error.getCode();
+        message = error.getMessage();
+    }
+
     @Override
     public AbstractMessage apply(Player player) {
         return null;
-    }
-
-    public ErrorMessage(GameError error){
-        code = error.getCode();
-        message = error.getMessage();
     }
 
 }

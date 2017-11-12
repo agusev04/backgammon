@@ -1,6 +1,7 @@
 package server.transport;
 
 import game.logics.GameError;
+import game.logics.GameMatch;
 import game.logics.Player;
 
 /**
@@ -13,16 +14,21 @@ public class ThrowCube extends AbstractMessage {
     public AbstractMessage apply(Player player) {
         AbstractMessage message = null;
         try {
-            CubeValue cubeValues = new CubeValue(player.getGameMatch().throwDice(player, null));
-            message = cubeValues;
-            player.getGameMatch().sendObject(cubeValues);
-            message = new PossibleMoves(player, cubeValues.getCubeValues());
-
+            GameMatch gameMatch = player.getGameMatch();
+            CubeValue cubeValues = new CubeValue(gameMatch.throwDice(player, null));
+            PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValues.getCubeValues()));
+            message = new PackageMessage(null, new Changes(cubeValues));
+            if (player == gameMatch.getBlackPlayer()) {
+                gameMatch.getWhitePlayer().sendMessage(message);
+            } else if (player == gameMatch.getWhitePlayer()) {
+                gameMatch.getBlackPlayer().sendMessage(message);
+            } else {
+                System.out.println("ThrowCube: пользователь не найден");
+            }
+            message = new PackageMessage(null, new Changes(moves, cubeValues));
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
         }
-
-
         return message;
     }
 

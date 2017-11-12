@@ -1,5 +1,5 @@
 import server.transport.GameStart;
-import server.transport.GameState;
+import server.transport.PackageMessage;
 import support.AbstractTest;
 
 public class GameMatchStartTest extends AbstractTest {
@@ -8,11 +8,11 @@ public class GameMatchStartTest extends AbstractTest {
         assertTrue(getPlayers().isEmpty());
 
         /*first player enters*/
-        GameState gameState = enter("0", "11");
+        PackageMessage gameState = enter("0", "11");
 
 
         /*second player enters*/
-        GameState gameState2 = enter("1", "user 2");
+        PackageMessage gameState2 = enter("1", "user 2");
         //TODO (IvchenkoAlexandr) этого синглтона не нужно, ты сперва посмотри, что уже есть, а потом велосипед изобретай :)
         //Есть Тестовая сессия, в ней есть TestBasicRemote.sendText по сути это и есть то, куда отправляется сообщение игроку.
         //сейчас там просто пишется в sout, можно куда-то сохранять (например, в тестовую сессию).
@@ -20,7 +20,7 @@ public class GameMatchStartTest extends AbstractTest {
 
         GameStart[] starts = new GameStart[2];
         starts[0] = sessions[0].getTestBasicRemote().getGameStart();
-        starts[1] = sessions[1].getTestBasicRemote().getGameStart();
+        starts[1] = gameState2.getChanges().getGameStart();
         assertNotNull(starts);
 
         assertEquals(2, starts.length);

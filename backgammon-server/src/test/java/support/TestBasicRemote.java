@@ -1,6 +1,7 @@
 package support;
 
 import server.transport.GameStart;
+import server.transport.PackageMessage;
 
 import javax.websocket.EncodeException;
 import javax.websocket.RemoteEndpoint;
@@ -54,11 +55,7 @@ public class TestBasicRemote implements RemoteEndpoint.Basic {
 
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
-
-        if (GameStart.class.isInstance(data)) {
-            gameStart = (GameStart) data;
-        }
-
+        gameStart = ((PackageMessage) data).getChanges().getGameStart();
     }
 
     @Override

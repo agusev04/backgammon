@@ -23,18 +23,18 @@ public abstract class AbstractTest extends TestCase {
         sessions = new TestSession[2];
     }
 
-    protected GameState enter(String session, String user) throws EncodeException {
+    protected PackageMessage enter(String session, String user) throws EncodeException {
         TestSession testSession = new TestSession(session);
         Enter pack = new Enter(user);
         System.out.println("REQUEST:" + messageEncoder.encode(pack));
-        GameState gameState = (GameState) requestHandler.request(pack, testSession);
-        System.out.println("RESPONSE:" + messageEncoder.encode(gameState));
+        PackageMessage packageMessage = (PackageMessage) requestHandler.request(pack, testSession);
+        System.out.println("RESPONSE:" + messageEncoder.encode(packageMessage));
         if (sessions[0] == null) {
             sessions[0] = testSession;
         } else {
             sessions[1] = testSession;
         }
-        return gameState;
+        return packageMessage;
     }
 
     protected CubeValue throwDice(String session) throws EncodeException {
@@ -45,12 +45,12 @@ public abstract class AbstractTest extends TestCase {
         return cubeValue;
     }
 
-    protected PossibleMoves throwCube(String session, int cubeValue) throws EncodeException {
+    protected PackageMessage throwCube(String session, int cubeValue) throws EncodeException {
         TestThrowCube pack = new TestThrowCube(cubeValue);
         System.out.println("REQUEST:" + messageEncoder.encode(pack));
-        PossibleMoves possibleMoves = (PossibleMoves) requestHandler.request(pack, new TestSession(session));
-        System.out.println("RESPONSE:" + messageEncoder.encode(possibleMoves));
-        return possibleMoves;
+        PackageMessage packageMessage = (PackageMessage) requestHandler.request(pack, new TestSession(session));
+        System.out.println("RESPONSE:" + messageEncoder.encode(packageMessage));
+        return packageMessage;
     }
 
     protected ConcurrentHashMap<Integer, Player> getPlayers() {

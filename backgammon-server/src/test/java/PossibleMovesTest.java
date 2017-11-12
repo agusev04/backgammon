@@ -1,7 +1,8 @@
-import server.transport.GameState;
 import server.transport.Move;
 import server.transport.PossibleMoves;
 import support.AbstractTest;
+
+import java.util.ArrayList;
 
 public class PossibleMovesTest extends AbstractTest {
 
@@ -10,21 +11,22 @@ public class PossibleMovesTest extends AbstractTest {
 
 
         /*first player enters*/
-        GameState gameState = enter("0", "11");
+        enter("0", "11");
 
         /*second player enters*/
-        GameState gameState2 = enter("1", "user 2");
+        enter("1", "user 2");
         int startPosition[] = {1, 12, 17, 19};
-        PossibleMoves possibleMoves = throwCube("0", 11);
-        Move move = new Move(1, 2);
+        PossibleMoves possibleMoves = throwCube("0", 11).getChanges().getPossibleMoves();
+        ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
         for (int i = 1; i < 5; i++) {
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + i)));
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + i)));
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + i)));
+
+            assertTrue(possibleMoves1.contains(new Move(startPosition[0], startPosition[0] + i)));
+            assertTrue(possibleMoves1.contains(new Move(startPosition[2], startPosition[2] + i)));
+            assertTrue(possibleMoves1.contains(new Move(startPosition[3], startPosition[3] + i)));
             if (i == 1) {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[1], startPosition[1] + i)));
+                assertFalse(possibleMoves1.contains(new Move(startPosition[1], startPosition[1] + i)));
             } else {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[1], startPosition[1] + i)));
+                assertTrue(possibleMoves1.contains(new Move(startPosition[1], startPosition[1] + i)));
             }
 
         }
@@ -34,27 +36,28 @@ public class PossibleMovesTest extends AbstractTest {
         assertTrue(getPlayers().isEmpty());
 
         /*first player enters*/
-        GameState gameState = enter("0", "11");
+        enter("0", "11");
 
         /*second player enters*/
-        GameState gameState2 = enter("1", "user 2");
+        enter("1", "user 2");
 
         int startPosition[] = {1, 12, 17, 19};
-        PossibleMoves possibleMoves = throwCube("0", 26);
+        PossibleMoves possibleMoves = throwCube("0", 26).getChanges().getPossibleMoves();
         int[] possibleValues = {2, 6, 8};
+        ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
+            assertTrue(possibleMoves1.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             if (i < 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
+                assertTrue(possibleMoves1.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
+                assertFalse(possibleMoves1.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
             }
             if (i < 1) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
+                assertTrue(possibleMoves1.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
+                assertFalse(possibleMoves1.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             }
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[1], startPosition[1] + possibleValues[i])));
+            assertTrue(possibleMoves1.contains(new Move(startPosition[1], startPosition[1] + possibleValues[i])));
 
         }
     }
@@ -63,32 +66,34 @@ public class PossibleMovesTest extends AbstractTest {
         assertTrue(getPlayers().isEmpty());
 
         /*first player enters*/
-        GameState gameState = enter("0", "11");
+        enter("0", "11");
 
         /*second player enters*/
-        GameState gameState2 = enter("1", "user 2");
+        enter("1", "user 2");
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = throwCube("0", 56);
-        int[] possibleValues1 = {5, 6, 11};
+        PossibleMoves possibleMoves = throwCube("0", 56).getChanges().getPossibleMoves();
+        int[] possibleValues = {5, 6, 11};
+        ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
+
             if (i != 0) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues1[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues1[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             }
             if (i < 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues1[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues1[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
             }
             if (i < 0) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues1[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues1[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             }
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[1], startPosition[1] + possibleValues1[i])));
+            assertTrue(possiblePositions.contains(new Move(startPosition[1], startPosition[1] + possibleValues[i])));
 
         }
     }
@@ -97,29 +102,30 @@ public class PossibleMovesTest extends AbstractTest {
         assertTrue(getPlayers().isEmpty());
 
         /*first player enters*/
-        GameState gameState = enter("0", "11");
+        enter("0", "11");
 
         /*second player enters*/
-        GameState gameState2 = enter("1", "user 2");
+        enter("1", "user 2");
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = throwCube("0", 23);
-        int[] possibleValues11 = {2, 3, 5};
+        PossibleMoves possibleMoves = throwCube("0", 23).getChanges().getPossibleMoves();
+        int[] possibleValues = {2, 3, 5};
+        ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
             if (i < 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues11[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues11[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             }
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues11[i])));
+            assertTrue(possiblePositions.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
 
             if (i < 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues11[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues11[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             }
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[1], startPosition[1] + possibleValues11[i])));
+            assertTrue(possiblePositions.contains(new Move(startPosition[1], startPosition[1] + possibleValues[i])));
         }
     }
 
@@ -127,34 +133,35 @@ public class PossibleMovesTest extends AbstractTest {
         assertTrue(getPlayers().isEmpty());
 
         /*first player enters*/
-        GameState gameState = enter("0", "11");
+        enter("0", "11");
 
         /*second player enters*/
-        GameState gameState2 = enter("1", "user 2");
+        enter("1", "user 2");
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = throwCube("0", 43);
-        int[] possibleValues111 = {4, 3, 7};
+        PossibleMoves possibleMoves = throwCube("0", 43).getChanges().getPossibleMoves();
+        int[] possibleValues = {4, 3, 7};
+        ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
             if (i != 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues111[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[0], startPosition[0] + possibleValues111[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[0], startPosition[0] + possibleValues[i])));
             }
 
             if (i != 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues111[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[2], startPosition[2] + possibleValues111[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[2], startPosition[2] + possibleValues[i])));
             }
 
             if (i != 2) {
-                assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues111[i])));
+                assertTrue(possiblePositions.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             } else {
-                assertFalse(possibleMoves.getPossiblePositions().contains(new Move(startPosition[3], startPosition[3] + possibleValues111[i])));
+                assertFalse(possiblePositions.contains(new Move(startPosition[3], startPosition[3] + possibleValues[i])));
             }
-            assertTrue(possibleMoves.getPossiblePositions().contains(new Move(startPosition[1], startPosition[1] + possibleValues111[i])));
+            assertTrue(possiblePositions.contains(new Move(startPosition[1], startPosition[1] + possibleValues[i])));
 
         }
     }

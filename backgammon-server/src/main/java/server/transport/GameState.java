@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class GameState extends AbstractMessage {
 
-    ArrayList<Integer> whitePositions;
-    ArrayList<Integer> blackPositions;
+    ArrayList<ChipsPosition> whitePositions;
+    ArrayList<ChipsPosition> blackPositions;
     int cubeValue;
     char color;
     String tableName;
@@ -35,27 +35,19 @@ public class GameState extends AbstractMessage {
         return null;
     }
 
-    public void setTurn(String turn) {
-        this.turn = turn;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public char getColor() {
+        return color;
     }
 
     public void setColor(char color) {
         this.color = color;
     }
 
-    public char getColor() {
-        return color;
-    }
-
-    public ArrayList<Integer> getWhitePositions() {
+    public ArrayList<ChipsPosition> getWhitePositions() {
         return whitePositions;
     }
 
-    public ArrayList<Integer> getBlackPositions() {
+    public ArrayList<ChipsPosition> getBlackPositions() {
         return blackPositions;
     }
 
@@ -67,8 +59,16 @@ public class GameState extends AbstractMessage {
         return tableName;
     }
 
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
     public String getTurn() {
         return turn;
+    }
+
+    public void setTurn(String turn) {
+        this.turn = turn;
     }
 
 //    public

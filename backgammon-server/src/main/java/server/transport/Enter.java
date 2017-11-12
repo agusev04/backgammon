@@ -22,9 +22,15 @@ public class Enter extends AbstractMessage {
             GameState gameState = new GameState(player.getGameMatch(), "",
                     player.getGameMatch().getWhitePlayer().getName() + "s backgammon table created",
                     player.getColor());
-            message = gameState;
+            if (player == player.getGameMatch().getBlackPlayer()) {
+                GameStart gameStart = new GameStart(player.getGameMatch().getWhitePlayer().getName());
+                message = new PackageMessage(gameState, new Changes(gameStart));
+            } else {
+                message = new PackageMessage(gameState, null);
+            }
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
+
         }
         return message;
     }

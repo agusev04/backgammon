@@ -8,8 +8,8 @@ public class PossibleMoves extends AbstractMessage {
     ArrayList<Move> possiblePositions = new ArrayList<>();
     int positionQuantity;
 
-    public PossibleMoves(Player player, int cubeValues) {
-        possiblePositions = player.getGameMatch().getPossiblePositions(player.getColor(), cubeValues);
+    public PossibleMoves(ArrayList<Move> arrayList) {
+        possiblePositions = arrayList;
         positionQuantity = possiblePositions.size();
     }
 
@@ -18,7 +18,7 @@ public class PossibleMoves extends AbstractMessage {
         return null;
     }
 
-    public ArrayList<Move> getPossiblePositions() {
+    public ArrayList<Move> getPossibleMoves() {
         return possiblePositions;
     }
 

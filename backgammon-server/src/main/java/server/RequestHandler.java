@@ -2,8 +2,7 @@ package server;
 
 import game.logics.GameMatch;
 import game.logics.Player;
-import server.transport.AbstractMessage;
-import server.transport.ErrorMessage;
+import server.transport.*;
 
 import javax.websocket.Session;
 import java.util.ArrayList;
@@ -56,13 +55,12 @@ public class RequestHandler {
         currentGameMatch.addPlayer(thisPlayer); // здесь уже может броситься игрокам GameStart если вызывать из GameMatch
         abstractMessage = pack.apply(thisPlayer);// здесь второму игроку имя присвоится, один GameStart будет без имени
         if (currentGameMatch.getNumberOfPlayers() == 2) {
-            currentGameMatch.sendGameStart();
+            GameStart gameStart = new GameStart(thisPlayer.getName());
+            PackageMessage packageMessage = new PackageMessage(null, new Changes(gameStart));
+            currentGameMatch.getWhitePlayer().sendMessage(packageMessage);
         }
 
         players.put(Integer.parseInt(session.getId()), thisPlayer);
-   /*     if (currentGameMatch.getNumberOfPlayers() == 2) {
-            this.sendGameStart(currentGameMatch);
-        } */
         return abstractMessage;
     }
 
