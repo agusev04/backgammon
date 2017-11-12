@@ -5,6 +5,7 @@ public class GameError extends Throwable {
     public static final GameError UNKNOWN_REQUEST = new GameError(0, "Unknown request"); // для клиент части
     public static final GameError INCORRECT_REQUEST = new GameError(1, "Incorrect request");
     public static final GameError UNABLE_THROW_DICES = new GameError(2, "You can not throw dices now");
+    public static final GameError UNABLE_TURN = new GameError(3, "It is not your turn now");
 
     int code;
     String message;

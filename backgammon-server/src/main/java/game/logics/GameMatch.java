@@ -12,6 +12,7 @@ import java.util.Random;
 import static game.gameobjects.Cell.*;
 import static game.gameobjects.GameBoard.*;
 import static game.logics.GameError.UNABLE_THROW_DICES;
+import static game.logics.GameError.UNABLE_TURN;
 
 public class GameMatch {
 
@@ -21,18 +22,18 @@ public class GameMatch {
     int numberOfPlayers = 0;
     Player playerThrow = null; //Миша, я могу кидать тебе игрока который постучался на сервер, а ты будешь сравнивать
     Player playerMove = null;
-    boolean turnWhite = false;
-    boolean turnBlack = false;
+    public boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
+    public int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
+    public int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
 
-        /* Игровые состояния */
+    /* Игровые состояния */
 
-    int waiting_turn = 0;  // ожидание хода
-    int waiting_throw_dice = 1; // ожидание броска кубика
-    int waiting_move_chip = 2; // ожидание перемещения фишки
-    int the_final = 3; //
+    public static final int waiting_turn = 0;  // ожидание хода
+    public static final int waiting_throw_dice = 1; // ожидание броска кубика
+    public static final int waiting_move_chip = 2; // ожидание перемещения фишки
+    public static final int the_final = 3; // конец игры
 
 //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
-//    у каждого должен быть свой флаг ход\ожидание
 
     Player whitePlayer;
     Player blackPlayer;
@@ -40,17 +41,22 @@ public class GameMatch {
     //TODO (Michael) подумать, как лучше назвать этот класс !!
 
     //TODO (Michael) Логика, кто белый, а кто черный, должна быть организована здесь. !!
-    //TODO (Michael) Логика, чей ход - тоже  здесь.
-    //TODO (Michael) Логика, можно ли сейчас бросить кубик - тоже.
+    //TODO (Michael) Логика, чей ход - тоже  здесь. !!
+    //TODO (Michael) Логика, можно ли сейчас бросить кубик - тоже. !!
     //TODO (Michael) Значение кубика должно быть тоже здесь. !!
-    //TODO (Michael) Оппонет должен запрашиваться отсюда
-
+    //TODO (Michael) Оппонет должен запрашиваться отсюда ??
 
     public GameBoard getTable() {
         return table;
     }
 
     public int throwDice(Player player, Integer cubeValue) throws GameError {
+        if(turnWhite && whitePlayerCondition != waiting_throw_dice){
+            throw UNABLE_TURN;
+        }
+        if(!turnWhite && blackPlayerCondition != waiting_throw_dice){
+            throw UNABLE_TURN;
+        }
         int result;
         if (cubeValue == null) {
             if (playerThrow == player) {
@@ -61,12 +67,47 @@ public class GameMatch {
             }
         } else {
             result = cubeValue.intValue();
+            if(turnWhite && whitePlayerCondition == waiting_throw_dice) {
+                whitePlayerCondition = waiting_move_chip;
+                playerMove = whitePlayer;
+                playerThrow = null;
+            }
+            if(!turnWhite && blackPlayerCondition == waiting_throw_dice){
+                blackPlayerCondition = waiting_move_chip;
+                playerMove = blackPlayer;
+                playerThrow = null;
+            }
         }
         return result;
     }
+    public void changeTurn(){ //метод передачи хода
+        if(whitePlayerCondition == waiting_move_chip){
+            whitePlayerCondition = waiting_turn;
+            blackPlayerCondition = waiting_throw_dice;
+            turnWhite = false;
+        }else if(blackPlayerCondition == waiting_move_chip){
+            blackPlayerCondition = waiting_turn;
+            whitePlayerCondition = waiting_throw_dice;
+            turnWhite = true;
+            // после перемещения фишек одним игроком, ему передается состояния ожидания хода, второму - состояние ожидания броска кубика
+            // и идет переключение флага хода
+        }
+    }
 
-    public void moveChip(int from, int to) {
-        getTable().moveChip(from, to);
+    public void moveChip(Player player, Move move) throws GameError  {
+        if(turnWhite && whitePlayerCondition != waiting_move_chip){
+            throw UNABLE_TURN;
+        }
+        if(!turnWhite && blackPlayerCondition != waiting_move_chip){
+            throw UNABLE_TURN;
+        }
+        if(playerMove == player) {
+            getTable().moveChip(move.firstPosition, move.secondPosition);
+        } else throw UNABLE_TURN;
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void addPlayer(Player player) {
@@ -77,7 +118,8 @@ public class GameMatch {
         } else {
             blackPlayer = player;
             color = Cell.BLACK;
-            turnWhite = true;
+            turnWhite = true; //флаг хода переключается на белого игрока
+            whitePlayerCondition = waiting_throw_dice; // после входа второго игрока, состояние для белого игрока меняется на ожидание броска кубика.
             playerThrow = whitePlayer;
         }
         player.setColor(color);
@@ -274,6 +316,29 @@ public class GameMatch {
 
         return result;
     }
+
+    public int getWhitePlayerCondition() { // возвращение состояния белого игрока
+        return whitePlayerCondition;
+    }
+
+    public int getBlackPlayerCondition() { // возвращение состояния черного игрока
+        return blackPlayerCondition;
+    }
+
+
+    public Player getActivePlayer () { // это должна быть проверка на активного игрока, проверить верно ли сделано!!!!
+        if(!turnWhite) { //дб если false, то возврат игрок черный
+            return getBlackPlayer();
+        }
+        return getWhitePlayer(); // если if не прошел в первом случае, отправляем, что активный игрок белый
+    }
+    public int getActivePlayerCondition(){
+        if (!turnWhite){
+            return getBlackPlayerCondition();
+        }
+        return getWhitePlayerCondition();
+    }
+
 }
 
 

@@ -5,8 +5,8 @@ package server.transport;
  */
 public class Move {
 
-    int firstPosition;
-    int secondPosition;
+    public int firstPosition;
+    public int secondPosition;
 
     public Move(int firstPosition, int secondPosition) {
         this.firstPosition = firstPosition;
