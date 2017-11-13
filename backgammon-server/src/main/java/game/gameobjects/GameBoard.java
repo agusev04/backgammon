@@ -1,7 +1,9 @@
 package game.gameobjects;
 
 import game.logics.ChipsPositions;
+import game.logics.GameError;
 
+import static game.logics.GameError.UNABLE_MOVE;
 
 
 public class GameBoard {
@@ -30,9 +32,15 @@ public class GameBoard {
         cells[24].setCell(Cell.BLACK, 2);
     }
 
-    public void moveChip(int from, int to) {
+    public void moveChip(int from, int to) throws GameError {
+        if(cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
+            throw UNABLE_MOVE;
+        }
         cells[from].setCell(cells[from].getColor(), cells[from].getCount()-1);
         cells[to].setCell(cells[from].getColor(), cells[to].getCount()+1);
+        if(cells[from].count == 0) {
+            cells[from].color = Cell.NULL;
+        }
     }
 
     public ChipsPositions getGameState() {

@@ -30,8 +30,13 @@ public class GameMatch {
     public static final int waiting_throw_dice = 1; // ожидание броска кубика
     public static final int waiting_move_chip = 2; // ожидание перемещения фишки
     public static final int the_final = 3; // конец игры
+    public int countMove = 1; // переменная для количества ходов
 
-//    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
+    public int getCountMove() {
+        return countMove;
+    }
+
+    //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
 
     Player whitePlayer;
     Player blackPlayer;
@@ -72,19 +77,25 @@ public class GameMatch {
                 blackPlayerCondition = waiting_move_chip;
             }
         }
+        countMove = 2; //
+        if(result / 10 == result % 10) { // проверка на дубль
+            countMove = 4; //при дубле 4 хода
+        }
         return result;
     }
     public void changeTurn(){ //метод передачи хода
-        if(whitePlayerCondition == waiting_move_chip){
-            whitePlayerCondition = waiting_turn;
-            blackPlayerCondition = waiting_throw_dice;
-            turnWhite = false;
-        }else if(blackPlayerCondition == waiting_move_chip){
-            blackPlayerCondition = waiting_turn;
-            whitePlayerCondition = waiting_throw_dice;
-            turnWhite = true;
-            // после перемещения фишек одним игроком, ему передается состояния ожидания хода, второму - состояние ожидания броска кубика
-            // и идет переключение флага хода
+        if(countMove == 0) {
+            if(whitePlayerCondition == waiting_move_chip){
+                whitePlayerCondition = waiting_turn;
+                blackPlayerCondition = waiting_throw_dice;
+                turnWhite = false;
+            }else if(blackPlayerCondition == waiting_move_chip){
+                blackPlayerCondition = waiting_turn;
+                whitePlayerCondition = waiting_throw_dice;
+                turnWhite = true;
+                // после перемещения фишек одним игроком, ему передается состояния ожидания хода, второму - состояние ожидания броска кубика
+                // и идет переключение флага хода
+            }
         }
     }
 
@@ -95,6 +106,12 @@ public class GameMatch {
         if(!turnWhite && blackPlayerCondition != waiting_move_chip){
             throw UNABLE_TURN;
         }
+        if(getActivePlayer() == player) {
+            if (countMove > 0) {
+                getTable().moveChip(move.from, move.to);
+                countMove--;
+            } else changeTurn();
+        } else throw UNABLE_TURN;
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
@@ -144,7 +161,7 @@ public class GameMatch {
         ArrayList<Move> arrayList = new ArrayList<>();
         int direction = 0;
         int endGameFlag = isEndGame(color);
-        boolean isPosibleCubeValues;
+        boolean isPossibleCubeValues;
         if (color == BLACK) {
             direction = BLACK_DIRECTION;
         } else if (color == WHITE) {
@@ -152,8 +169,8 @@ public class GameMatch {
         }
         Move move;
         Cell[] cells = this.table.getCells();
-        isPosibleCubeValues = checkBar(color, cubeValues, cells, direction);
-        if (isPosibleCubeValues) {
+        isPossibleCubeValues = checkBar(color, cubeValues, cells, direction);
+        if (isPossibleCubeValues) {
             for (int i = 0; i < cells.length; i++) {
                 if ((color == cells[i].getColor())) {
                     int cube1 = cubeValues / 10;
@@ -178,6 +195,9 @@ public class GameMatch {
                     }
                 }
             }
+        }
+        if(arrayList.size() == 0) {
+            countMove = 0;
         }
 
         return arrayList;

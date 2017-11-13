@@ -5,12 +5,12 @@ package server.transport;
  */
 public class Move {
 
-    public int firstPosition;
-    public int secondPosition;
+    public int from;
+    public int to;
 
-    public Move(int firstPosition, int secondPosition) {
-        this.firstPosition = firstPosition;
-        this.secondPosition = secondPosition;
+    public Move(int from, int to) {
+        this.from = from;
+        this.to = to;
 
     }
 
@@ -21,14 +21,14 @@ public class Move {
 
         Move move = (Move) o;
 
-        if (firstPosition != move.firstPosition) return false;
-        return secondPosition == move.secondPosition;
+        if (from != move.from) return false;
+        return to == move.to;
     }
 
     @Override
     public int hashCode() {
-        int result = firstPosition;
-        result = 31 * result + secondPosition;
+        int result = from;
+        result = 31 * result + to;
         return result;
     }
 }
