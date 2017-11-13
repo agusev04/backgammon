@@ -9,18 +9,19 @@ import support.AbstractTest;
 import java.util.ArrayList;
 
 public class ConditionAndMoveTest extends AbstractTest {
-    public void testOtherPositions() throws Exception, GameError {
+    public void testConditionAndMove() throws Exception, GameError {
 
         PackageMessage packageMessage = enter("0", "Tom");
         Player whitePlayer = getPlayers().get(0);
         GameMatch gameMatch = whitePlayer.getGameMatch();
         System.out.println();
-        System.out.println("Active player name " + gameMatch.getActivePlayer());
+        System.out.println("Active player name: " + gameMatch.getActivePlayer());
         PackageMessage packageMessage1 = enter("1", "Sam");
         Player blackPlayer = getPlayers().get(1);
         System.out.println("Active player name (0 turn) " + gameMatch.getActivePlayer().getName() +
                 " Condition code: "  + gameMatch.getActivePlayerCondition());
-        gameMatch.throwDice(whitePlayer, 25);
+        System.out.println("Cube value for player" + gameMatch.getActivePlayer().getName() + " in first turn: "
+                + gameMatch.throwDice(whitePlayer, 25));
 
         gameMatch.moveChip(whitePlayer, new Move(1,10));
         gameMatch.moveChip(whitePlayer, new Move(1,10));
@@ -37,8 +38,8 @@ public class ConditionAndMoveTest extends AbstractTest {
         System.out.println("Not active player condition " + gameMatch.getWhitePlayerCondition());
         System.out.println("Active player name (1 turn) " + gameMatch.getActivePlayer().getName() +
                 " Condition code: "  + gameMatch.getActivePlayerCondition());
-        gameMatch.throwDice(blackPlayer, 25); //черный пытется кинуть кубики, не получив флаг хода.
-
+        System.out.println("Cube value for player " + gameMatch.getActivePlayer().getName() + "  in second turn:  " +
+                 + gameMatch.throwDice(blackPlayer, 35)); //черный кидает кубики (при комментировании 34 строчки будет исключение, так как ход не передан)
         System.out.println("Active player name (1 turn) " + gameMatch.getActivePlayer().getName() +
                 " Condition code: "  + gameMatch.getActivePlayerCondition());
 

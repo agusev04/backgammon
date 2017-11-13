@@ -20,8 +20,6 @@ public class GameMatch {
     public static final int BLACK_DIRECTION = -1;
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
-    Player playerThrow = null; //Миша, я могу кидать тебе игрока который постучался на сервер, а ты будешь сравнивать
-    Player playerMove = null;
     public boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
     public int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     public int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
@@ -59,7 +57,7 @@ public class GameMatch {
         }
         int result;
         if (cubeValue == null) {
-            if (playerThrow == player) {
+            if (getActivePlayer() == player) {
                 Random random = new Random();
                 result = 10 * (random.nextInt(6) + 1) + random.nextInt(6) + 1;
             } else {
@@ -69,13 +67,9 @@ public class GameMatch {
             result = cubeValue.intValue();
             if(turnWhite && whitePlayerCondition == waiting_throw_dice) {
                 whitePlayerCondition = waiting_move_chip;
-                playerMove = whitePlayer;
-                playerThrow = null;
             }
             if(!turnWhite && blackPlayerCondition == waiting_throw_dice){
                 blackPlayerCondition = waiting_move_chip;
-                playerMove = blackPlayer;
-                playerThrow = null;
             }
         }
         return result;
@@ -101,9 +95,6 @@ public class GameMatch {
         if(!turnWhite && blackPlayerCondition != waiting_move_chip){
             throw UNABLE_TURN;
         }
-        if(playerMove == player) {
-            getTable().moveChip(move.firstPosition, move.secondPosition);
-        } else throw UNABLE_TURN;
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
@@ -120,7 +111,6 @@ public class GameMatch {
             color = Cell.BLACK;
             turnWhite = true; //флаг хода переключается на белого игрока
             whitePlayerCondition = waiting_throw_dice; // после входа второго игрока, состояние для белого игрока меняется на ожидание броска кубика.
-            playerThrow = whitePlayer;
         }
         player.setColor(color);
         numberOfPlayers++;

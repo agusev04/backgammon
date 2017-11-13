@@ -10,7 +10,7 @@ import game.logics.Player;
  */
 public class StateChange extends AbstractMessage {
     int code;
-    Player player;
+    String activePlayerName;
 
 
     @Override
@@ -20,6 +20,6 @@ public class StateChange extends AbstractMessage {
 
     public StateChange(GameMatch match){
         code = match.getActivePlayerCondition();
-        player = match.getActivePlayer();
+        activePlayerName = match.getActivePlayer().getName();
     }
 }

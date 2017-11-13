@@ -7,6 +7,7 @@ public class Changes extends AbstractMessage implements Cloneable {
     PossibleMoves possibleMoves;
     Move move; // для отправки подтвержденного хода пользователям
     CubeValue cubeValue;
+    StateChange stateChange;
 
     public Changes(GameStart gameStart) {
         this.gameStart = gameStart;
@@ -20,7 +21,9 @@ public class Changes extends AbstractMessage implements Cloneable {
     public Changes(CubeValue cubeValue) {
         this.cubeValue = cubeValue;
     }
-
+    public Changes(StateChange stateChange) {
+        this.stateChange = stateChange;
+    }
     public Changes(GameStart gameStart, PossibleMoves possibleMoves, Move move, CubeValue cubeValue) {
         this.gameStart = gameStart;
         this.possibleMoves = possibleMoves;
