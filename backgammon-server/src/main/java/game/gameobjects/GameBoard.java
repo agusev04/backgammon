@@ -47,9 +47,10 @@ public class GameBoard {
         if (to == finalPosition) {
             counter--;
             cells[from].takeChip();
+        }else {
+            cells[from].takeChip();
+            cells[to].putChip(color);
         }
-        cells[from].takeChip();
-        cells[to].putChip(color);
     }
 
     public ChipsPositions getGameState() {
