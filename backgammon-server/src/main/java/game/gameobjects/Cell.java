@@ -40,4 +40,21 @@ public class Cell {
         this.color = color;
         this.count = count;
     }
+
+    public void takeChip() {
+        count--;
+        if (count == 0) {
+            color = NULL;
+        }
+    }
+
+    public void putChip(char color) {
+        count++;
+        if ((this.color != color) && (this.color != NULL)) {
+            System.out.println("Cell: YOU CAN NOT PUT CHIP ON THIS POSITION. YOUR COLOR IS " + color + "BUT COLOR OF CELL IS" + this.color);
+        } else {
+            this.color = color;
+        }
+
+    }
 }

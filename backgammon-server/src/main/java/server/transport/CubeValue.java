@@ -1,12 +1,10 @@
 package server.transport;
 
-import game.logics.Player;
-
 /**
  * Класс {@link CubeValue} имплементирует {@link AbstractMessage}, содержит информацию о
  * значениях кубиков для передачи клиентам
  */
-public class CubeValue extends AbstractMessage {
+public class CubeValue implements Change {
     protected int cubeValues;
     //TODO (IvchenkoAlexandr) это надо из конструктора убрать, такой логики в конструкторах быть не должно
 
@@ -14,10 +12,6 @@ public class CubeValue extends AbstractMessage {
         this.cubeValues = cubeValues;
     }
 
-    @Override
-    public AbstractMessage apply(Player player) {
-        return null;
-    }
 
     public int getCubeValues() {
         return cubeValues;

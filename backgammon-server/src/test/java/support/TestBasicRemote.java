@@ -55,7 +55,7 @@ public class TestBasicRemote implements RemoteEndpoint.Basic {
 
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
-        gameStart = ((PackageMessage) data).getChanges().getGameStart();
+        gameStart = (GameStart) ((PackageMessage) data).getChange("GameStart");
     }
 
     @Override

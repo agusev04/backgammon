@@ -3,7 +3,10 @@ package support;
 import game.logics.Player;
 import junit.framework.TestCase;
 import server.MessageEncoder;
-import server.transport.*;
+import server.transport.Enter;
+import server.transport.GameStart;
+import server.transport.PackageMessage;
+import server.transport.TestThrowCube;
 
 import javax.websocket.EncodeException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,13 +40,13 @@ public abstract class AbstractTest extends TestCase {
         return packageMessage;
     }
 
-    protected CubeValue throwDice(String session) throws EncodeException {
-        ThrowCube pack = new ThrowCube();
-        System.out.println("REQUEST:" + messageEncoder.encode(pack));
-        CubeValue cubeValue = (CubeValue) requestHandler.request(pack, new TestSession(session));
-        System.out.println("RESPONSE:" + messageEncoder.encode(cubeValue));
-        return cubeValue;
-    }
+//    protected CubeValue throwDice(String session) throws EncodeException {
+//        ThrowCube pack = new ThrowCube();
+//        System.out.println("REQUEST:" + messageEncoder.encode(pack));
+//        CubeValue cubeValue = (CubeValue) requestHandler.request(pack, new TestSession(session));
+//        System.out.println("RESPONSE:" + messageEncoder.encode(cubeValue));
+//        return cubeValue;
+//    }
 
     protected PackageMessage throwCube(String session, int cubeValue) throws EncodeException {
         TestThrowCube pack = new TestThrowCube(cubeValue);

@@ -2,6 +2,7 @@ package server;
 
 import game.logics.GameError;
 import server.transport.AbstractMessage;
+import server.transport.Action;
 import server.transport.ErrorMessage;
 
 import javax.websocket.*;
@@ -32,7 +33,7 @@ public class WsServer  {
     }
 
     @OnMessage
-    public AbstractMessage onMessage(AbstractMessage pack, Session session) {
+    public AbstractMessage onMessage(Action pack, Session session) {
         return REQUEST_HANDLER.request(pack, session);
     }
 

@@ -2,9 +2,7 @@ package game.logics;
 
 import game.gameobjects.Cell;
 import game.gameobjects.GameBoard;
-import server.transport.AbstractMessage;
-import server.transport.GameStart;
-import server.transport.Move;
+import server.transport.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -99,19 +97,26 @@ public class GameMatch {
         }
     }
 
-    public void moveChip(Player player, Move move) throws GameError  {
+    public Final moveChip(Player player, MoveAction move) throws GameError  {
         if(turnWhite && whitePlayerCondition != waiting_move_chip){
             throw UNABLE_TURN;
         }
         if(!turnWhite && blackPlayerCondition != waiting_move_chip){
             throw UNABLE_TURN;
         }
-        if(getActivePlayer() == player) {
-            if (countMove > 0) {
-                getTable().moveChip(move.from, move.to);
+        Final finalMes = null;
+        if (getActivePlayer() == player) {
+            if(countMove>0) {
+                table.moveChip(move.from, move.to, player.color);
                 countMove--;
-            } else changeTurn();
+                if (table.isEnd(player.getColor())) {
+                    finalMes = new Final(player.getColor(), player.getName());
+                }
+            }else{
+                changeTurn();
+            }
         } else throw UNABLE_TURN;
+        return finalMes;
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
@@ -145,32 +150,21 @@ public class GameMatch {
         return blackPlayer;
     }
 
-    public void sendGameStart() {
-        GameStart gameStart = new GameStart(blackPlayer.getName());
-        whitePlayer.sendMessage(gameStart);
-        gameStart = new GameStart(whitePlayer.getName());
-        blackPlayer.sendMessage(gameStart);
-    }
 
-    public void sendObject(AbstractMessage abstractMessage) {
-        blackPlayer.sendMessage(abstractMessage);
-        whitePlayer.sendMessage(abstractMessage);
-    }
 
     public ArrayList<Move> getPossiblePositions(char color, int cubeValues) {
         ArrayList<Move> arrayList = new ArrayList<>();
         int direction = 0;
         int endGameFlag = isEndGame(color);
-        boolean isPossibleCubeValues;
+        boolean isPosibleCubeValues;
         if (color == BLACK) {
             direction = BLACK_DIRECTION;
         } else if (color == WHITE) {
             direction = WHITE_DIRECTION;
         }
-        Move move;
         Cell[] cells = this.table.getCells();
-        isPossibleCubeValues = checkBar(color, cubeValues, cells, direction);
-        if (isPossibleCubeValues) {
+        isPosibleCubeValues = checkBar(color, cubeValues, cells, direction);
+        if (isPosibleCubeValues) {
             for (int i = 0; i < cells.length; i++) {
                 if ((color == cells[i].getColor())) {
                     int cube1 = cubeValues / 10;

@@ -7,7 +7,7 @@ import game.logics.Player;
  * Класс {@link ErrorMessage} имплементирует {@link AbstractMessage}. Данный класс
  * содержит информацию об ошибке, котораю отправится клиенту
  */
-public class ErrorMessage extends AbstractMessage {
+public class ErrorMessage extends Action {
     int code;
     String message;
 

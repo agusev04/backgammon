@@ -2,7 +2,6 @@ package server.transport;
 
 import game.logics.ChipsPositions;
 import game.logics.GameMatch;
-import game.logics.Player;
 
 import java.util.ArrayList;
 
@@ -10,7 +9,7 @@ import java.util.ArrayList;
  * Класс {@link GameState} имплементирует {@link AbstractMessage}, содержит в себе
  * состояния стола, необходимое для клиента
  */
-public class GameState extends AbstractMessage {
+public class GameState {
 
     ArrayList<ChipsPosition> whitePositions;
     ArrayList<ChipsPosition> blackPositions;
@@ -30,10 +29,6 @@ public class GameState extends AbstractMessage {
         this.color = color;
     }
 
-    @Override
-    public AbstractMessage apply(Player player) {
-        return null;
-    }
 
     public char getColor() {
         return color;
@@ -70,9 +65,5 @@ public class GameState extends AbstractMessage {
     public void setTurn(String turn) {
         this.turn = turn;
     }
-
-//    public
-
-
 }
 

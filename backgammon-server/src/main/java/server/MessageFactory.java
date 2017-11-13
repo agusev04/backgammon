@@ -22,47 +22,26 @@ public class MessageFactory {
         map.put("Enter", Enter.class);
         map.put("ThrowCube", ThrowCube.class);
         map.put("TestThrowCube", TestThrowCube.class);
+        map.put("MoveAction", MoveAction.class);
     }
 
     public static MessageFactory getMessageFactory() {
         return messageFactory;
     }
 
-    public AbstractMessage makeMessage(String className, String jsonObject) {
-        AbstractMessage abstractMessage = null;
+    public Action makeMessage(String className, String jsonObject) {
+        Action action = null;
         map.get(className);
         Gson gson = new Gson();
 
-  /*      switch (className) {
-            case "Enter":
-                abstractMessage = gson.fromJson(jsonObject, Enter.class);
-                break;
-            case "ThrowCube":
-                abstractMessage = gson.fromJson(jsonObject, ThrowCube.class);
-                break;
-            case "ErrorMessage":
-                break;
-            case "TestThrowCube":
-                abstractMessage = gson.fromJson(jsonObject, TestThrowCube.class);
-                break;
-            case "MoveMessage":
-                break;
-            case "FinalMessage":
-                break;
-            default:
-                abstractMessage = new ErrorMessage(GameError.UNKNOWN_REQUEST); //TODO добавить
-                break;
-                */
-
-        //}
         Class cl = Enter.class;
         Class thisClass = map.get(className);
         try {
-            abstractMessage = (AbstractMessage) gson.fromJson(jsonObject, thisClass);
+            action = (Action) gson.fromJson(jsonObject, thisClass);
         } catch (Exception ex) {
-            abstractMessage = new ErrorMessage(GameError.UNKNOWN_REQUEST);
+            action = new ErrorMessage(GameError.UNKNOWN_REQUEST);
         }
 
-        return abstractMessage;
+        return action;
     }
 }

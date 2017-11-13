@@ -20,7 +20,7 @@ public class RequestHandler {
     protected ArrayList<GameMatch> gameMatchArrayList = new ArrayList<>();
 
 
-    public AbstractMessage request(AbstractMessage pack, Session session) {
+    public AbstractMessage request(Action pack, Session session) {
         AbstractMessage message;
         if (ErrorMessage.class.isInstance(pack)) {
             return pack;
@@ -40,9 +40,9 @@ public class RequestHandler {
         return message;
     }
 
-    private AbstractMessage registration(Session session, AbstractMessage pack) {
+    private AbstractMessage registration(Session session, Action pack) {
         Player thisPlayer;
-        AbstractMessage abstractMessage = null;
+        AbstractMessage abstractMessage;
         if (currentGameMatch == null) {
             currentGameMatch = new GameMatch();
             gameMatchArrayList.add(currentGameMatch);
@@ -56,10 +56,10 @@ public class RequestHandler {
         abstractMessage = pack.apply(thisPlayer);// здесь второму игроку имя присвоится, один GameStart будет без имени
         if (currentGameMatch.getNumberOfPlayers() == 2) {
             GameStart gameStart = new GameStart(thisPlayer.getName());
-            PackageMessage packageMessage = new PackageMessage(null, new Changes(gameStart));
+            PackageMessage packageMessage = new PackageMessage();
+            packageMessage.addChange(gameStart);
             currentGameMatch.getWhitePlayer().sendMessage(packageMessage);
         }
-
         players.put(Integer.parseInt(session.getId()), thisPlayer);
         return abstractMessage;
     }

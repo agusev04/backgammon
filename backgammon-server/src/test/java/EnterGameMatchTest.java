@@ -3,7 +3,7 @@ import game.logics.GameMatch;
 import game.logics.Player;
 import server.transport.ChipsPosition;
 import server.transport.GameState;
-import server.transport.Move;
+import server.transport.MoveAction;
 import server.transport.PackageMessage;
 import support.AbstractTest;
 
@@ -82,35 +82,35 @@ public class EnterGameMatchTest extends AbstractTest {
         PackageMessage packageMessage1 = enter("1", "Sam");
         Player blackPlayer = getPlayers().get(1);
         System.out.println("Active player name (0 turn) " + gameMatch.getActivePlayer().getName() +
-                " Condition code: "  + gameMatch.getActivePlayerCondition());
+                " Condition code: " + gameMatch.getActivePlayerCondition());
         gameMatch.throwDice(whitePlayer, 25);
 
-        gameMatch.moveChip(whitePlayer, new Move(1,10));
-        gameMatch.moveChip(whitePlayer, new Move(1,10));
+        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10));
+        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10));
 
-        gameMatch.moveChip(whitePlayer, new Move(17, 18));
-        gameMatch.moveChip(whitePlayer, new Move(17, 19));
+        gameMatch.moveChip(whitePlayer, new MoveAction(17, 18));
+        gameMatch.moveChip(whitePlayer, new MoveAction(17, 19));
 
         System.out.println("Active player name (0 turn) " + gameMatch.getActivePlayer().getName() +
-                " Condition code: "  + gameMatch.getActivePlayerCondition());
+                " Condition code: " + gameMatch.getActivePlayerCondition());
         System.out.println("*****");
         gameMatch.changeTurn(); //передача хода
         System.out.println("Change turn");
         System.out.println("*****");
         System.out.println("Not active player condition " + gameMatch.getWhitePlayerCondition());
         System.out.println("Active player name (1 turn) " + gameMatch.getActivePlayer().getName() +
-        " Condition code: "  + gameMatch.getActivePlayerCondition());
+                " Condition code: " + gameMatch.getActivePlayerCondition());
         gameMatch.throwDice(blackPlayer, 25); //черный пытется кинуть кубики, не получив флаг хода.
 
         System.out.println("Active player name (1 turn) " + gameMatch.getActivePlayer().getName() +
-                " Condition code: "  + gameMatch.getActivePlayerCondition());
+                " Condition code: " + gameMatch.getActivePlayerCondition());
 
-        gameMatch.moveChip(blackPlayer, new Move(24, 23));
-        gameMatch.moveChip(blackPlayer, new Move(24, 23));
+        gameMatch.moveChip(blackPlayer, new MoveAction(24, 23));
+        gameMatch.moveChip(blackPlayer, new MoveAction(24, 23));
 
-        gameMatch.moveChip(blackPlayer, new Move(8, 6));
-        gameMatch.moveChip(blackPlayer, new Move(8, 7));
-        gameMatch.moveChip(blackPlayer, new Move(8, 7));
+        gameMatch.moveChip(blackPlayer, new MoveAction(8, 6));
+        gameMatch.moveChip(blackPlayer, new MoveAction(8, 7));
+        gameMatch.moveChip(blackPlayer, new MoveAction(8, 7));
 
 
         ArrayList<ChipsPosition> whitePositions1 = gameMatch.getTable().getGameState().getWhitePos();

@@ -3,7 +3,7 @@ package server.transport;
 /**
  * Класс {@link Move} содержит информацию о ходе (или возможно ходе) игрока
  */
-public class Move {
+public class Move implements Change {
 
     public int from;
     public int to;

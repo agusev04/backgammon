@@ -20,7 +20,7 @@ public class GameMatchStartTest extends AbstractTest {
 
         GameStart[] starts = new GameStart[2];
         starts[0] = sessions[0].getTestBasicRemote().getGameStart();
-        starts[1] = gameState2.getChanges().getGameStart();
+        starts[1] = (GameStart) gameState2.getChange("GameStart");
         assertNotNull(starts);
 
         assertEquals(2, starts.length);

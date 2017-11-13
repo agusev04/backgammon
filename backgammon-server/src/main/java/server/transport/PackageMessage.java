@@ -1,33 +1,44 @@
 package server.transport;
 
-import game.logics.Player;
+import java.util.ArrayList;
 
-public class PackageMessage extends AbstractMessage implements Cloneable {
+public class PackageMessage implements AbstractMessage {
 
     GameState gameState;
-    Changes changes;
+    ArrayList<Change> changeArrayList = new ArrayList<>();
 
-    public PackageMessage(GameState gameState, Changes changes) {
+    public PackageMessage(GameState gameState) {
         this.gameState = gameState;
-        this.changes = changes;
     }
 
-    @Override
-    public AbstractMessage apply(Player player) {
-        return null;
+    public PackageMessage() {
+
     }
 
-
-    public void setGameStart(GameStart gameStart) {
-        changes.setGameStart(gameStart);
-    }
 
     public GameState getGameState() {
         return gameState;
     }
 
-    public Changes getChanges() {
-        return changes;
+
+    public void addChange(Change change) {
+        changeArrayList.add(change);
+    }
+
+    public Change getChange(String className) {
+        Change change = null;
+        for (Change change1 : changeArrayList) {
+            if (className.equals(change1.getClass().getSimpleName())) {
+                if (change != null) {
+                    System.out.println("PackageMessage: Message has more than one change");
+                }
+                change = change1;
+            }
+        }
+        if (change == null) {
+            System.out.println("PackageMessage: Message has not this change");
+        }
+        return change;
     }
 }
 

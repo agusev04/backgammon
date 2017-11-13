@@ -16,7 +16,7 @@ public class PossibleMovesTest extends AbstractTest {
         /*second player enters*/
         enter("1", "user 2");
         int startPosition[] = {1, 12, 17, 19};
-        PossibleMoves possibleMoves = throwCube("0", 11).getChanges().getPossibleMoves();
+        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 11).getChange("PossibleMoves");
         ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
         for (int i = 1; i < 5; i++) {
 
@@ -42,7 +42,7 @@ public class PossibleMovesTest extends AbstractTest {
         enter("1", "user 2");
 
         int startPosition[] = {1, 12, 17, 19};
-        PossibleMoves possibleMoves = throwCube("0", 26).getChanges().getPossibleMoves();
+        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 26).getChange("PossibleMoves");
         int[] possibleValues = {2, 6, 8};
         ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
@@ -73,7 +73,7 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = throwCube("0", 56).getChanges().getPossibleMoves();
+        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 56).getChange("PossibleMoves");
         int[] possibleValues = {5, 6, 11};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
@@ -109,7 +109,7 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = throwCube("0", 23).getChanges().getPossibleMoves();
+        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 23).getChange("PossibleMoves");
         int[] possibleValues = {2, 3, 5};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
@@ -140,7 +140,7 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = throwCube("0", 43).getChanges().getPossibleMoves();
+        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 43).getChange("PossibleMoves");
         int[] possibleValues = {4, 3, 7};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 3; i++) {
