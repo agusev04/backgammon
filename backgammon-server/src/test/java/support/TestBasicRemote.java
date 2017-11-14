@@ -1,6 +1,6 @@
 package support;
 
-import server.transport.GameStart;
+import server.MessageEncoder;
 import server.transport.PackageMessage;
 
 import javax.websocket.EncodeException;
@@ -12,15 +12,15 @@ import java.nio.ByteBuffer;
 
 public class TestBasicRemote implements RemoteEndpoint.Basic {
 
-    GameStart gameStart;
+    PackageMessage packageMessage;
     private String sessionId;
 
     TestBasicRemote(String sessionId) {
         this.sessionId = sessionId;
     }
 
-    public GameStart getGameStart() {
-        return gameStart;
+    public PackageMessage getPackageMessage() {
+        return packageMessage;
     }
 
     @Override
@@ -53,9 +53,12 @@ public class TestBasicRemote implements RemoteEndpoint.Basic {
         return null;
     }
 
+
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
-        gameStart = (GameStart) ((PackageMessage) data).getChange("GameStart");
+        MessageEncoder encoder = new MessageEncoder();
+        System.out.println("SEND ASYNCHRONOUS MESSAGE " + encoder.encode((PackageMessage) data));
+        packageMessage = ((PackageMessage) data);
     }
 
     @Override

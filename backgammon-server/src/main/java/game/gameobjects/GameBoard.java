@@ -1,9 +1,11 @@
 package game.gameobjects;
 
 import game.logics.ChipsPositions;
+import game.logics.GameError;
 
 import static game.gameobjects.Cell.BLACK;
 import static game.gameobjects.Cell.WHITE;
+import static game.logics.GameError.UNABLE_MOVE;
 
 
 public class GameBoard {
@@ -33,7 +35,10 @@ public class GameBoard {
         cells[24].setCell(Cell.BLACK, 2);
     }
 
-    public void moveChip(int from, int to, char color) { //можно вытащить color из cells[from]
+    public void moveChip(int from, int to, char color) throws GameError { //можно вытащить color из cells[from]
+        if (cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
+            throw UNABLE_MOVE;
+        }
         int finalPosition;
         int counter;
         if (color == Cell.BLACK) {
@@ -43,14 +48,13 @@ public class GameBoard {
             finalPosition = BLACK_OUT;
             counter = blackCount;
         }
-
-        if (to == finalPosition) {
-            counter--;
-            cells[from].takeChip();
-        }else {
-            cells[from].takeChip();
+        cells[from].takeChip();
+        if (to != finalPosition) {
             cells[to].putChip(color);
+        } else {
+            counter--;
         }
+
     }
 
     public ChipsPositions getGameState() {
