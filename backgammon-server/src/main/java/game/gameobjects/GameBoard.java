@@ -67,9 +67,9 @@ public class GameBoard {
 
     public boolean isEnd(char color) {
         boolean result = false;
-        if ((color == WHITE) && (whiteCount == 15)) {
+        if ((color == WHITE) && (whiteCount == 0)) {
             result = true;
-        } else if ((color == BLACK) && (blackCount == 15)) {
+        } else if ((color == BLACK) && (blackCount == 0)) {
             result = true;
         }
         return result;

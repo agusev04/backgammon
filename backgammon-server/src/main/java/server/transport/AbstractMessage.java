@@ -5,5 +5,4 @@ package server.transport;
  * транспортных объектов, имеет поле CLASS_NAME, по которому происходит парсинг JSON объект
  */
 public interface AbstractMessage {
-
 }

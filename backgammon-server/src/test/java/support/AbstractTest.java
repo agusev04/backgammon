@@ -3,10 +3,7 @@ package support;
 import game.logics.Player;
 import junit.framework.TestCase;
 import server.MessageEncoder;
-import server.transport.Enter;
-import server.transport.GameStart;
-import server.transport.PackageMessage;
-import server.transport.TestThrowCube;
+import server.transport.*;
 
 import javax.websocket.EncodeException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +50,15 @@ public abstract class AbstractTest extends TestCase {
         System.out.println("REQUEST:" + messageEncoder.encode(pack));
         PackageMessage packageMessage = (PackageMessage) requestHandler.request(pack, new TestSession(session));
         System.out.println("RESPONSE:" + messageEncoder.encode(packageMessage));
+        return packageMessage;
+    }
+
+    protected PackageMessage moveChip(int from, int to, String session) throws EncodeException {
+        MoveAction action = new MoveAction(from, to);
+        PackageMessage packageMessage = null;
+        System.out.println("REQUEST:" + messageEncoder.encode(action));
+        AbstractMessage packageMessage1 = requestHandler.request(action, new TestSession(session));
+        System.out.println("RESPONSE:" + messageEncoder.encode(packageMessage1));
         return packageMessage;
     }
 

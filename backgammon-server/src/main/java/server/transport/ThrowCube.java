@@ -10,15 +10,17 @@ import game.logics.Player;
  */
 public class ThrowCube extends Action {
 
+
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
         try {
             GameMatch gameMatch = player.getGameMatch();
             CubeValue cubeValues = new CubeValue(gameMatch.throwDice(player, null));
-            PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValues.getCubeValues()));
+            //    PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValues.getCubeValues()));
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(cubeValues);
+            packageMessage.addChange(new StateChange(gameMatch));
             message = packageMessage;
             if (player == gameMatch.getBlackPlayer()) {
                 gameMatch.getWhitePlayer().sendMessage(message);
@@ -27,12 +29,13 @@ public class ThrowCube extends Action {
             } else {
                 System.out.println("ThrowCube: пользователь не найден");
             }
-            packageMessage.addChange(moves);
+            //     packageMessage.addChange(moves);
             message = packageMessage;
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
         }
         return message;
     }
+
 
 }

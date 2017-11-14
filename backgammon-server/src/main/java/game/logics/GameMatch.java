@@ -2,9 +2,7 @@ package game.logics;
 
 import game.gameobjects.Cell;
 import game.gameobjects.GameBoard;
-import server.transport.Final;
-import server.transport.Move;
-import server.transport.MoveAction;
+import server.transport.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,6 +37,7 @@ public class GameMatch {
         return countMove;
     }
 
+
     //TODO (Michael) подумать, как лучше назвать этот класс !!
 
     //TODO (Michael) Логика, кто белый, а кто черный, должна быть организована здесь. !!
@@ -51,7 +50,7 @@ public class GameMatch {
         return table;
     }
 
-    public int throwDice(Player player, Integer cubeValue) throws GameError {
+    public int throwDice(Player player, Integer cubeValue) throws GameError { //TODO смена состояний, проверка на то тот ли ирок бросает
         if (turnWhite && whitePlayerCondition != waiting_throw_dice) {
             throw UNABLE_TURN;
         }
@@ -82,12 +81,13 @@ public class GameMatch {
         return result;
     }
 
-    public void changeTurn() { //метод передачи хода
+    public Change changeTurn() { //метод передачи хода
         if (countMove == 0) {
             if (whitePlayerCondition == waiting_move_chip) {
                 whitePlayerCondition = waiting_turn;
                 blackPlayerCondition = waiting_throw_dice;
                 turnWhite = false;
+
             } else if (blackPlayerCondition == waiting_move_chip) {
                 blackPlayerCondition = waiting_turn;
                 whitePlayerCondition = waiting_throw_dice;
@@ -96,28 +96,36 @@ public class GameMatch {
                 // и идет переключение флага хода
             }
         }
+        return new StateChange(this); //TODO Миша, я правильно понял, что такая конструкция вернет чендж содержащий имя
+        //активного игрока и его состояние всега равное waiting_throw_dice = 1 (в реалях нашей договоренности это является ожиданием)\
+        //хода, ибо ожидания броска кубика нет, мы сразу кидаем кубик, как только сменился ход, ожидания кубика нет в принципе).
     }
 
-    public Final moveChip(Player player, MoveAction move) throws GameError {
+    public Change moveChip(Player player, MoveAction move) throws GameError {
         if (turnWhite && whitePlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
         }
         if (!turnWhite && blackPlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
         }
-        Final finalMes = null;
+        Change change = null;
+
         if (getActivePlayer() == player) {
             if (countMove > 0) {
                 table.moveChip(move.from, move.to, player.color);
                 countMove--;
                 if (table.isEnd(player.getColor())) {
-                    finalMes = new Final(player.getColor(), player.getName());
+                    change = new Final(player.getColor(), player.getName());
+                    System.out.println("GameMatch: final");
                 }
-            } else {
-                changeTurn();
+            }//else{
+            //было   change = changeTurn(); зайдем только при countMove==0, а это уже третий вызов
+            //}
+            if ((countMove == 0) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
+                change = changeTurn();
             }
         } else throw UNABLE_TURN;
-        return finalMes;
+        return change;
     }
 
     public void addPlayer(Player player) {
@@ -149,6 +157,17 @@ public class GameMatch {
 
     public Player getBlackPlayer() {
         return blackPlayer;
+    }
+
+
+    public Player getOtherPlayer(Player player) {
+        Player player1 = null;
+        if (player == whitePlayer) {
+            player1 = blackPlayer;
+        } else if (player == blackPlayer) {
+            player1 = whitePlayer;
+        }
+        return player1;
     }
 
 
@@ -345,6 +364,7 @@ public class GameMatch {
         }
         return getWhitePlayerCondition();
     }
+
 
 }
 

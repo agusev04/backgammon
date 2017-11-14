@@ -1,6 +1,7 @@
 package server.transport;
 
 import game.logics.GameError;
+import game.logics.GameMatch;
 import game.logics.Player;
 
 public class MoveAction extends Action {
@@ -17,9 +18,20 @@ public class MoveAction extends Action {
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
         try {
-            message = new PackageMessage();
+            GameMatch gameMatch = player.getGameMatch();
+            Change change = gameMatch.moveChip(player, this); // либо ничего, либо финал, либо смена хода
+
             PackageMessage packageMessage = new PackageMessage();
-            packageMessage.addChange(player.getGameMatch().moveChip(player, this));
+            packageMessage.addChange(change);
+
+            PackageMessage packageMessageForOpponent = new PackageMessage();
+            packageMessageForOpponent.addChange(change);
+            Move move = new Move(from, to);
+            packageMessageForOpponent.addChange(move);
+
+            Player otherPlayer = gameMatch.getOtherPlayer(player);
+
+            otherPlayer.sendMessage(packageMessageForOpponent);
             message = packageMessage;
         } catch (GameError gameError) {
             message = new ErrorMessage(gameError);
