@@ -68,6 +68,12 @@ define(["require", "exports"], function (require, exports) {
             this._val2 = val2;
             this.animate(this._val1, this._val2);
         };
+        Dices.prototype.show = function () {
+            this.visible = true;
+        };
+        Dices.prototype.hide = function () {
+            this.visible = false;
+        };
         return Dices;
     }(Container));
     exports.Dices = Dices;

@@ -26,7 +26,9 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
             _this.countClick = 0;
             _this.tl = new TimelineLite();
             _this.sound = new Sound_1.Sound();
-            // ----------Массив с фишками-------------
+            _this.sectorJailWhite = 24;
+            _this.sectorJailBlack = 25;
+            // ----------Массив с фишками(два последних Тюрьма)-------------
             _this.arrayChips = [
                 [new Chip_1.Chip(true), new Chip_1.Chip(true)],
                 [], [], [], [],
@@ -41,15 +43,17 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 [],
                 [new Chip_1.Chip(false), new Chip_1.Chip(false), new Chip_1.Chip(false), new Chip_1.Chip(false), new Chip_1.Chip(false)],
                 [], [], [], [],
-                [new Chip_1.Chip(false), new Chip_1.Chip(false)]
+                [new Chip_1.Chip(false), new Chip_1.Chip(false)],
+                [],
+                []
             ];
-            // ----------Массив секторов которые отслеживают клики(на доске они скрыты)-------------
+            // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(два последних Тюрьма)------------
             _this.arraySectors = [new Sector_1.Sector(0), new Sector_1.Sector(1), new Sector_1.Sector(2), new Sector_1.Sector(3), new Sector_1.Sector(4), new Sector_1.Sector(5), new Sector_1.Sector(6), new Sector_1.Sector(7), new Sector_1.Sector(8), new Sector_1.Sector(9), new Sector_1.Sector(10), new Sector_1.Sector(11), new Sector_1.Sector(12),
-                new Sector_1.Sector(13), new Sector_1.Sector(14), new Sector_1.Sector(15), new Sector_1.Sector(16), new Sector_1.Sector(17), new Sector_1.Sector(18), new Sector_1.Sector(19), new Sector_1.Sector(20), new Sector_1.Sector(21), new Sector_1.Sector(22), new Sector_1.Sector(23)];
-            // ----------Массив position X позиция и начальной позиции Y конечная позиция Y высчитывается в зависимости от положения фишки в стеке фишек-------------
+                new Sector_1.Sector(13), new Sector_1.Sector(14), new Sector_1.Sector(15), new Sector_1.Sector(16), new Sector_1.Sector(17), new Sector_1.Sector(18), new Sector_1.Sector(19), new Sector_1.Sector(20), new Sector_1.Sector(21), new Sector_1.Sector(22), new Sector_1.Sector(23), new Sector_1.Sector(24), new Sector_1.Sector(25)];
+            // ----------Массив position X позиция и начальной позиции Y конечная позиция Y высчитывается в зависимости от положения фишки в стеке фишек(два последних Тюрьма)-------------
             _this.arrayPositionPoint = [new PIXI.Point(872, 60), new PIXI.Point(815, 60), new PIXI.Point(753, 60), new PIXI.Point(696, 60), new PIXI.Point(636, 60), new PIXI.Point(578, 60), new PIXI.Point(450, 60), new PIXI.Point(390, 60), new PIXI.Point(330, 60),
                 new PIXI.Point(270, 60), new PIXI.Point(210, 60), new PIXI.Point(155, 60), new PIXI.Point(155, 715), new PIXI.Point(210, 715), new PIXI.Point(270, 715), new PIXI.Point(330, 715), new PIXI.Point(390, 715), new PIXI.Point(450, 715), new PIXI.Point(578, 715), new PIXI.Point(636, 715),
-                new PIXI.Point(696, 715), new PIXI.Point(753, 715), new PIXI.Point(815, 715), new PIXI.Point(872, 715),];
+                new PIXI.Point(696, 715), new PIXI.Point(753, 715), new PIXI.Point(815, 715), new PIXI.Point(872, 715), new PIXI.Point(515, 30), new PIXI.Point(515, 715)];
             _this.bg.texture = _this.bg_skin;
             _this.addChild(_this.bg);
             _this.listenClick();
@@ -91,6 +95,9 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                     this.arraySectors[i].rotation = -3.14;
                 }
             }
+            this.arraySectors[this.sectorJailWhite].rotation = 0;
+            this.arraySectors[this.sectorJailWhite].position.set(this.arrayPositionPoint[24].x, this.arrayPositionPoint[24].y); //Jail
+            this.arraySectors[this.sectorJailBlack].position.set(this.arrayPositionPoint[25].x, this.arrayPositionPoint[25].y); //Jail
         };
         Board.prototype.drawSectors = function () {
             //задает позицию сектора и добовляет его на доску
@@ -111,20 +118,45 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 this.sound.playSoundClickChip();
                 this.countClick++;
                 this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target); // делаю это для того что бы можно было воспользоваться сектором на который кликнули первый раз т.е выбрали фишку
+                if (this.arraySectors.indexOf(data.target) == 24) {
+                    this.whiteIsJail = true;
+                }
                 this.selectChip(this.firsSelectSectorIndex); //в этом методе фишка меняет скин на зеленый (активный)
-                // console.log('кубики с сервера и их тип');
-                // console.log(typeof this.diceFromServer);
-                // console.log(this.diceFromServer);
-                this.deactivationAllSectors(); //убираю интерактив после выбора фишки со всем секторов кроме подсвеченных
-                this.highlightSector(this.firsSelectSectorIndex, this.dice); //кидаю туда значение кубиков которые константа 3 и 1
+                this.deactivationAllSectors(); //убираю интерактив после выбора фишки со всех секторов кроме подсвеченных и кроме того на котором фишка стоит что бы можно было отметить выбранную фишку
+                this.highlightSector(this.firsSelectSectorIndex);
             }
             else if (this.countClick == 1) {
                 this.secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
-                this.moveChip(this.firsSelectSectorIndex, this.secondSelectSectorIndex);
-                this.deactivationChip(); //делаю фишку не активной
-                this.offHighLightSectors(); //отключаю подсветку
-                this.deactivationSectors(); //убираю интерактив с секторов что бы можно было нажать только на те на которых есть фишки
+                if (this.firsSelectSectorIndex == this.secondSelectSectorIndex) {
+                    this.sound.playSoundClickChip();
+                    this.deactivationChip(); //делаю фишку не активной
+                    this.offHighLightSectors(); //отключаю подсветку
+                    this.deactivationSectors();
+                    this.deactivationSectorsAndJail(); //если тюрьма пустая то активны все чипы на которых есть фишки иначе активна только тюрьма
+                    this.countClick = 0;
+                }
+                else {
+                    this.moveChip(this.firsSelectSectorIndex, this.secondSelectSectorIndex);
+                    this.deactivationChip(); //делаю фишку не активной
+                    this.offHighLightSectors(); //отключаю подсветку
+                    this.deactivationSectorsAndJail(); //если тюрьма пустая то активны все чипы на которых есть фишки иначе активна только тюрьма
+                }
             }
+        };
+        Board.prototype.deactivationSectorsAndJail = function () {
+            if (this.arrayChips[this.sectorJailWhite].length != 0 || this.arrayChips[this.sectorJailBlack].length != 0) {
+                for (var i = 0; i < 24; i++) {
+                    this.arraySectors[i].interactiveOff();
+                }
+                if (this.arrayChips[this.sectorJailWhite] != 0) {
+                    this.arraySectors[this.sectorJailWhite].interactiveOn();
+                }
+                else {
+                    this.arraySectors[this.sectorJailBlack].interactiveOn();
+                }
+            }
+            else
+                this.deactivationSectors(); //убираю интерактив с секторов что бы можно было нажать только на те на которых есть фишки
         };
         Board.prototype.selectChip = function (selectSectorIndex) {
             //передаю сюда сектор по которому кликнули первый раз ( индекс сектора совподает с индексом массива фишек )
@@ -165,6 +197,7 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
             for (var i = 0; i < this.arraySectors.length; i++) {
                 this.arraySectors[i].interactiveOff();
             }
+            this.arraySectors[this.firsSelectSectorIndex].interactiveOn();
         };
         Board.prototype.deactivationSectors = function () {
             //убираю интерактив с секторов что бы можно было нажать только на подсвеченные сектора
@@ -195,84 +228,156 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
             }
             return new Point(x, y);
         };
+        Board.prototype.animationMoveChip = function (Chip, x, y) {
+            this.emit(Board.EVENT_MOVE_CHIP, {
+                oldPositionX: Chip.position.x,
+                oldPositionY: Chip.position.y,
+                newPositionX: x,
+                newPositionY: y,
+            });
+            TweenLite.to(Chip, 0.5, {
+                x: x,
+                y: y,
+                onStart: this.sound.playSoundMoveChip()
+            });
+        };
         Board.prototype.setDice = function (first, second) {
             this.dice[0] = first;
             this.dice[1] = second;
+            this._activeDices = [];
+            if (first == second) {
+                this._activeMoves = first * 4;
+                this._activeDices.push(first);
+                this._activeDices.push(first);
+                this._activeDices.push(first);
+                this._activeDices.push(first);
+                this._activeDices.push(first * 2);
+                this._activeDices.push(first * 2);
+                this._activeDices.push(first * 3);
+                this._activeDices.push(first * 4);
+            }
+            else {
+                this._activeDices.push(first);
+                this._activeDices.push(second);
+                this._activeDices.push(first + second);
+                this._activeMoves = first + second;
+            }
+            console.log('Кол-во возможных ходов: ', this._activeMoves);
+            console.log('Активные кубики: ', this._activeDices);
+            this._isActive = this._activeMoves != 0;
         };
         Board.prototype.moveChip = function (oldPosition, newPosition) {
-            // let yPosition:number;
-            // let newSector:Sector = this.arraySectors[newPosition];
-            // //
-            // // console.log();
-            // // if(newSector.position.y == 745){//условие создано для того что бы правильно рассчитывать координату y
-            // //     yPosition =(newSector.position.y-30)- this.OFFSET * this.arrayChips[newPosition].length;
-            // // }else {
-            // //     yPosition =(newSector.position.y*2) + this.OFFSET * this.arrayChips[newPosition].length;
-            // // }
-            var oldChip = this.arrayChips[oldPosition].pop();
-            this.addChild(oldChip);
-            var newPositionX = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).x;
-            var newPositionY = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).y;
-            TweenLite.to(oldChip, 0.5, {
-                x: newPositionX,
-                y: newPositionY,
-                onStart: this.sound.playSoundMoveChip()
-            });
-            this.arrayChips[newPosition].push(oldChip);
-            this.countClick = 0;
+            if (this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].colorChipWhite != this.arrayChips[newPosition][0].colorChipWhite) {
+                var positionJail_X = void 0;
+                var positionJail_Y = void 0;
+                var oldChip = this.arrayChips[oldPosition].pop();
+                this.addChild(oldChip);
+                var opponentChip = this.arrayChips[newPosition][0];
+                this.addChild(opponentChip);
+                switch (opponentChip.colorChipWhite) {
+                    case true:
+                        this.arrayChips[this.sectorJailWhite].push(opponentChip);
+                        positionJail_X = this.getChipPosition(this.sectorJailWhite, this.arrayChips[this.sectorJailWhite].length).x;
+                        positionJail_Y = this.getChipPosition(this.sectorJailWhite, this.arrayChips[this.sectorJailWhite].length).y;
+                        break;
+                    case false:
+                        this.arrayChips[this.sectorJailBlack].push(opponentChip);
+                        positionJail_X = this.getChipPosition(this.sectorJailBlack, this.arrayChips[this.sectorJailBlack].length).x;
+                        positionJail_Y = this.getChipPosition(this.sectorJailBlack, this.arrayChips[this.sectorJailBlack].length).y;
+                }
+                this.arrayChips[newPosition].pop();
+                this.animationMoveChip(opponentChip, positionJail_X, positionJail_Y);
+                var newPositionX = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).x;
+                var newPositionY = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).y;
+                this.animationMoveChip(oldChip, newPositionX, newPositionY);
+                this.arrayChips[newPosition].push(oldChip);
+                var currentMove = void 0;
+                if (this.whiteIsJail) {
+                    currentMove = newPosition;
+                    this.whiteIsJail = false;
+                }
+                else {
+                    currentMove = Math.abs(newPosition - oldPosition);
+                }
+                this._activeMoves -= currentMove;
+                this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                this._activeDices = this._activeDices.filter(function (number) {
+                    return number <= this._activeMoves;
+                }, this);
+                console.log('Сделан ход: ', currentMove);
+                console.log('Кол-во возможных ходов: ', this._activeMoves);
+                console.log('Активные кубики: ', this._activeDices);
+                this._isActive = this._activeMoves != 0;
+                if (!this._isActive) {
+                    this.emit(Board.EVENT_ENDOFTURN);
+                }
+                this.countClick = 0;
+            }
+            else {
+                var oldChip = this.arrayChips[oldPosition].pop();
+                this.addChild(oldChip);
+                var newPositionX = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).x;
+                var newPositionY = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).y;
+                this.animationMoveChip(oldChip, newPositionX, newPositionY);
+                this.arrayChips[newPosition].push(oldChip);
+                var currentMove = void 0;
+                if (this.whiteIsJail) {
+                    currentMove = newPosition;
+                    this.whiteIsJail = false;
+                }
+                else {
+                    currentMove = Math.abs(newPosition - oldPosition);
+                }
+                this._activeMoves -= currentMove;
+                this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                this._activeDices = this._activeDices.filter(function (number) {
+                    return number <= this._activeMoves;
+                }, this);
+                console.log('Сделан ход: ', currentMove);
+                console.log('Кол-во возможных ходов: ', this._activeMoves);
+                console.log('Активные кубики: ', this._activeDices);
+                this._isActive = this._activeMoves != 0;
+                if (!this._isActive) {
+                    this.emit(Board.EVENT_ENDOFTURN);
+                }
+                this.countClick = 0;
+            }
         };
-        Board.prototype.highlightSector = function (sectorIndex, dice) {
-            //подсветка секторов
-            var oneWay;
-            var secondWay;
-            var thirdWay;
+        Board.prototype.highlightSector = function (sectorIndex) {
             if (this.selectChipWhite) {
-                oneWay = sectorIndex + dice[1];
-                secondWay = sectorIndex + dice[0];
-                thirdWay = sectorIndex + dice[1] + dice[0];
+                this._activeDices.forEach(function (element) {
+                    if (sectorIndex + element < 24) {
+                        this.calculateHighlights(sectorIndex + element);
+                    }
+                    else if (sectorIndex == 24) {
+                        this.calculateHighlights(element);
+                    }
+                    else if (sectorIndex == 25) {
+                        this.calculateHighlights(23 + element);
+                    }
+                }, this);
             }
             else {
-                oneWay = sectorIndex - dice[1];
-                secondWay = sectorIndex - dice[0];
-                thirdWay = sectorIndex - dice[1] - dice[0];
-            }
-            if (this.arrayChips[oneWay].length != 0) {
-                if (this.arrayChips[oneWay][0].colorChipWhite == this.selectChipWhite) {
-                    this.arraySectors[oneWay].highlightMove();
-                }
-                else {
-                    this.arraySectors[oneWay].highlightAttack();
-                }
-            }
-            else {
-                this.arraySectors[oneWay].highlightMove();
-            }
-            if (this.arrayChips[secondWay].length != 0) {
-                if (this.arrayChips[secondWay][0].colorChipWhite == this.selectChipWhite) {
-                    this.arraySectors[secondWay].highlightMove();
-                }
-                else {
-                    this.arraySectors[secondWay].highlightAttack();
-                }
-            }
-            else {
-                this.arraySectors[secondWay].highlightMove();
-            }
-            if (this.arrayChips[thirdWay].length != 0) {
-                if (this.arrayChips[thirdWay][0].colorChipWhite == this.selectChipWhite) {
-                    this.arraySectors[thirdWay].highlightMove();
-                }
-                else {
-                    this.arraySectors[thirdWay].highlightAttack();
-                }
-            }
-            else {
-                this.arraySectors[thirdWay].highlightMove();
+                this._activeDices.forEach(function (element) {
+                    this.calculateHighlights(sectorIndex - element);
+                }, this);
             }
         };
-        Board.prototype.arrayDicaOfSrtingDice = function (diceFromGame) {
-            this.diceFromServer = diceFromGame.split(',');
+        Board.prototype.calculateHighlights = function (way) {
+            if (this.arrayChips[way].length != 0) {
+                if (this.arrayChips[way][0].colorChipWhite == this.selectChipWhite) {
+                    this.arraySectors[way].highlightMove();
+                }
+                else if (this.arrayChips[way].length == 1) {
+                    this.arraySectors[way].highlightAttack();
+                }
+            }
+            else {
+                this.arraySectors[way].highlightMove();
+            }
         };
+        Board.EVENT_ENDOFTURN = 'EndOfTurn';
+        Board.EVENT_MOVE_CHIP = 'moveChip';
         return Board;
     }(Container));
     exports.Board = Board;

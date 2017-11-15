@@ -52,7 +52,7 @@ export class Sector extends Container
 
     public highlightAttack(){
         this.yellowTrianglSprite.visible = true;
-        this.interactiveOff();
+        this.interactiveOn();
     }
 
     public interactiveOn(){

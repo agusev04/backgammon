@@ -42,4 +42,14 @@ export class Button extends Container
         });
         this.addChild(icon);
     }
+
+    public show()
+    {
+        this.visible = true;
+    }
+
+    public hide()
+    {
+        this.visible = false;
+    }
 }

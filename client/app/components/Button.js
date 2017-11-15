@@ -46,6 +46,12 @@ define(["require", "exports"], function (require, exports) {
             });
             this.addChild(icon);
         };
+        Button.prototype.show = function () {
+            this.visible = true;
+        };
+        Button.prototype.hide = function () {
+            this.visible = false;
+        };
         return Button;
     }(Container));
     exports.Button = Button;

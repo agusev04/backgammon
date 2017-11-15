@@ -84,21 +84,6 @@ export class Network extends EventEmitter
         this.send({
             CLASS_NAME: 'Enter'
         });
-        // this.emit(Network.EVENT_DATA, {
-        //     CLASS_NAME: 'GameState',
-        //     whitePositions: [ 103, 305, 2404, 2103 ],
-        //     blackPositions:[ 403, 905, 1803, 1604 ],
-        //     cubeValues: 0,
-        //     color: 0,
-        //     turn: 'Jp',
-        //     tableName:"Bill's table"
-        // });
-        // setTimeout(function () {
-        //     this.emit(Network.EVENT_DATA, {
-        //         CLASS_NAME: 'GameStart',
-        //         enemyUserName: 'Ivan'
-        //     });
-        // }.bind(this), 8000)
     }
 
     public openConnection(url:any):void {
@@ -122,7 +107,7 @@ export class Network extends EventEmitter
     private onError(event:any)
     {
         this.emit(Network.EVENT_ERROR);
-        console.log(event.target.readyState);
+        // console.log(event.target.readyState);
     }
 
     private onOpen()
@@ -134,18 +119,18 @@ export class Network extends EventEmitter
     private onClose(event:any):void
     {
         if (event.wasClean) {
-            console.log('Соединение закрыто чисто');
+            // console.log('Соединение закрыто чисто');
             this.emit(Network.EVENT_DISCONNECTED,{
                 status:'wasClean'
             })
 
         } else {
-            console.log('Обрыв соединения сообщение из класса Network');
+            // console.log('Обрыв соединения сообщение из класса Network');
             this.emit(Network.EVENT_DISCONNECTED,{
                 status: 'disconnection'
             })
         }
-        console.log('Код: ' + event.code + ' причина: ' + event.reason);
+        // console.log('Код: ' + event.code + ' причина: ' + event.reason);
     }
 
     private onMessage(event:any):void

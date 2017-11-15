@@ -27,6 +27,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
          */
         function Game() {
             var _this = _super.call(this) || this;
+            _this._myName = 'Jp';
             _this.configure();
             return _this;
         }
@@ -44,8 +45,13 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this._network.on(Network_1.Network.EVENT_CONNECTED, this.eventConnected, this);
             this._network.on(Network_1.Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
             this._network.on(Network_1.Network.EVENT_DATA, this.eventData, this);
+            this._board.on(Board_1.Board.EVENT_ENDOFTURN, this.endTurn, this);
             // this.addChild(this._board);
             this.addChild(this._msgBox);
+        };
+        Game.prototype.endTurn = function () {
+            this._throwBtn.show();
+            this._dices.hide();
         };
         Game.prototype.eventDisconnected = function () {
             console.log('Disconnected from server.');
@@ -59,6 +65,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 // TODO Сделать отдельные функции
                 case 'GameState':
                     console.log('GameState reached from server. Waiting for opponent...');
+                    this._myTurn = data.turn == this._myName;
                     // this._board.drawState();
                     this.loadGame();
                     break;
@@ -69,7 +76,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 case 'CubeValue':
                     var first = (data.cubeValues - data.cubeValues % 10) / 10;
                     var second = data.cubeValues % 10;
-                    console.log('Values from server: ' + first + ', ' + second);
+                    console.log('Values from server: ', first + ', ', second);
                     this.throwCubes(first, second);
                     this._board.setDice(first, second);
                     // Передать данные кубика
@@ -106,9 +113,10 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         Game.prototype.set_cube = function () {
             this._throwBtn.on('DiceRoll', this.requestCubes, this);
             this._throwBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
-            this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2 - 150);
+            this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
             this.addChild(this._throwBtn);
             this.addChild(this._dices);
+            this._dices.hide();
         };
         Game.prototype.openConnection = function () {
             console.log('Connecting to server...');
@@ -139,8 +147,10 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this.set_cube();
         };
         Game.prototype.throwCubes = function (first, second) {
+            this._throwBtn.hide();
+            this._dices.show();
             this._dices.throwDice(first, second);
-            this._dices.on('SuccessfulThrow', this.requestPossiblePositions, this);
+            // this._dices.on('SuccessfulThrow', this.requestPossiblePositions, this);
         };
         Game.prototype.moveChip = function (positions) {
             console.log('Requesting move: 504');

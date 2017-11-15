@@ -70,6 +70,16 @@ export class Dices extends Container
         this.animate(this._val1, this._val2);
     }
 
+    public show()
+    {
+        this.visible = true;
+    }
+
+    public hide()
+    {
+        this.visible = false;
+    }
+
     // TODO С анимацией и без. Вернуть какой-то результат, что кубики выброшены.
     // TODO Сделать msgBox еще один.
     // TODO Кубики на половине доски игрока.

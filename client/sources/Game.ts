@@ -18,6 +18,8 @@ export class Game extends Container
 
     public static WIDTH:number = 1024;
     public static HEIGHT:number = 768;
+    private _myTurn:boolean;
+    private _myName:string;
     private _startBtn:Button;
     private _throwBtn:Button;
     private _dices:Dices;
@@ -33,6 +35,7 @@ export class Game extends Container
     constructor()
     {
         super();
+        this._myName = 'Jp';
         this.configure();
     }
 
@@ -51,15 +54,21 @@ export class Game extends Container
         this._network.on(Network.EVENT_CONNECTED, this.eventConnected, this);
         this._network.on(Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
         this._network.on(Network.EVENT_DATA, this.eventData, this);
+        this._board.on(Board.EVENT_ENDOFTURN, this.endTurn, this);
 
         // this.addChild(this._board);
         this.addChild(this._msgBox);
     }
 
+    protected endTurn()
+    {
+        this._throwBtn.show();
+        this._dices.hide();
+    }
+
     protected eventDisconnected():void
     {
         console.log('Disconnected from server.');
-
     }
 
     protected eventConnected():void
@@ -75,6 +84,7 @@ export class Game extends Container
             // TODO Сделать отдельные функции
             case 'GameState':
                 console.log('GameState reached from server. Waiting for opponent...');
+                this._myTurn = data.turn == this._myName;
                 // this._board.drawState();
                 this.loadGame();
                 break;
@@ -85,7 +95,7 @@ export class Game extends Container
             case 'CubeValue':
                 let first = (data.cubeValues - data.cubeValues % 10)/10;
                 let second = data.cubeValues % 10;
-                console.log('Values from server: ' + first + ', ' + second);
+                console.log('Values from server: ', first + ', ', second);
                 this.throwCubes(first, second);
                 this._board.setDice(first, second);
                 // Передать данные кубика
@@ -130,9 +140,10 @@ export class Game extends Container
     {
         this._throwBtn.on('DiceRoll', this.requestCubes, this);
         this._throwBtn.position.set(Game.WIDTH/2, Game.HEIGHT/2);
-        this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2 - 150);
+        this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2);
         this.addChild(this._throwBtn);
         this.addChild(this._dices);
+        this._dices.hide();
     }
 
     protected openConnection()
@@ -175,8 +186,10 @@ export class Game extends Container
 
     protected throwCubes(first:number, second:number)
     {
+        this._throwBtn.hide();
+        this._dices.show();
         this._dices.throwDice(first, second);
-        this._dices.on('SuccessfulThrow', this.requestPossiblePositions, this);
+        // this._dices.on('SuccessfulThrow', this.requestPossiblePositions, this);
     }
 
     protected moveChip(positions:number[])

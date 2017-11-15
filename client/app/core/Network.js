@@ -80,21 +80,6 @@ define(["require", "exports"], function (require, exports) {
             this.send({
                 CLASS_NAME: 'Enter'
             });
-            // this.emit(Network.EVENT_DATA, {
-            //     CLASS_NAME: 'GameState',
-            //     whitePositions: [ 103, 305, 2404, 2103 ],
-            //     blackPositions:[ 403, 905, 1803, 1604 ],
-            //     cubeValues: 0,
-            //     color: 0,
-            //     turn: 'Jp',
-            //     tableName:"Bill's table"
-            // });
-            // setTimeout(function () {
-            //     this.emit(Network.EVENT_DATA, {
-            //         CLASS_NAME: 'GameStart',
-            //         enemyUserName: 'Ivan'
-            //     });
-            // }.bind(this), 8000)
         };
         Network.prototype.openConnection = function (url) {
             // подключение
@@ -115,7 +100,7 @@ define(["require", "exports"], function (require, exports) {
         // }
         Network.prototype.onError = function (event) {
             this.emit(Network.EVENT_ERROR);
-            console.log(event.target.readyState);
+            // console.log(event.target.readyState);
         };
         Network.prototype.onOpen = function () {
             console.log('Connection succeed.');
@@ -123,18 +108,18 @@ define(["require", "exports"], function (require, exports) {
         };
         Network.prototype.onClose = function (event) {
             if (event.wasClean) {
-                console.log('Соединение закрыто чисто');
+                // console.log('Соединение закрыто чисто');
                 this.emit(Network.EVENT_DISCONNECTED, {
                     status: 'wasClean'
                 });
             }
             else {
-                console.log('Обрыв соединения сообщение из класса Network');
+                // console.log('Обрыв соединения сообщение из класса Network');
                 this.emit(Network.EVENT_DISCONNECTED, {
                     status: 'disconnection'
                 });
             }
-            console.log('Код: ' + event.code + ' причина: ' + event.reason);
+            // console.log('Код: ' + event.code + ' причина: ' + event.reason);
         };
         Network.prototype.onMessage = function (event) {
             console.log("говорю из класса нетворк что сервер мне сказал--->>>", event.data);

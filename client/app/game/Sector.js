@@ -52,7 +52,7 @@ define(["require", "exports"], function (require, exports) {
         };
         Sector.prototype.highlightAttack = function () {
             this.yellowTrianglSprite.visible = true;
-            this.interactiveOff();
+            this.interactiveOn();
         };
         Sector.prototype.interactiveOn = function () {
             this.interactive = true;
