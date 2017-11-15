@@ -7,11 +7,15 @@ import game.logics.Player;
 public class MoveAction extends Action {
     public int from;
     public int to;
+    public boolean cantMove;
 
 
     public MoveAction(int from, int to) { // For tests
         this.from = from;
         this.to = to;
+    }
+    public MoveAction(boolean cantMove) { // For tests
+        this.cantMove = cantMove;
     }
 
     @Override

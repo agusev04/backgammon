@@ -14,18 +14,19 @@ import static game.logics.GameError.UNABLE_TURN;
 
 public class GameMatch {
 
-    public static final int WHITE_DIRECTION = 1;
-    public static final int BLACK_DIRECTION = -1;
-    public static final int waiting_turn = 0;  // ожидание хода
-    public static final int waiting_throw_dice = 1; // ожидание броска кубика
-    public static final int waiting_move_chip = 2; // ожидание перемещения фишки
-    public static final int the_final = 3; // конец игры
-    public boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
+    private static final int WHITE_DIRECTION = 1;
+    private static final int BLACK_DIRECTION = -1;
+    private static final int waiting_turn = 0;  // ожидание хода
+    private static final int waiting_throw_dice = 1; // ожидание броска кубика
+    private static final int waiting_move_chip = 2; // ожидание перемещения фишки
+    private static final int the_final = 3; // конец игры
+    private boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
+    private boolean cantMove = false; // флаг от клиента, что есть ходы, когда true - changeTurn
 
     /* Игровые состояния */
     public int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     public int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
-    public int countMove = 1; // переменная для количества ходов
+    private int countMove = 1; // переменная для количества ходов
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     Player whitePlayer;
@@ -36,7 +37,6 @@ public class GameMatch {
     public int getCountMove() {
         return countMove;
     }
-
 
     //TODO (Michael) подумать, как лучше назвать этот класс !!
 
@@ -66,15 +66,15 @@ public class GameMatch {
                 throw UNABLE_THROW_DICES;
             }
         } else {
-            result = cubeValue.intValue();
             if (turnWhite && whitePlayerCondition == waiting_throw_dice) {
                 whitePlayerCondition = waiting_move_chip;
             }
             if (!turnWhite && blackPlayerCondition == waiting_throw_dice) {
                 blackPlayerCondition = waiting_move_chip;
             }
+            result = cubeValue.intValue();
         }
-        countMove = 2; //
+        countMove = 2;
         if (result / 10 == result % 10) { // проверка на дубль
             countMove = 4; //при дубле 4 хода
         }
@@ -101,6 +101,19 @@ public class GameMatch {
         //хода, ибо ожидания броска кубика нет, мы сразу кидаем кубик, как только сменился ход, ожидания кубика нет в принципе).
     }
 
+    public void setTable(GameBoard table) { //TODO: нужен ли нам этот метод? нигде не используется
+        this.table = table;
+    }
+
+    public Change moveChip (boolean cantMove) {
+        Change change = null;
+        if (cantMove) { // проверяем, пришел ли флаг, что нельзя ходить
+            this.countMove = 0;
+            change = changeTurn();
+        }
+        return change;
+    }
+
     public Change moveChip(Player player, MoveAction move) throws GameError {
         if (turnWhite && whitePlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
@@ -116,6 +129,12 @@ public class GameMatch {
                 countMove--;
                 if (table.isEnd(player.getColor())) {
                     change = new Final(player.getColor(), player.getName());
+                    if (turnWhite && whitePlayerCondition == waiting_move_chip) {
+                        whitePlayerCondition = the_final;
+                    }
+                    if (!turnWhite && blackPlayerCondition == waiting_move_chip) {
+                        blackPlayerCondition = the_final;
+                    }
                     System.out.println("GameMatch: final");
                 }
             }//else{
@@ -149,7 +168,7 @@ public class GameMatch {
 
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
-    }
+    } //TODO: этот метод нужен? нигде не используется
 
     public Player getWhitePlayer() {
         return whitePlayer;
@@ -358,6 +377,13 @@ public class GameMatch {
         return getWhitePlayer(); // если if не прошел в первом случае, отправляем, что активный игрок белый
     }
 
+    public Player getWaitingPlayer() {
+        if (!turnWhite) {
+            return getWhitePlayer();
+        }
+        return getBlackPlayer();
+    }
+
     public int getActivePlayerCondition() {
         if (!turnWhite) {
             return getBlackPlayerCondition();
@@ -365,7 +391,12 @@ public class GameMatch {
         return getWhitePlayerCondition();
     }
 
-
+    public int getWaitingPlayerCondition() {
+        if (!turnWhite) {
+            return getWhitePlayerCondition();
+        }
+        return getBlackPlayerCondition();
+    }
 }
 
 
