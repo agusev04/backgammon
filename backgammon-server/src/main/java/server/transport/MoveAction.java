@@ -10,9 +10,10 @@ public class MoveAction extends Action {
     public boolean cantMove;
 
 
-    public MoveAction(int from, int to) { // For tests
+    public MoveAction(int from, int to, boolean cantMove) { // For tests
         this.from = from;
         this.to = to;
+        this.cantMove = cantMove;
     }
 
     @Override
@@ -33,26 +34,31 @@ public class MoveAction extends Action {
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
         System.out.println(player.getName() + " move chip from " + from + " to " + to);
-        try {
-            GameMatch gameMatch = player.getGameMatch();
-            Change change = gameMatch.moveChip(player, this); // либо ничего, либо финал, либо смена хода
+        Change change;
+            try {
+                GameMatch gameMatch = player.getGameMatch();
+                if (cantMove) {
+                    change = gameMatch.moveChip(player, this, cantMove);
+                } else change = gameMatch.moveChip(player, this, !cantMove); // либо ничего, либо финал, либо смена хода
 
-            PackageMessage packageMessage = new PackageMessage();
-            packageMessage.addChange(change);
+                PackageMessage packageMessage = new PackageMessage();
+                packageMessage.addChange(change);
 
-            PackageMessage packageMessageForOpponent = new PackageMessage();
-            packageMessageForOpponent.addChange(change);
-            Move move = new Move(from, to);
-            packageMessageForOpponent.addChange(move);
+                PackageMessage packageMessageForOpponent = new PackageMessage();
+                packageMessageForOpponent.addChange(change);
+                Move move = new Move(from, to);
+                packageMessageForOpponent.addChange(move);
 
-            Player otherPlayer = gameMatch.getOtherPlayer(player);
+                Player otherPlayer = gameMatch.getOtherPlayer(player);
 
-            otherPlayer.sendMessage(packageMessageForOpponent);
-            message = packageMessage;
-        } catch (GameError gameError) {
-            message = new ErrorMessage(gameError);
-        }
-        System.out.println("SERVER SENT: " + message);
+                otherPlayer.sendMessage(packageMessageForOpponent);
+                message = packageMessage;
+                System.out.println("SERVER SENT: " + message);
+                otherPlayer.sendMessage(packageMessageForOpponent);
+                message = packageMessage;
+            } catch (GameError gameError) {
+                message = new ErrorMessage(gameError);
+            }
         return message;
     }
 }

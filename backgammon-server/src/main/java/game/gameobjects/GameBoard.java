@@ -18,6 +18,7 @@ public class GameBoard {
     int whiteCount = 15;
     int blackCount = 15;
 
+
     public GameBoard() {
         cells = new Cell[26];
 

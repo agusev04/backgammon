@@ -30,8 +30,6 @@ public class GameMatch {
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     Player whitePlayer;
-
-    //    TODO: геттер для терна (чей ход) (бул тип) 1 - ход, 0 - ожидание своего хода.
     Player blackPlayer;
 
     public int getCountMove() {
@@ -49,6 +47,8 @@ public class GameMatch {
     public GameBoard getTable() {
         return table;
     }
+
+
 
     public int throwDice(Player player, Integer cubeValue) throws GameError { //TODO смена состояний, проверка на то тот ли ирок бросает
         if (turnWhite && whitePlayerCondition != waiting_throw_dice) {
@@ -101,20 +101,7 @@ public class GameMatch {
         //хода, ибо ожидания броска кубика нет, мы сразу кидаем кубик, как только сменился ход, ожидания кубика нет в принципе).
     }
 
-    public void setTable(GameBoard table) { //TODO: нужен ли нам этот метод? нигде не используется
-        this.table = table;
-    }
-
-    public Change moveChip (boolean cantMove) {
-        Change change = null;
-        if (cantMove) { // проверяем, пришел ли флаг, что нельзя ходить
-            this.countMove = 0;
-            change = changeTurn();
-        }
-        return change;
-    }
-
-    public Change moveChip(Player player, MoveAction move) throws GameError {
+    public Change moveChip(Player player, MoveAction move, boolean cantMove) throws GameError {
         if (turnWhite && whitePlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
         }
@@ -137,10 +124,8 @@ public class GameMatch {
                     }
                     System.out.println("GameMatch: final");
                 }
-            }//else{
-            //было   change = changeTurn(); зайдем только при countMove==0, а это уже третий вызов
-            //}
-            if ((countMove == 0) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
+            }
+            if ((cantMove) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
                 change = changeTurn();
             }
         } else throw UNABLE_TURN;
