@@ -9,7 +9,19 @@ import java.util.ArrayList;
  * Класс {@link GameState} имплементирует {@link AbstractMessage}, содержит в себе
  * состояния стола, необходимое для клиента
  */
-public class GameState {
+public class GameState extends Response {
+    @Override
+    public String toString() {
+        return "GameState{" +
+                "whitePositions=" + whitePositions +
+                ", blackPositions=" + blackPositions +
+                ", cubeValue=" + cubeValue +
+                ", color=" + color +
+                ", tableName='" + tableName + '\'' +
+                ", turn='" + turn + '\'' +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                '}';
+    }
 
     ArrayList<ChipsPosition> whitePositions;
     ArrayList<ChipsPosition> blackPositions;
@@ -65,5 +77,6 @@ public class GameState {
     public void setTurn(String turn) {
         this.turn = turn;
     }
+
 }
 

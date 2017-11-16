@@ -2,7 +2,7 @@ package server.transport;
 
 import java.util.ArrayList;
 
-public class PackageMessage implements AbstractMessage {
+public class PackageMessage extends Response implements AbstractMessage {
 
     GameState gameState;
     ArrayList<Change> changeArrayList = new ArrayList<>();
@@ -39,6 +39,15 @@ public class PackageMessage implements AbstractMessage {
             System.out.println("PackageMessage: Message has not this change");
         }
         return change;
+    }
+
+    @Override
+    public String toString() {
+        return "PackageMessage{" +
+                "gameState=" + gameState +
+                ", changeArrayList=" + changeArrayList +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                '}';
     }
 }
 

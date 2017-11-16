@@ -23,7 +23,7 @@ public class GameMatch {
     private boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
     private boolean cantMove = false; // флаг от клиента, что есть ходы, когда true - changeTurn
 
-    /* Игровые состояния */
+    //Игровые состояния
     public int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     public int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     private int countMove = 1; // переменная для количества ходов

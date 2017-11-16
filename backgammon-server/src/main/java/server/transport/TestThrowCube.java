@@ -12,6 +12,14 @@ public class TestThrowCube extends Action {
     }
 
     @Override
+    public String toString() {
+        return "TestThrowCube{" +
+                "cubeValue=" + cubeValue +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                '}';
+    }
+
+    @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
         try {
@@ -37,6 +45,7 @@ public class TestThrowCube extends Action {
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
         }
+        System.out.println("SERVER SENT: " + message);
         return message;
     }
 }

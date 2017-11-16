@@ -1,6 +1,6 @@
 package server.transport;
 
-public class ChipsPosition {
+public class ChipsPosition extends Response{
     int position;
     int quantity;
 
@@ -32,6 +32,7 @@ public class ChipsPosition {
         return "ChipsPosition{" +
                 "position=" + position +
                 ", quantity=" + quantity +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
     }
 }

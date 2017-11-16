@@ -57,7 +57,7 @@ public class TestBasicRemote implements RemoteEndpoint.Basic {
     @Override
     public void sendObject(Object data) throws IOException, EncodeException {
         MessageEncoder encoder = new MessageEncoder();
-        System.out.println("SEND ASYNCHRONOUS MESSAGE " + encoder.encode((PackageMessage) data));
+      //  System.out.println("SEND ASYNCHRONOUS MESSAGE " + encoder.encode((PackageMessage) data));
         packageMessage = ((PackageMessage) data);
     }
 

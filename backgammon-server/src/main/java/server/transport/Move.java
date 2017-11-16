@@ -3,7 +3,7 @@ package server.transport;
 /**
  * Класс {@link Move} содержит информацию о ходе (или возможно ходе) игрока
  */
-public class Move implements Change {
+public class Move extends Response implements Change {
 
     public int from;
     public int to;
@@ -30,5 +30,14 @@ public class Move implements Change {
         int result = from;
         result = 31 * result + to;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "from=" + from +
+                ", to=" + to +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                '}';
     }
 }

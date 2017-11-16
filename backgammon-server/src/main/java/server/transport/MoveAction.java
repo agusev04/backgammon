@@ -14,6 +14,17 @@ public class MoveAction extends Action {
         this.from = from;
         this.to = to;
     }
+
+    @Override
+    public String toString() {
+        return "MoveAction{" +
+                "from=" + from +
+                ", to=" + to +
+                ", cantMove=" + cantMove +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                '}';
+    }
+
     public MoveAction(boolean cantMove) { // For tests
         this.cantMove = cantMove;
     }
@@ -21,6 +32,7 @@ public class MoveAction extends Action {
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
+        System.out.println(player.getName() + " move chip from " + from + " to " + to);
         try {
             GameMatch gameMatch = player.getGameMatch();
             Change change = gameMatch.moveChip(player, this); // либо ничего, либо финал, либо смена хода
@@ -40,6 +52,7 @@ public class MoveAction extends Action {
         } catch (GameError gameError) {
             message = new ErrorMessage(gameError);
         }
+        System.out.println("SERVER SENT: " + message);
         return message;
     }
 }

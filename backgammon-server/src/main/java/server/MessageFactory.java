@@ -19,10 +19,12 @@ public class MessageFactory {
     HashMap<String, Class> map = new HashMap<>();
 
     private MessageFactory() {
-        map.put("Enter", Enter.class);
-        map.put("ThrowCube", ThrowCube.class);
-        map.put("TestThrowCube", TestThrowCube.class);
-        map.put("MoveAction", MoveAction.class);
+
+            map.put("Enter", Enter.class);
+            map.put("ThrowCube", ThrowCube.class);
+            map.put("TestThrowCube", TestThrowCube.class);
+            map.put("MoveAction", MoveAction.class);
+
     }
 
     public static MessageFactory getMessageFactory() {
@@ -30,11 +32,10 @@ public class MessageFactory {
     }
 
     public Action makeMessage(String className, String jsonObject) {
-        Action action = null;
+        Action action ;
         map.get(className);
         Gson gson = new Gson();
 
-        Class cl = Enter.class;
         Class thisClass = map.get(className);
         try {
             action = (Action) gson.fromJson(jsonObject, thisClass);
