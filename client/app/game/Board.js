@@ -132,14 +132,19 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                     this.deactivationChip(); //делаю фишку не активной
                     this.offHighLightSectors(); //отключаю подсветку
                     this.deactivationSectors();
-                    this.deactivationSectorsAndJail(); //если тюрьма пустая то активны все чипы на которых есть фишки иначе активна только тюрьма
+                    // this.deactivationSectorsAndJail(); //если тюрьма пустая то активны все чипы на которых есть фишки иначе активна только тюрьма
                     this.countClick = 0;
                 }
                 else {
                     this.moveChip(this.firsSelectSectorIndex, this.secondSelectSectorIndex);
                     this.deactivationChip(); //делаю фишку не активной
                     this.offHighLightSectors(); //отключаю подсветку
-                    this.deactivationSectorsAndJail(); //если тюрьма пустая то активны все чипы на которых есть фишки иначе активна только тюрьма
+                    this.deactivationSectors();
+                    if (!this._isActive || this._activeMoves < 0) {
+                        this._activeMoves = 0;
+                        this.deactivationSectorsAndJail();
+                        this.emit(Board.EVENT_ENDOFTURN);
+                    }
                 }
             }
         };
@@ -148,15 +153,13 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 for (var i = 0; i < 24; i++) {
                     this.arraySectors[i].interactiveOff();
                 }
-                if (this.arrayChips[this.sectorJailWhite] != 0) {
-                    this.arraySectors[this.sectorJailWhite].interactiveOn();
-                }
-                else {
-                    this.arraySectors[this.sectorJailBlack].interactiveOn();
-                }
+                // if(this.arrayChips[this.sectorJailWhite]!=0){
+                //     this.arraySectors[this.sectorJailWhite].interactiveOn();
+                // }else{
+                //     this.arraySectors[this.sectorJailBlack].interactiveOn();
+                // }
             }
-            else
-                this.deactivationSectors(); //убираю интерактив с секторов что бы можно было нажать только на те на которых есть фишки
+            // this.deactivationSectors(); //убираю интерактив с секторов что бы можно было нажать только на те на которых есть фишки
         };
         Board.prototype.selectChip = function (selectSectorIndex) {
             //передаю сюда сектор по которому кликнули первый раз ( индекс сектора совподает с индексом массива фишек )
@@ -293,7 +296,7 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 this.arrayChips[newPosition].push(oldChip);
                 var currentMove = void 0;
                 if (this.whiteIsJail) {
-                    currentMove = newPosition;
+                    currentMove = newPosition + 1;
                     this.whiteIsJail = false;
                 }
                 else {
@@ -307,10 +310,13 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 console.log('Сделан ход: ', currentMove);
                 console.log('Кол-во возможных ходов: ', this._activeMoves);
                 console.log('Активные кубики: ', this._activeDices);
+                //
                 this._isActive = this._activeMoves != 0;
-                if (!this._isActive) {
-                    this.emit(Board.EVENT_ENDOFTURN);
-                }
+                // if (!this._isActive)
+                // {
+                //     this.deactivationSectorsAndJail();
+                //     this.emit(Board.EVENT_ENDOFTURN);
+                // }
                 this.countClick = 0;
             }
             else {
@@ -322,7 +328,7 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 this.arrayChips[newPosition].push(oldChip);
                 var currentMove = void 0;
                 if (this.whiteIsJail) {
-                    currentMove = newPosition;
+                    currentMove = newPosition + 1;
                     this.whiteIsJail = false;
                 }
                 else {
@@ -337,9 +343,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                 console.log('Кол-во возможных ходов: ', this._activeMoves);
                 console.log('Активные кубики: ', this._activeDices);
                 this._isActive = this._activeMoves != 0;
-                if (!this._isActive) {
-                    this.emit(Board.EVENT_ENDOFTURN);
-                }
                 this.countClick = 0;
             }
         };
@@ -350,16 +353,17 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound"], function (requir
                         this.calculateHighlights(sectorIndex + element);
                     }
                     else if (sectorIndex == 24) {
-                        this.calculateHighlights(element);
-                    }
-                    else if (sectorIndex == 25) {
-                        this.calculateHighlights(23 + element);
+                        this.calculateHighlights(element - 1);
                     }
                 }, this);
             }
             else {
                 this._activeDices.forEach(function (element) {
-                    this.calculateHighlights(sectorIndex - element);
+                    if (sectorIndex == 25) {
+                        this.calculateHighlights(24 - element);
+                    }
+                    else
+                        this.calculateHighlights(sectorIndex - element);
                 }, this);
             }
         };

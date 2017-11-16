@@ -37,6 +37,7 @@ export class Chip extends Container{
         }
         else
             this.chipSprite.texture = this.chipSkinBlack;
+
     }
 
 }
