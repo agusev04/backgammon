@@ -40,6 +40,7 @@ public class Player {  //класс игрока
         if (name == null || name.equals("")) {
             throw INCORRECT_REQUEST;
         }
+        this.name = name;
     }
 
     public GameMatch getGameMatch() {
