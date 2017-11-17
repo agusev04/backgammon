@@ -114,13 +114,13 @@ export class Game extends Container
             {
                 this._throwBtn.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
                 this._dices.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
-                this.showNotification('White\'s turn');
+                // this.showNotification('White\'s turn');
             }
             else
             {
                 this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
                 this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-                this.showNotification('Black\'s turn');
+                // this.showNotification('Black\'s turn');
             }
 
             this._throwBtn.show();
