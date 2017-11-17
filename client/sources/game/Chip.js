@@ -15,60 +15,29 @@ var Sprite = PIXI.Sprite;
 var Texture = PIXI.Texture;
 var Chip = (function (_super) {
     __extends(Chip, _super);
-    function Chip(chip_i, color_black, position_x, position_y) {
+    function Chip(color_white) {
         var _this = _super.call(this) || this;
-        _this.chip_sprite = new Sprite(PIXI.Texture.WHITE);
-        _this.chip_skin_white = Texture.fromImage('assets/white.png');
-        _this.chip_skin_black = Texture.fromImage('assets/black.png');
-        _this.chip_skin_white_active = Texture.fromImage('assets/white_active.png');
-        _this.chip_skin_black_active = Texture.fromImage('assets/black_active.png');
-        _this.chip_color_black = color_black;
-        _this.chip_index = chip_i;
-        _this.chip_sprite.texture = _this.chip_skin_white;
-        _this.chip_sprite.visible = true;
-        _this.chip_sprite.position.x = position_x;
-        _this.chip_sprite.position.y = position_y;
-        _this.setup();
+        _this.chipSprite = new Sprite(PIXI.Texture.WHITE);
+        _this.chipSkinWhite = Texture.fromImage('assets/white.png');
+        _this.chipSkinWhite_active = Texture.fromImage('assets/white_active.png');
+        _this.chipSkinBlack = Texture.fromImage('assets/black.png');
+        _this.chipSkinBlack_active = Texture.fromImage('assets/black_active.png');
+        _this.colorChipWhite = color_white;
+        _this.blackOrWhite();
+        _this.chipSprite.anchor.set(0.5);
+        _this.chipSprite.width = 60; //Game.WIDTH/15;
+        _this.chipSprite.height = 60; //Game.HEIGHT/15;
+        _this.selectNow = false;
+        _this.addChild(_this.chipSprite);
         return _this;
     }
-    ;
-    Chip.prototype.setup = function () {
-        if (this.chip_color_black) {
-            this.chip_sprite.texture = this.chip_skin_black;
+    Chip.prototype.blackOrWhite = function () {
+        if (this.colorChipWhite) {
+            this.chipSprite.texture = this.chipSkinWhite;
         }
-        else {
-            this.chip_sprite.texture = this.chip_skin_white;
-        }
-        this.chip_sprite.anchor.set(0.5);
-        this.chip_sprite.width = 64; //Game.WIDTH/15;
-        this.chip_sprite.height = 64; //Game.HEIGHT/15;
-        this.chip_sprite.interactive = true;
-        this.chip_sprite.buttonMode = true;
-        this.chip_sprite
-            .on('pointerdown', onDragStart)
-            .on('pointerup', onDragEnd)
-            .on('pointerupoutside', onDragEnd)
-            .on('pointermove', onDragMove);
-        function onDragStart(event) {
-            this.data = event.data;
-            this.alpha = 0.5;
-            this.dragging = true;
-        }
-        function onDragEnd() {
-            this.alpha = 1;
-            this.dragging = false;
-            this.data = null;
-        }
-        function onDragMove() {
-            if (this.dragging) {
-                var newPosition = this.data.getLocalPosition(this.parent);
-                this.x = newPosition.x;
-                this.y = newPosition.y;
-            }
-        }
-        this.addChild(this.chip_sprite);
+        else
+            this.chipSprite.texture = this.chipSkinBlack;
     };
-    ;
     return Chip;
 }(Container));
 exports.Chip = Chip;

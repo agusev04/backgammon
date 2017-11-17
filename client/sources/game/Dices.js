@@ -14,56 +14,64 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Container = PIXI.Container;
 var Sprite = PIXI.Sprite;
 var Texture = PIXI.Texture;
-var Button_1 = require("../components/Button");
 var BaseTexture = PIXI.BaseTexture;
 var Dices = (function (_super) {
     __extends(Dices, _super);
     function Dices() {
         var _this = _super.call(this) || this;
+        _this._dice1 = new Sprite();
+        _this._dice2 = new Sprite();
         _this.configure();
         return _this;
     }
     Dices.prototype.configure = function () {
-        var roll = new Button_1.Button('DiceRoll', 'test', 2000);
-        this.addChild(roll);
-        roll.position.set(0, 70);
-        var animation = [];
+        this._animation = [];
         for (var i = 0; i < 30; i++) {
-            animation.push(new PIXI.Rectangle(100 * i, 0, 100, 100));
+            this._animation.push(new PIXI.Rectangle(100 * i, 0, 100, 100));
         }
-        var Dice_1 = new Sprite();
-        var Dice_2 = new Sprite();
         var base = BaseTexture.fromImage('assets/dice.png');
-        Dice_1.visible = false;
-        Dice_2.visible = false;
-        Dice_1.texture = new Texture(base);
-        Dice_2.texture = new Texture(base);
-        Dice_1.anchor.set(0.5);
-        Dice_2.anchor.set(0.5);
-        Dice_1.position.set(-50, 0);
-        Dice_2.position.set(50, 0);
-        this.addChild(Dice_1);
-        this.addChild(Dice_2);
-        // this.animate(Dice_1, animation);
-        // this.animate(Dice_2, animation);
-        roll.on('DiceRoll', this.animate.bind(this, Dice_1, animation, this._val_1));
-        roll.on('DiceRoll', this.animate.bind(this, Dice_2, animation, this._val_2));
+        this._dice1.visible = false;
+        this._dice2.visible = false;
+        this._dice1.texture = new Texture(base);
+        this._dice2.texture = new Texture(base);
+        this._dice1.anchor.set(0.5);
+        this._dice2.anchor.set(0.5);
+        this._dice1.position.set(-50, 0);
+        this._dice2.position.set(50, 0);
+        this.addChild(this._dice1);
+        this.addChild(this._dice2);
     };
-    Dices.prototype.animate = function (sprite, animation, value) {
-        sprite.visible = true;
+    Dices.prototype.animate = function (val1, val2) {
+        this._dice1.visible = true;
+        this._dice2.visible = true;
         var _loop_1 = function (i) {
             setTimeout(function () {
-                sprite.texture.frame = animation[i];
+                this._dice1.texture.frame = this._animation[i];
+                this._dice2.texture.frame = this._animation[i];
             }.bind(this_1), i * 80);
         };
         var this_1 = this;
         for (var i = 0; i < 24; i++) {
             _loop_1(i);
         }
-        var side = Math.floor(Math.random() * (6)) + 24;
         setTimeout(function () {
-            sprite.texture.frame = animation[side];
-        }, 1920);
+            this._dice1.texture.frame = this._animation[23 + val1];
+            this._dice2.texture.frame = this._animation[23 + val2];
+        }.bind(this), 1920);
+        setTimeout(function () {
+            this.emit('SuccessfulThrow', { first: val1, second: val2 });
+        }.bind(this), 2100);
+    };
+    Dices.prototype.throwDice = function (val1, val2) {
+        this._val1 = val1;
+        this._val2 = val2;
+        this.animate(this._val1, this._val2);
+    };
+    Dices.prototype.show = function () {
+        this.visible = true;
+    };
+    Dices.prototype.hide = function () {
+        this.visible = false;
     };
     return Dices;
 }(Container));

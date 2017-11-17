@@ -11,6 +11,7 @@ import {MessageBox} from "./components/MessageBox";
 import TextStyle = PIXI.TextStyle;
 import {Dices} from "./game/Dices";
 import {Network} from "./core/Network";
+import {NotificationBox} from "./components/NotificationBox";
 
 export class Game extends Container
 {
@@ -24,6 +25,7 @@ export class Game extends Container
     private _throwBtn:Button;
     private _dices:Dices;
     private _msgBox:MessageBox;
+    private _ntfBox:NotificationBox;
     private _board:Board;
     private _network:Network;
     private _myColor:number;
@@ -51,6 +53,7 @@ export class Game extends Container
         this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2);
         this._board = new Board();
         this._msgBox = new MessageBox();
+        this._ntfBox = new NotificationBox();
         this._network = new Network();
         this._network.on(Network.EVENT_CONNECTED, this.eventConnected, this);
         this._network.on(Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
@@ -60,6 +63,7 @@ export class Game extends Container
 
         // this.addChild(this._board);
         this.addChild(this._msgBox);
+        this.addChild(this._ntfBox);
     }
 
     protected eventData(data:any):void
@@ -110,12 +114,15 @@ export class Game extends Container
             {
                 this._throwBtn.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
                 this._dices.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
+                this.showNotification('White\'s turn');
             }
             else
             {
                 this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
                 this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
+                this.showNotification('Black\'s turn');
             }
+
             this._throwBtn.show();
         }
         else
@@ -215,6 +222,13 @@ export class Game extends Container
         this._dices.hide();
     }
 
+    protected showNotification(text:string)
+    {
+        let style = new TextStyle({fill: '#ffffff', fontSize: 28, fontWeight: '800', dropShadow: true, align: 'center'});
+        this.addChild(this._ntfBox);
+        this._ntfBox.show(text, 2000, style);
+    }
+
     protected showMessage(text:string, duration:number, timeout:number)
     {
         let redStyle = new TextStyle({fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center'});
@@ -239,6 +253,8 @@ export class Game extends Container
     {
         if (this._myTurn)
         {
+            if (data.first == data.second)
+                this.showNotification('OMG !');
             this._board.startTurn(data.first, data.second, this._myColor);
         }
     }
