@@ -59,7 +59,7 @@ export class Dices extends Container
             this._dice2.texture.frame = this._animation[23 + val2];
         }.bind(this), 1920);
         setTimeout(function () {
-            this.emit('SuccessfulThrow');
+            this.emit('SuccessfulThrow', {first: val1, second: val2});
         }.bind(this), 2100);
     }
 
@@ -80,8 +80,7 @@ export class Dices extends Container
         this.visible = false;
     }
 
-    // TODO С анимацией и без. Вернуть какой-то результат, что кубики выброшены.
+    // TODO С анимацией и без.
     // TODO Сделать msgBox еще один.
-    // TODO Кубики на половине доски игрока.
 
 }

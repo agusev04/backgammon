@@ -10,6 +10,7 @@ export class Network extends EventEmitter
     public static EVENT_ERROR:string = 'Error';
     private _socket:WebSocket;
 
+
     constructor()
     {
         super();
@@ -20,10 +21,6 @@ export class Network extends EventEmitter
         return this._socket;
     }
 
-    public connect() {
-        // this._socket.onclose = (event) => this.onClose(event) ;
-        // this._socket.onmessage = (event) => this.onMessage(event);
-    }
 
     // TODO Объеденить проекты
     // Работать с сервером
@@ -41,9 +38,6 @@ export class Network extends EventEmitter
             case 'Enter':
                 this.emit(Network.EVENT_DATA, {
                     CLASS_NAME: 'GameState',
-                    whitePositions: [ 103, 305, 2404, 2103 ],
-                    blackPositions:[ 403, 905, 1803, 1604 ],
-                    cubeValues: 0,
                     color: 0,
                     turn: 'Jp',
                     tableName:"Bill's table"
@@ -53,13 +47,13 @@ export class Network extends EventEmitter
                         CLASS_NAME: 'GameStart',
                         enemyUserName: 'Ivan'
                     });
-                }.bind(this), 8000);
+                }.bind(this), 100);
                 break;
             case 'ThrowCube':
                 this.emit(Network.EVENT_DATA, {
                     CLASS_NAME: 'CubeValue',
-                    // cubeValues: 25
-                    cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1
+                    cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1,
+
                 });
                 break;
             case 'ShowPossiblePositions':
@@ -72,8 +66,32 @@ export class Network extends EventEmitter
             case 'MoveChip':
                 this.emit(Network.EVENT_DATA, {
                     CLASS_NAME:'ChangeTable',
-                    Positions: 306
+                    from: data.from,
+                    to: data.to
                 });
+                break;
+            case 'EndOfTurn':
+                if (data.color == 0)
+                {
+                    this.emit(Network.EVENT_DATA, {
+                        CLASS_NAME: 'GameState',
+                        color: 1,
+                        turn: 'Jp',
+                        tableName:"Bill's table"
+                    });
+                    console.log('Сообщение из эмулятора: ходят черные.')
+                }
+                else
+                {
+                    this.emit(Network.EVENT_DATA, {
+                        CLASS_NAME: 'GameState',
+                        color: 0,
+                        turn: 'Jp',
+                        tableName:"Bill's table"
+                    });
+                    console.log('Сообщение из эмулятора: ходят белые.')
+                }
+
                 break;
         }
     }
@@ -95,14 +113,6 @@ export class Network extends EventEmitter
         this._socket.addEventListener('open', this.onOpen.bind(this));
         this.emit(Network.EVENT_CONNECTED);
     }
-    // public moveChips():void
-    // {
-    //     // запрашиваем разрешение на сдвиг фишки.
-    //     this.send({
-    //         CLASS_NAME: 'MoveChip',
-    //         Positions: 306
-    //     })
-    // }
 
     private onError(event:any)
     {
@@ -148,23 +158,4 @@ export class Network extends EventEmitter
         this._socket.close();
         this.emit(Network.EVENT_DISCONNECTED);
     }
-
-    // public throwDices():void
-    // {
-    //     // Запрос на бросок кубика.
-    //     this.send({
-    //         CLASS_NAME: 'ThrowCube'
-    //     })
-    //     // this.emit(Network.EVENT_DATA, {
-    //     //     CLASS_NAME: 'CubeValue',
-    //     //     cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1
-    //     // });
-    //     // setTimeout(function () {
-    //     //     this.emit(Network.EVENT_DATA, {
-    //     //         CLASS_NAME: 'PossiblePositions',
-    //     //         positionQuantity: 4,
-    //     //         possiblePositions: [ 504,407,609, 2023 ]
-    //     //     });
-    //     // }.bind(this), 2000)
-    // }
 }

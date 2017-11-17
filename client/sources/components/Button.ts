@@ -35,7 +35,7 @@ export class Button extends Container
             }, this._timeToWork);
         }, this);
         icon.on('pointerdown', function () {
-           icon.alpha = 0.5;
+            icon.alpha = 0.5;
         });
         icon.on('pointerupoutside', function () {
             icon.alpha = 1;

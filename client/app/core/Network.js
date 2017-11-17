@@ -21,10 +21,6 @@ define(["require", "exports"], function (require, exports) {
         Network.prototype.getSoket = function () {
             return this._socket;
         };
-        Network.prototype.connect = function () {
-            // this._socket.onclose = (event) => this.onClose(event) ;
-            // this._socket.onmessage = (event) => this.onMessage(event);
-        };
         // TODO Объеденить проекты
         // Работать с сервером
         // TODO достать протокол, сделать емиты по нему
@@ -39,9 +35,6 @@ define(["require", "exports"], function (require, exports) {
                 case 'Enter':
                     this.emit(Network.EVENT_DATA, {
                         CLASS_NAME: 'GameState',
-                        whitePositions: [103, 305, 2404, 2103],
-                        blackPositions: [403, 905, 1803, 1604],
-                        cubeValues: 0,
                         color: 0,
                         turn: 'Jp',
                         tableName: "Bill's table"
@@ -51,13 +44,12 @@ define(["require", "exports"], function (require, exports) {
                             CLASS_NAME: 'GameStart',
                             enemyUserName: 'Ivan'
                         });
-                    }.bind(this), 8000);
+                    }.bind(this), 100);
                     break;
                 case 'ThrowCube':
                     this.emit(Network.EVENT_DATA, {
                         CLASS_NAME: 'CubeValue',
-                        // cubeValues: 25
-                        cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1
+                        cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1,
                     });
                     break;
                 case 'ShowPossiblePositions':
@@ -70,8 +62,29 @@ define(["require", "exports"], function (require, exports) {
                 case 'MoveChip':
                     this.emit(Network.EVENT_DATA, {
                         CLASS_NAME: 'ChangeTable',
-                        Positions: 306
+                        from: data.from,
+                        to: data.to
                     });
+                    break;
+                case 'EndOfTurn':
+                    if (data.color == 0) {
+                        this.emit(Network.EVENT_DATA, {
+                            CLASS_NAME: 'GameState',
+                            color: 1,
+                            turn: 'Jp',
+                            tableName: "Bill's table"
+                        });
+                        console.log('Сообщение из эмулятора: ходят черные.');
+                    }
+                    else {
+                        this.emit(Network.EVENT_DATA, {
+                            CLASS_NAME: 'GameState',
+                            color: 0,
+                            turn: 'Jp',
+                            tableName: "Bill's table"
+                        });
+                        console.log('Сообщение из эмулятора: ходят белые.');
+                    }
                     break;
             }
         };
@@ -90,14 +103,6 @@ define(["require", "exports"], function (require, exports) {
             this._socket.addEventListener('open', this.onOpen.bind(this));
             this.emit(Network.EVENT_CONNECTED);
         };
-        // public moveChips():void
-        // {
-        //     // запрашиваем разрешение на сдвиг фишки.
-        //     this.send({
-        //         CLASS_NAME: 'MoveChip',
-        //         Positions: 306
-        //     })
-        // }
         Network.prototype.onError = function (event) {
             this.emit(Network.EVENT_ERROR);
             // console.log(event.target.readyState);
