@@ -6,7 +6,7 @@
 </head>
 
 <script type="text/javascript">
-    var socket = new WebSocket("ws://localhost:8888/ws");
+    var socket = new WebSocket("ws://backgammon.connectivegames.com:8888/ws");
     socket.onopen = function () {
         log(socket.url + ': Connected!');
     };
