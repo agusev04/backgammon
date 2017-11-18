@@ -167,8 +167,7 @@ export class Board extends Container {
 
     private turnDependsOfTheColor(){
         let colorChip:boolean;              //перевод цвета из 0 и 1 в true false мне так удобнее
-        // console.log('цвет пришел');
-        // console.log(this._activColor);
+
 
         switch (this._activColor){
             case 0: colorChip = true;
@@ -176,10 +175,6 @@ export class Board extends Container {
             case 1:colorChip = false;
                 break;
         }
-
-        console.log('цвет стал');
-        console.log(colorChip);
-
         for (let i = 0; i < this.arrayChips.length; i++) {
             if(this.arrayChips[i].length!=0){
                 if(this.arrayChips[i][0].colorChipWhite==colorChip){
@@ -206,8 +201,7 @@ export class Board extends Container {
 
 
     public startTurn(firsDice:number,secondDice:number,activColor:number){ //начало хода
-        console.log('цвет который приходит в старт терн от гейма в борд');
-        console.log(activColor);
+
         this.setDice(firsDice,secondDice);
         this._activColor = activColor;
         this.turnDependsOfTheColor();
@@ -289,26 +283,29 @@ export class Board extends Container {
         }
     }
 
-    private getChipPosition(sectorIndex:any,chipIndex:any):Point{
+    public getChipPosition(sectorIndex:number,chipIndex:number):Point{
         let x:number;
         let y:number;
         x = this.arrayPositionPoint[sectorIndex].x;
 
         if(this.arrayPositionPoint[sectorIndex].y == 715){
             y = this.arrayPositionPoint[sectorIndex].y - this.OFFSET * chipIndex;
+
         }else {
             y = this.arrayPositionPoint[sectorIndex].y + this.OFFSET * chipIndex;
         }
         return new Point(x,y);
     }
-    private animationMoveChip(Chip:any,x:any,y:any){
+    public moveOpponentChip(fromSector:number, toSector:number){
+        let opponentChip:Chip = this.arrayChips[fromSector].pop();
+        this.addChild(opponentChip);
+        let newPosition =this.getChipPosition(toSector,this.arrayChips[toSector].length);
+        this.animationMoveChip(opponentChip,newPosition.x,newPosition.y);
+        this.arrayChips[toSector].push(opponentChip);
+        console.log('Сообщение из борда: moveOpponentChip from '+fromSector+' to '+toSector);
+    }
 
-        // this.emit(Board.EVENT_MOVE_CHIP,{
-        //     oldPositionX:Chip.position.x,
-        //     oldPositionY:Chip.position.y,
-        //     newPositionX:x,
-        //     newPositionY:y,
-        // });
+    private animationMoveChip(Chip:any,x:any,y:any){
         TweenLite.to(Chip, 0.5, {
             x: x,
             y: y,
