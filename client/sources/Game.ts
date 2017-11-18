@@ -99,7 +99,10 @@ export class Game extends Container
                 break;
             case 'ChangeTable':
                 console.log('Сообщение из гейма: Move accepted.');
-                this._board.moveChip(data.from, data.to);
+                if (this._myTurn)
+                    this._board.moveChip(data.from, data.to);
+                else
+                    this._board.moveOpponentChip(data.from, data.to);
                 break;
         }
     }
@@ -108,28 +111,20 @@ export class Game extends Container
     {
         console.log('Сообщение из гейма: Текущий цвет на начало хода - ', this._myColor);
         this._dices.hide();
-        if (this._myTurn)
+        if (this._myColor == 0)
         {
-            if (this._myColor == 0)
-            {
-                this._throwBtn.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
-                this._dices.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
-                // this.showNotification('White\'s turn');
-            }
-            else
-            {
-                this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-                this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-                // this.showNotification('Black\'s turn');
-            }
-
-            this._throwBtn.show();
+            this._throwBtn.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
+            this._dices.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
+            // this.showNotification('White\'s turn');
         }
         else
         {
             this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
             this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
+            // this.showNotification('Black\'s turn');
         }
+
+        this._throwBtn.show();
     }
 
     protected moveChip(data:any)
@@ -143,6 +138,8 @@ export class Game extends Container
         console.log('Сообщение из гейма: EndOfTurn пришел.');
         this._dices.hide();
         this._myTurn = false;
+        this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
+        this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
         this._network.send({
             CLASS_NAME: 'EndOfTurn',
             color: this._myColor

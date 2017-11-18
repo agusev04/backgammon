@@ -13,6 +13,8 @@ export class Network extends EventEmitter
     private _socket:WebSocket;
     private _gameIsBusy:boolean;
     private _queue:any[] = [];
+    private _debug:boolean = false;
+    private _opponentEmulationIndex:number = 0;
 
 
     constructor()
@@ -40,13 +42,11 @@ export class Network extends EventEmitter
             case 'Enter':
                 this.emit(Network.EVENT_DATA, {
                     CLASS_NAME: 'GameState',
-                    // whitePositions: [ 103, 305, 2404, 2103 ],
-                    // blackPositions:[ 403, 905, 1803, 1604 ],
-                    // cubeValues: 0,
                     color: 0,
                     turn: 'Jp',
                     tableName:"Bill's table"
                 });
+
                 setTimeout(function () {
                     this.emit(Network.EVENT_DATA, {
                         CLASS_NAME: 'GameStart',
@@ -76,25 +76,104 @@ export class Network extends EventEmitter
                 });
                 break;
             case 'EndOfTurn':
-                if (data.color == 0)
+                if (this._debug)
                 {
-                    this.emit(Network.EVENT_DATA, {
-                        CLASS_NAME: 'GameState',
-                        color: 1,
-                        turn: 'Jp',
-                        tableName:"Bill's table"
-                    });
-                    console.log('Сообщение из эмулятора: ходят черные.')
+                    if (data.color == 0)
+                    {
+                        this.emit(Network.EVENT_DATA, {
+                            CLASS_NAME: 'GameState',
+                            color: 1,
+                            turn: 'Jp',
+                            tableName:"Bill's table"
+                        });
+                        console.log('Сообщение из эмулятора: ходят черные.')
+                    }
+                    else
+                    {
+                        this.emit(Network.EVENT_DATA, {
+                            CLASS_NAME: 'GameState',
+                            color: 0,
+                            turn: 'Jp',
+                            tableName:"Bill's table"
+                        });
+                        console.log('Сообщение из эмулятора: ходят белые.')
+                    }
                 }
                 else
                 {
                     this.emit(Network.EVENT_DATA, {
                         CLASS_NAME: 'GameState',
                         color: 0,
-                        turn: 'Jp',
+                        turn: 'Ivan',
                         tableName:"Bill's table"
                     });
-                    console.log('Сообщение из эмулятора: ходят белые.')
+                    switch (this._opponentEmulationIndex)
+                    {
+                        case 0:
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME: 'CubeValue',
+                                    // cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1
+                                    cubeValues: 52
+                                });
+                            }.bind(this), 3000);
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME:'ChangeTable',
+                                    from: 12,
+                                    to: 7
+                                });
+                            }.bind(this), 7500);
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME:'ChangeTable',
+                                    from: 7,
+                                    to: 5
+                                });
+                            }.bind(this), 9000);
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME: 'GameState',
+                                    color: 0,
+                                    turn: 'Jp',
+                                    tableName:"Bill's table"
+                                });
+                            }.bind(this), 9500);
+                            this._opponentEmulationIndex += 1;
+                            break;
+                        case 1:
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME: 'CubeValue',
+                                    // cubeValues: (Math.floor(Math.random() * (6)) + 1) * 10 + Math.floor(Math.random() * (6)) + 1
+                                    cubeValues: 11
+                                });
+                            }.bind(this), 3000);
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME:'ChangeTable',
+                                    from: 5,
+                                    to: 3
+                                });
+                            }.bind(this), 7500);
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME:'ChangeTable',
+                                    from: 5,
+                                    to: 3
+                                });
+                            }.bind(this), 9000);
+                            setTimeout(function () {
+                                this.emit(Network.EVENT_DATA, {
+                                    CLASS_NAME: 'GameState',
+                                    color: 0,
+                                    turn: 'Jp',
+                                    tableName:"Bill's table"
+                                });
+                            }.bind(this), 9500);
+                            this._opponentEmulationIndex += 1;
+                            break;
+                    }
                 }
 
                 break;
