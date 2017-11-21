@@ -83,7 +83,7 @@ public class Player {  //класс игрока
     }
 
     public void sendMessage(AbstractMessage abstractMessage) {
-        System.out.println("TO OTHER PLAYER: " + abstractMessage);
+        System.out.println("Player sendMessage: TO PLAYER "+ getName() + ": " + abstractMessage);
         try {
             session.getBasicRemote().sendObject(abstractMessage);
         } catch (IOException | EncodeException e) {

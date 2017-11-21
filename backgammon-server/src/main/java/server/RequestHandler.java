@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static game.logics.GameError.PLAYER_CAME_OUT;
+
 /**
  * Класс {@link RequestHandler} реализует первичную обработку сообщений от пользователя и
  * регистрацию новых пользователей
@@ -62,6 +64,33 @@ public class RequestHandler {
         }
         players.put(Integer.parseInt(session.getId()), thisPlayer);
         return abstractMessage;
+    }
+
+    public void deletePlayer(Session session) {
+        System.out.println(gameMatchArrayList.size());
+        System.out.println(players.size());
+        Player player = players.remove(Integer.parseInt(session.getId())); //получаем пользователя, если он прошел рег.
+        if (player != null) {
+            System.out.println("Player came out: " + player.getName());
+
+            GameMatch gameMatch = player.getGameMatch();
+            if (gameMatch != null) { // эта проверка может быть использована для реконекта
+                if(gameMatch == currentGameMatch){
+                    currentGameMatch = null;
+                }
+                Player otherPlayer = gameMatch.getOtherPlayer(player);
+                gameMatch.deletePlayer(player);
+                if (otherPlayer != null) {
+                    otherPlayer.sendMessage(new ErrorMessage(PLAYER_CAME_OUT));
+                    otherPlayer.setGameMatch(null);
+                    gameMatch.deletePlayer(otherPlayer);
+                }
+                gameMatchArrayList.remove(gameMatch);
+            }
+        }
+        System.out.println(gameMatchArrayList.size());
+        System.out.println(players.size());
+
     }
 
     public ArrayList<GameMatch> getGameMatchArrayList() {

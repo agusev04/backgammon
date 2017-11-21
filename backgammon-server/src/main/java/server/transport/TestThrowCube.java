@@ -38,14 +38,14 @@ public class TestThrowCube extends Action {
             } else if (player == gameMatch.getWhitePlayer()) {
                 gameMatch.getBlackPlayer().sendMessage(message);
             } else {
-                System.out.println("ThrowCube: WTF!!!!");
+                System.out.println("TestThrowCube: WTF!!!!");
             }
             //    packageMessage.addChange(moves);
             message = packageMessage;
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
         }
-        System.out.println("SERVER SENT: " + message);
+        System.out.println("TestThrowCube: SERVER SENT TO "+ player.getName()+ ": " + message);
         return message;
     }
 }

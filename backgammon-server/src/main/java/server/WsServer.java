@@ -29,7 +29,8 @@ public class WsServer  {
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("WsServer: Close Connection");
+        System.out.println("WsServer: Close Connection " + session.getId());
+        REQUEST_HANDLER.deletePlayer(session);
     }
 
     @OnMessage

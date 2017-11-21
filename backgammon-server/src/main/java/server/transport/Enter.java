@@ -25,7 +25,7 @@ public class Enter extends Action {
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message = null;
-        System.out.println(myUserName + " tries to connect");
+        System.out.println("Enter" + myUserName + " tries to connect");
         try {
             player.setName(myUserName);
             GameState gameState = new GameState(player.getGameMatch(), "",
@@ -43,7 +43,7 @@ public class Enter extends Action {
             message = new ErrorMessage(gameErrors);
 
         }
-        System.out.println("SERVER SENT: " + message);
+        System.out.println("Enter: SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 

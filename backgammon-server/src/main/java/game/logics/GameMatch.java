@@ -20,17 +20,16 @@ public class GameMatch {
     private static final int waiting_throw_dice = 1; // ожидание броска кубика
     private static final int waiting_move_chip = 2; // ожидание перемещения фишки
     private static final int the_final = 3; // конец игры
-    private boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
-    private boolean cantMove = false; // флаг от клиента, что есть ходы, когда true - changeTurn
-
     //Игровые состояния
     public int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     public int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
-    private int countMove = 1; // переменная для количества ходов
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     Player whitePlayer;
     Player blackPlayer;
+    private boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
+    private boolean cantMove = false; // флаг от клиента, что есть ходы, когда true - changeTurn
+    private int countMove = 1; // переменная для количества ходов
 
     public int getCountMove() {
         return countMove;
@@ -47,7 +46,6 @@ public class GameMatch {
     public GameBoard getTable() {
         return table;
     }
-
 
 
     public int throwDice(Player player, Integer cubeValue) throws GameError { //TODO смена состояний, проверка на то тот ли ирок бросает
@@ -381,6 +379,14 @@ public class GameMatch {
             return getWhitePlayerCondition();
         }
         return getBlackPlayerCondition();
+    }
+
+    public void deletePlayer(Player player) {
+        if (player == blackPlayer) {
+            blackPlayer = null;
+        } else if (player == whitePlayer) {
+            whitePlayer = null;
+        }
     }
 }
 
