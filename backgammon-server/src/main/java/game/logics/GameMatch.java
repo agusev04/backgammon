@@ -21,14 +21,13 @@ public class GameMatch {
     private static final int waiting_move_chip = 2; // ожидание перемещения фишки
     private static final int the_final = 3; // конец игры
     //Игровые состояния
-    public int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
-    public int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
+    private int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
+    private int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     Player whitePlayer;
     Player blackPlayer;
-    private boolean turnWhite = false;  // если true - ход белых, иначе - ход черных
-    private boolean cantMove = false; // флаг от клиента, что есть ходы, когда true - changeTurn
+    private boolean turnWhite = true;  // если true - ход белых, иначе - ход черных
     private int countMove = 1; // переменная для количества ходов
 
     public int getCountMove() {
@@ -99,7 +98,7 @@ public class GameMatch {
         //хода, ибо ожидания броска кубика нет, мы сразу кидаем кубик, как только сменился ход, ожидания кубика нет в принципе).
     }
 
-    public Change moveChip(Player player, MoveAction move, boolean cantMove) throws GameError {
+    public Change moveChip(Player player, MoveAction move) throws GameError {
         if (turnWhite && whitePlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
         }
@@ -109,7 +108,7 @@ public class GameMatch {
         Change change = null;
 
         if (getActivePlayer() == player) {
-            if (countMove > 0) {
+            if (!move.isCantMove() && countMove > 0) {
                 table.moveChip(move.from, move.to, player.color);
                 countMove--;
                 if (table.isEnd(player.getColor())) {
@@ -123,8 +122,10 @@ public class GameMatch {
                     System.out.println("GameMatch: final");
                 }
             }
-            if ((cantMove) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
+            if ((move.isCantMove()) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
+                countMove = 0;
                 change = changeTurn();
+                System.out.println("GameMatch: You can not move chips! Change turn, active player is " + getActivePlayer().getName() + " now.");
             }
         } else throw UNABLE_TURN;
         return change;
@@ -138,7 +139,6 @@ public class GameMatch {
         } else {
             blackPlayer = player;
             color = Cell.BLACK;
-            turnWhite = true; //флаг хода переключается на белого игрока
             whitePlayerCondition = waiting_throw_dice; // после входа второго игрока, состояние для белого игрока меняется на ожидание броска кубика.
         }
         player.setColor(color);
@@ -353,7 +353,7 @@ public class GameMatch {
     }
 
 
-    public Player getActivePlayer() { // это должна быть проверка на активного игрока, проверить верно ли сделано!!!!
+    public Player getActivePlayer() {// это должна быть проверка на активного игрока, проверить верно ли сделано!!!!
         if (!turnWhite) { //дб если false, то возврат игрок черный
             return getBlackPlayer();
         }

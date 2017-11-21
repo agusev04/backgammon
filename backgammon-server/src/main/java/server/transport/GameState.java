@@ -16,6 +16,8 @@ public class GameState extends Response {
     char color;
     String tableName;
     String turn;
+    String stateChange;
+    //TODO (Michael) Оформить как транспортный объект.
 
     public GameState(GameMatch gameMatch, String turn, String tableName, char color) {
         ChipsPositions positions = gameMatch.getTable().getGameState();
@@ -25,8 +27,8 @@ public class GameState extends Response {
         this.turn = turn;
         this.tableName = tableName;
         this.color = color;
+        stateChange = new StateChange(gameMatch).toString();
     }
-    //TODO (Michael) Оформить как транспортный объект.
 
     @Override
     public String toString() {
@@ -37,6 +39,7 @@ public class GameState extends Response {
                 ", color=" + color +
                 ", tableName='" + tableName + '\'' +
                 ", turn='" + turn + '\'' +
+                ", stateChange='" + stateChange + '\'' +
                 ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
     }

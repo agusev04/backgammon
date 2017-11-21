@@ -7,7 +7,7 @@ import game.logics.Player;
 public class MoveAction extends Action {
     public int from;
     public int to;
-    public boolean cantMove;
+    private boolean cantMove;
 
 
     public MoveAction(int from, int to, boolean cantMove) { // For tests
@@ -30,6 +30,10 @@ public class MoveAction extends Action {
                 '}';
     }
 
+    public boolean isCantMove() {
+        return cantMove;
+    }
+
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
@@ -37,10 +41,7 @@ public class MoveAction extends Action {
         Change change;
         try {
             GameMatch gameMatch = player.getGameMatch();
-//            if (cantMove) {
-//                change = gameMatch.moveChip(player, this, cantMove);
-//            } else change = gameMatch.moveChip(player, this, !cantMove); // либо ничего, либо финал, либо смена хода
-            change = gameMatch.moveChip(player, this, cantMove);
+            change = gameMatch.moveChip(player, this);
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(change);
 

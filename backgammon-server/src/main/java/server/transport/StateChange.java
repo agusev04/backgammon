@@ -10,10 +10,10 @@ public class StateChange extends Response implements Change {
     int activePlayerCode;
     String activePlayerName;
 
-    public StateChange(GameMatch match) {
+    public StateChange(GameMatch gameMatch) {
         // получение инфы по активному игроку
-        activePlayerCode = match.getActivePlayerCondition();
-        activePlayerName = match.getActivePlayer().getName();
+        activePlayerCode = gameMatch.getActivePlayerCondition();
+        activePlayerName = gameMatch.getActivePlayer().getName();
     }
 
     @Override
