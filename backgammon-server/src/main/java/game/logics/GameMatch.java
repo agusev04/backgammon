@@ -108,9 +108,10 @@ public class GameMatch {
         Change change = null;
 
         if (getActivePlayer() == player) {
-            if (!move.isCantMove() && countMove > 0) {
+            if (!move.isCantMove() || countMove > 0) {
                 table.moveChip(move.from, move.to, player.color);
                 countMove--;
+                System.out.println("You have move count: " + getCountMove());
                 if (table.isEnd(player.getColor())) {
                     change = new Final(player.getColor(), player.getName());
                     if (turnWhite && whitePlayerCondition == waiting_move_chip) {
@@ -122,9 +123,14 @@ public class GameMatch {
                     System.out.println("GameMatch: final");
                 }
             }
+            if ((countMove == 0) && (change == null)) {
+                changeTurn();
+                change = new StateChange(this);
+            }
             if ((move.isCantMove()) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
                 countMove = 0;
-                change = changeTurn();
+                changeTurn();
+                change = new StateChange(this);
                 System.out.println("GameMatch: You can not move chips! Change turn, active player is " + getActivePlayer().getName() + " now.");
             }
         } else throw UNABLE_TURN;

@@ -19,9 +19,9 @@ public class StateChange extends Response implements Change {
     @Override
     public String toString() {
         return "StateChange{" +
-                "activePlayerCode=" + activePlayerCode +
-                ", activePlayerName='" + activePlayerName + '\'' +
-                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                "activePlayerName: " + activePlayerName +
+                ", activePlayerCode: " + activePlayerCode +
+                ", CLASS_NAME: " + CLASS_NAME +
                 '}';
     }
 }
