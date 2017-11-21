@@ -13,7 +13,7 @@ public class ThrowCube extends Action {
 
     @Override
     public AbstractMessage apply(Player player) {
-        System.out.println("ThrowCube" + player.getName() + " is throwing dices");
+        System.out.println("ThrowCube: " + player.getName() + " is throwing dices");
         AbstractMessage message;
         try {
             GameMatch gameMatch = player.getGameMatch();

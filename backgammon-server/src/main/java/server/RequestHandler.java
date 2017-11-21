@@ -67,15 +67,15 @@ public class RequestHandler {
     }
 
     public void deletePlayer(Session session) {
-        System.out.println(gameMatchArrayList.size());
-        System.out.println(players.size());
+        System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + "games before");
+        System.out.println("RequestHandler deletePlayer: " + players.size() + "players before");
         Player player = players.remove(Integer.parseInt(session.getId())); //получаем пользователя, если он прошел рег.
         if (player != null) {
-            System.out.println("Player came out: " + player.getName());
+            System.out.println("RequestHandler deletePlayer: Player " + player.getName() + " came out");
 
             GameMatch gameMatch = player.getGameMatch();
             if (gameMatch != null) { // эта проверка может быть использована для реконекта
-                if(gameMatch == currentGameMatch){
+                if (gameMatch == currentGameMatch) {
                     currentGameMatch = null;
                 }
                 Player otherPlayer = gameMatch.getOtherPlayer(player);
@@ -88,8 +88,8 @@ public class RequestHandler {
                 gameMatchArrayList.remove(gameMatch);
             }
         }
-        System.out.println(gameMatchArrayList.size());
-        System.out.println(players.size());
+        System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + "games after");
+        System.out.println("RequestHandler deletePlayer: " + players.size() + "players after");
 
     }
 

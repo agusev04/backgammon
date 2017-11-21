@@ -33,14 +33,14 @@ public class MoveAction extends Action {
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
-        System.out.println("MoveAction" + player.getName() + " move chip from " + from + " to " + to);
+        System.out.println("MoveAction: " + player.getName() + " move chip from " + from + " to " + to);
         Change change;
         try {
             GameMatch gameMatch = player.getGameMatch();
-            if (cantMove) {
-                change = gameMatch.moveChip(player, this, cantMove);
-            } else change = gameMatch.moveChip(player, this, !cantMove); // либо ничего, либо финал, либо смена хода
-
+//            if (cantMove) {
+//                change = gameMatch.moveChip(player, this, cantMove);
+//            } else change = gameMatch.moveChip(player, this, !cantMove); // либо ничего, либо финал, либо смена хода
+            change = gameMatch.moveChip(player, this, cantMove);
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(change);
 
@@ -52,13 +52,13 @@ public class MoveAction extends Action {
             Player otherPlayer = gameMatch.getOtherPlayer(player);
 
             otherPlayer.sendMessage(packageMessageForOpponent);
-            message = packageMessage;
-            System.out.println("MoveAction: SERVER SENT TO " + player.getName() + ": " + message);
+
             otherPlayer.sendMessage(packageMessageForOpponent);
             message = packageMessage;
         } catch (GameError gameError) {
             message = new ErrorMessage(gameError);
         }
+        System.out.println("MoveAction: SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 }
