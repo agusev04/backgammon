@@ -38,6 +38,15 @@ public class RequestHandler {
                 }
             }
             message = pack.apply(thisPlayer);
+            if(PackageMessage.class.isInstance(message)){
+                if(checkToDelete(((PackageMessage) message).getChangeArrayList())){
+                    Player otherPlayer = thisPlayer.getGameMatch().getOtherPlayer(thisPlayer);
+                    deletePlayer(thisPlayer);
+                    players.remove(Integer.parseInt(otherPlayer.getSession().getId()));
+
+                }
+            }
+
         }
         return message;
     }
@@ -66,10 +75,25 @@ public class RequestHandler {
         return abstractMessage;
     }
 
-    public void deletePlayer(Session session) {
+    private boolean checkToDelete(ArrayList<Change> arrayList){
+        boolean result = false;
+        for (Change change: arrayList){
+            if(Final.class.isInstance(change)){
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public void deleteSession(Session session) {
+        Player player = players.remove(Integer.parseInt(session.getId())); //получаем пользователя, если он прошел рег.
+        deletePlayer(player);
+
+    }
+
+    private void deletePlayer(Player player) {
         System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + "games before");
         System.out.println("RequestHandler deletePlayer: " + players.size() + "players before");
-        Player player = players.remove(Integer.parseInt(session.getId())); //получаем пользователя, если он прошел рег.
         if (player != null) {
             System.out.println("RequestHandler deletePlayer: Player " + player.getName() + " came out");
 
@@ -79,6 +103,7 @@ public class RequestHandler {
                     currentGameMatch = null;
                 }
                 Player otherPlayer = gameMatch.getOtherPlayer(player);
+                player.setGameMatch(null);
                 gameMatch.deletePlayer(player);
                 if (otherPlayer != null) {
                     otherPlayer.sendMessage(new ErrorMessage(PLAYER_CAME_OUT));
@@ -90,7 +115,6 @@ public class RequestHandler {
         }
         System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + "games after");
         System.out.println("RequestHandler deletePlayer: " + players.size() + "players after");
-
     }
 
     public ArrayList<GameMatch> getGameMatchArrayList() {

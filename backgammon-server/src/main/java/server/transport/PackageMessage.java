@@ -20,6 +20,9 @@ public class PackageMessage extends Response implements AbstractMessage {
         return gameState;
     }
 
+    public ArrayList<Change> getChangeArrayList() {
+        return changeArrayList;
+    }
 
     public void addChange(Change change) {
         changeArrayList.add(change);
