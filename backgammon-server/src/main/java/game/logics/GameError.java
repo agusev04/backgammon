@@ -9,6 +9,7 @@ public class GameError extends Throwable {
     public static final GameError UNABLE_MOVE = new GameError(4, "You can not do this move");
     public static final GameError INCORRECT_NAME = new GameError(5, "You can not choose this name");
     public static final GameError PLAYER_CAME_OUT = new GameError(6, "Your opponent came out");
+    public static final GameError CANT_REENTER = new GameError(7, "You can not re-enter");
 
     int code;
     String message;

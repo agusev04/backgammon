@@ -3,6 +3,8 @@ package server.transport;
 import game.logics.GameError;
 import game.logics.Player;
 
+import static game.logics.GameError.CANT_REENTER;
+
 /**
  * Класс {@link Enter} имплементирует {@link AbstractMessage}
  * Класс содержит имя клинета и реализеут регистрацию пользователя
@@ -27,6 +29,9 @@ public class Enter extends Action {
         AbstractMessage message = null;
         System.out.println("Enter: " + myUserName + " tries to connect");
         try {
+            if (player.getName() != null) {
+                throw CANT_REENTER;
+            }
             player.setName(myUserName);
             GameState gameState = new GameState(player.getGameMatch(), "",
                     player.getGameMatch().getWhitePlayer().getName() + "s backgammon table created",
