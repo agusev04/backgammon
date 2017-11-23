@@ -4,6 +4,8 @@ import EventEmitter = PIXI.utils.EventEmitter;
 
 export class Network extends EventEmitter
 {
+
+    // Params >>------------------------------------------------------------<<<<
     public static EVENT_CONNECTED:string = 'Connected';
     public static EVENT_DISCONNECTED:string = 'Disconnected';
     public static EVENT_DATA:string = 'Data';
@@ -14,11 +16,15 @@ export class Network extends EventEmitter
     private _gameIsBusy:boolean;
     private _queue:any[] = [];
 
+    // Debug Params >>------------------------------------------------------------<<<<
     private _emulating:boolean = true;
-    private _debug:boolean = false;
+    private _debug:boolean = true;
     private _opponentEmulationIndex:number = 0;
 
-
+    // Init >>--------------------------------------------------------------<<<<
+    /**
+     * @private
+     */
     constructor()
     {
         super();
@@ -26,19 +32,27 @@ export class Network extends EventEmitter
         this.on(Network.EVENT_GAME_IS_BUSY, this.storeData);
     }
 
-    public getSocket(){
+    // Base >>--------------------------------------------------------------<<<<
+
+    public getSocket():WebSocket
+    {
         return this._socket;
     }
 
-
-    // TODO Сделать очередь
-    // Занятость игры
-    // Если игра занята сеть добавляет ответы сервера в массив (очередь)
-    // По мере того как игра освобождается она говорит об этом сети и сеть отдает ответ сервера из очереди
+    public openConnection(url:any):void
+    {
+        // подключение
+        this._socket = new WebSocket(url);
+        this._socket.addEventListener('close', this.onClose.bind(this));
+        this._socket.addEventListener('message', this.onMessage.bind(this));
+        this._socket.addEventListener('error', this.onError.bind(this));
+        this._socket.addEventListener('open', this.onOpen.bind(this));
+    }
 
     public send(data:any):void
     {
-        // this._socket.send(JSON.stringify(data));
+        console.log(JSON.stringify(data));
+        this._socket.send(JSON.stringify(data));
         if (this._emulating)
         {
             switch (data.CLASS_NAME)
@@ -185,35 +199,24 @@ export class Network extends EventEmitter
         }
     }
 
-    public enter():void
+    private disconnect(event:any):void
     {
-        // Посылаем Enter, на него приходит ГС.
-        this.send({
-            CLASS_NAME: 'Enter',
-            myUserName: 'Jp'
-        });
+        this._socket.close();
+        console.log(event);
+        this.emit(Network.EVENT_DISCONNECTED);
     }
 
-    public openConnection(url:any):void {
-        // подключение
-        // this._socket = new WebSocket(url);
-        // this._socket.addEventListener('close', this.onClose.bind(this));
-        // this._socket.addEventListener('message', this.onMessage.bind(this));
-        // this._socket.addEventListener('error', this.onError.bind(this));
-        // this._socket.addEventListener('open', this.onOpen.bind(this));
-        this.emit(Network.EVENT_CONNECTED);
-    }
-
+    // Events >>------------------------------------------------------------<<<<
     private onError(event:any)
     {
         this.emit(Network.EVENT_ERROR);
-        // console.log(event.target.readyState);
+        this.disconnect(event);
     }
 
-    private onOpen()
+    private onOpen():void
     {
         console.log('Connection succeed.');
-        // this.emit(Network.EVENT_CONNECTED);
+        this.emit(Network.EVENT_CONNECTED);
     }
 
     private onClose(event:any):void
@@ -235,31 +238,28 @@ export class Network extends EventEmitter
 
     private onMessage(event:any):void
     {
-        console.log("Data from server: ", event.data);
+        let data = JSON.parse(event.data);
+
         if (this._gameIsBusy)
         {
-            this._queue.push(event.data);
+            this._queue.push(data);
+            console.log(this._queue);
         }
         else
         {
-            this.emit(Network.EVENT_DATA,event.data);
+            this.emit(Network.EVENT_DATA,data);
+            console.log(data);
         }
     }
 
-    private storeData()
+    private storeData():void
     {
         this._gameIsBusy = true;
     }
 
-    private popData()
+    private popData():void
     {
         this._gameIsBusy = false;
         this.emit(Network.EVENT_DATA, this._queue.shift());
-    }
-
-    private disconnect()
-    {
-        this._socket.close();
-        this.emit(Network.EVENT_DISCONNECTED);
     }
 }
