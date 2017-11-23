@@ -20,13 +20,13 @@ public class GameMatch {
     private static final int waiting_throw_dice = 1; // ожидание броска кубика
     private static final int waiting_move_chip = 2; // ожидание перемещения фишки
     private static final int the_final = 3; // конец игры
-    //Игровые состояния
-    private int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
-    private int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     Player whitePlayer;
     Player blackPlayer;
+    //Игровые состояния
+    private int whitePlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
+    private int blackPlayerCondition = waiting_turn; // в начале игры оба игрока ожидают ход
     private boolean turnWhite = true;  // если true - ход белых, иначе - ход черных
     private int countMove = 1; // переменная для количества ходов
 
@@ -63,13 +63,13 @@ public class GameMatch {
                 throw UNABLE_THROW_DICES;
             }
         } else {
-            if (turnWhite && whitePlayerCondition == waiting_throw_dice) {
-                whitePlayerCondition = waiting_move_chip;
-            }
-            if (!turnWhite && blackPlayerCondition == waiting_throw_dice) {
-                blackPlayerCondition = waiting_move_chip;
-            }
             result = cubeValue.intValue();
+        }
+        if (turnWhite && whitePlayerCondition == waiting_throw_dice) {
+            whitePlayerCondition = waiting_move_chip;
+        }
+        if (!turnWhite && blackPlayerCondition == waiting_throw_dice) {
+            blackPlayerCondition = waiting_move_chip;
         }
         countMove = 2;
         if (result / 10 == result % 10) { // проверка на дубль
@@ -183,15 +183,15 @@ public class GameMatch {
         ArrayList<Move> arrayList = new ArrayList<>();
         int direction = 0;
         int endGameFlag = isEndGame(color);
-        boolean isPosibleCubeValues;
+        boolean isPossibleCubeValues;
         if (color == BLACK) {
             direction = BLACK_DIRECTION;
         } else if (color == WHITE) {
             direction = WHITE_DIRECTION;
         }
         Cell[] cells = this.table.getCells();
-        isPosibleCubeValues = checkBar(color, cubeValues, cells, direction);
-        if (isPosibleCubeValues) {
+        isPossibleCubeValues = checkBar(color, cubeValues, cells, direction);
+        if (isPossibleCubeValues) {
             for (int from = 0; from < cells.length; from++) {
                 if ((color == cells[from].getColor())) {
                     int cube1 = cubeValues / 10;
@@ -393,6 +393,16 @@ public class GameMatch {
         } else if (player == whitePlayer) {
             whitePlayer = null;
         }
+    }
+
+    public boolean isChangeCounter(Player plyaer, int to){
+        boolean result = false;
+        if((plyaer.getColor() == BLACK)&&(to == WHITE_OUT)){
+            result = true;
+        } if((plyaer.getColor() == WHITE)&&(to == BLACK_OUT)){
+            result = true;
+        }
+        return result;
     }
 }
 

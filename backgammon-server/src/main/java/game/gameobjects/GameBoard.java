@@ -15,8 +15,8 @@ public class GameBoard {
     public static final int WHITE_HOME = 19;
     public static final int BLACK_HOME = 6;
     public Cell[] cells;
-    int whiteCount = 15;
-    int blackCount = 15;
+    int whiteCounter = 0;
+    int blackCounter = 0;
 
 
     public GameBoard() {
@@ -44,16 +44,16 @@ public class GameBoard {
         int counter;
         if (color == Cell.BLACK) {
             finalPosition = WHITE_OUT;
-            counter = whiteCount;
+            counter = whiteCounter;
         } else {
             finalPosition = BLACK_OUT;
-            counter = blackCount;
+            counter = blackCounter;
         }
         cells[from].takeChip();
         if (to != finalPosition) {
             cells[to].putChip(color);
         } else {
-            counter--;
+            counter++;
         }
 
     }
@@ -68,11 +68,19 @@ public class GameBoard {
 
     public boolean isEnd(char color) {
         boolean result = false;
-        if ((color == WHITE) && (whiteCount == 0)) {
+        if ((color == WHITE) && (whiteCounter == 15)) {
             result = true;
-        } else if ((color == BLACK) && (blackCount == 0)) {
+        } else if ((color == BLACK) && (blackCounter == 15)) {
             result = true;
         }
         return result;
+    }
+
+    public int getWhiteCounter() {
+        return whiteCounter;
+    }
+
+    public int getBlackCounter() {
+        return blackCounter;
     }
 }
