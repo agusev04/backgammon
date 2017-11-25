@@ -1,12 +1,9 @@
-import game.logics.GameError;
-import game.logics.GameMatch;
-import game.logics.Player;
 import server.transport.ChipsPosition;
 import server.transport.GameState;
-import server.transport.MoveAction;
 import server.transport.PackageMessage;
 import support.AbstractTest;
 
+import javax.websocket.EncodeException;
 import java.util.ArrayList;
 
 public class EnterGameMatchTest extends AbstractTest {
@@ -70,5 +67,53 @@ public class EnterGameMatchTest extends AbstractTest {
         assertEquals(2, getPlayers().size());
         assertNotNull(getPlayers().get(1));
         assertEquals('b', gameState2.getColor());
+    }
+
+    public void testEnterEqualName() throws EncodeException {
+        assertTrue(getPlayers().isEmpty());
+
+        PackageMessage gameState1 = enter("0", "11");
+        PackageMessage gameState2 = enter("1", "11");
+
+        assertEquals("11", gameState1.getGameState().getMyName());
+        assertEquals("11", gameState2.getGameState().getMyName());
+
+        assertNotNull(getPlayers().get(0));
+        assertNotNull(getPlayers().get(1));
+
+        assertEquals('w', gameState1.getGameState().getColor());
+        assertEquals('b', gameState2.getGameState().getColor());
+    }
+
+    public void testEnterEmptyName() throws EncodeException {
+        assertTrue(getPlayers().isEmpty());
+
+        PackageMessage gameState1 = enter("0", "");
+        PackageMessage gameState2 = enter("1", "");
+
+        assertEquals("user0", gameState1.getGameState().getMyName());
+        assertEquals("user1", gameState2.getGameState().getMyName());
+
+        assertNotNull(getPlayers().get(0));
+        assertNotNull(getPlayers().get(1));
+
+        assertEquals('w', gameState1.getGameState().getColor());
+        assertEquals('b', gameState2.getGameState().getColor());
+    }
+
+    public void testEnterWithoutName() throws EncodeException {
+        assertTrue(getPlayers().isEmpty());
+
+        PackageMessage gameState1 = enter("0", null); //бесполезно переорделеять метод, ибо в myUserName будет null
+        PackageMessage gameState2 = enter("1", null);
+
+        assertEquals("user0", gameState1.getGameState().getMyName());
+        assertEquals("user1", gameState2.getGameState().getMyName());
+
+        assertNotNull(getPlayers().get(0));
+        assertNotNull(getPlayers().get(1));
+
+        assertEquals('w', gameState1.getGameState().getColor());
+        assertEquals('b', gameState2.getGameState().getColor());
     }
 }

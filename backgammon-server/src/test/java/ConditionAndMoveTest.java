@@ -25,11 +25,11 @@ public class ConditionAndMoveTest extends AbstractTest {
 
 
         System.out.println();
-        System.out.println("white player must move chip, count move:  " + gameMatch.getCountMove() );
+        System.out.println("white player must move chip, count move:  " + gameMatch.getCountMove());
         gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, false));
-        System.out.println("white player move chip, count move:  " + gameMatch.getCountMove() );
+        System.out.println("white player move chip, count move:  " + gameMatch.getCountMove());
         gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, true));
-        System.out.println("white player move chip, count move:  " + gameMatch.getCountMove() );
+        System.out.println("white player move chip, count move:  " + gameMatch.getCountMove());
 
 
 //        gameMatch.moveChip(whitePlayer, new Move(17, 18));

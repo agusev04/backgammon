@@ -11,17 +11,17 @@ public class ErrorMessage extends Action {
     int code;
     String message;
 
+    public ErrorMessage(GameError error) {
+        code = error.getCode();
+        message = error.getMessage();
+    }
+
     @Override
     public String toString() {
         return "ErrorMessage{" +
                 "code=" + code +
                 ", message='" + message + '\'' +
                 '}';
-    }
-
-    public ErrorMessage(GameError error) {
-        code = error.getCode();
-        message = error.getMessage();
     }
 
     @Override

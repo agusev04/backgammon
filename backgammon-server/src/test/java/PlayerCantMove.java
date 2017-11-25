@@ -1,12 +1,9 @@
 import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
-import server.transport.ChipsPosition;
 import server.transport.MoveAction;
 import server.transport.PackageMessage;
 import support.AbstractTest;
-
-import java.util.ArrayList;
 
 public class PlayerCantMove extends AbstractTest {
     public void testPlayerCantMove() throws Exception, GameError {

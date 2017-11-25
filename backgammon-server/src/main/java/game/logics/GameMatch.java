@@ -395,11 +395,12 @@ public class GameMatch {
         }
     }
 
-    public boolean isChangeCounter(Player plyaer, int to){
+    public boolean isChangeCounter(Player plyaer, int to) {
         boolean result = false;
-        if((plyaer.getColor() == BLACK)&&(to == WHITE_OUT)){
+        if ((plyaer.getColor() == BLACK) && (to == WHITE_OUT)) {
             result = true;
-        } if((plyaer.getColor() == WHITE)&&(to == BLACK_OUT)){
+        }
+        if ((plyaer.getColor() == WHITE) && (to == BLACK_OUT)) {
             result = true;
         }
         return result;

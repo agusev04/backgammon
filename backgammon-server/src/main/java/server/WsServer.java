@@ -15,7 +15,7 @@ import java.io.IOException;
  * Copyright 2017 Connective Games LLC. All rights reserved.
  */
 @ServerEndpoint(value = "/ws", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
-public class WsServer  {
+public class WsServer {
     private static final RequestHandler REQUEST_HANDLER = new RequestHandler();
 
     public WsServer() {
@@ -39,7 +39,7 @@ public class WsServer  {
     }
 
     @OnError
-    public void onError(Throwable e, Session session)  {
+    public void onError(Throwable e, Session session) {
         System.out.println("WsServer: .......");
         e.printStackTrace();
         ErrorMessage errorMessage = new ErrorMessage(GameError.UNKNOWN_REQUEST);

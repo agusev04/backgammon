@@ -45,7 +45,7 @@ public class TestThrowCube extends Action {
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
         }
-        System.out.println("TestThrowCube: SERVER SENT TO "+ player.getName()+ ": " + message);
+        System.out.println("TestThrowCube: SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 }

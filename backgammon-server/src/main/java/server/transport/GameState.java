@@ -16,10 +16,12 @@ public class GameState extends Response {
     char color;
     String tableName;
     String turn;
+    String myName;
     StateChange stateChange;
+
     //TODO (Michael) Оформить как транспортный объект.
 
-    public GameState(GameMatch gameMatch, String turn, String tableName, char color) {
+    public GameState(GameMatch gameMatch, String turn, String tableName, char color, String myName) {
         ChipsPositions positions = gameMatch.getTable().getGameState();
         whitePositions = positions.getWhitePos();
         blackPositions = positions.getBlackPos();
@@ -28,6 +30,7 @@ public class GameState extends Response {
         this.tableName = tableName;
         this.color = color;
         stateChange = new StateChange(gameMatch);
+        this.myName = myName;
     }
 
     @Override
@@ -80,5 +83,8 @@ public class GameState extends Response {
         this.turn = turn;
     }
 
+    public String getMyName() {
+        return myName;
+    }
 }
 

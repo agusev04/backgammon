@@ -1,12 +1,8 @@
-import server.transport.Move;
-import server.transport.PossibleMoves;
 import support.AbstractTest;
-
-import java.util.ArrayList;
 
 public class PossibleMovesTest extends AbstractTest {
 
-    public void testEmpty(){
+    public void testEmpty() {
 
     }
 //    public void testPossibleMoves1() throws Exception {

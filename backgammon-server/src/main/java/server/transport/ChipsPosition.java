@@ -1,6 +1,6 @@
 package server.transport;
 
-public class ChipsPosition extends Response{
+public class ChipsPosition extends Response {
     int position;
     int quantity;
 

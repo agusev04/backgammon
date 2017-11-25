@@ -16,6 +16,7 @@ public class Enter extends Action {
         this.myUserName = myUserName;
     }
 
+
     @Override
     public String toString() {
         return "Enter{" +
@@ -32,14 +33,15 @@ public class Enter extends Action {
             if (player.getName() != null) {
                 throw CANT_REENTER;
             }
-            player.setName(myUserName);
+            player.setName(myUserName, player.getSession().getId());
             GameState gameState = new GameState(player.getGameMatch(), "",
                     player.getGameMatch().getWhitePlayer().getName() + "s backgammon table created",
-                    player.getColor());
+                    player.getColor(), player.getName());
             PackageMessage packageMessage = new PackageMessage(gameState);
             if (player == player.getGameMatch().getBlackPlayer()) {
                 GameStart gameStart = new GameStart(player.getGameMatch().getWhitePlayer().getName());
                 packageMessage.addChange(gameStart);
+                packageMessage.addChange(new StateChange(player.getGameMatch()));
                 message = packageMessage;
             } else {
                 message = packageMessage;

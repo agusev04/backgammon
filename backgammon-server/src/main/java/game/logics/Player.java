@@ -7,8 +7,6 @@ import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
 
-import static game.logics.GameError.INCORRECT_REQUEST;
-
 public class Player {  //класс игрока
     String name;
     char color; // 'w' or 'b'
@@ -36,9 +34,9 @@ public class Player {  //класс игрока
         return name;
     }
 
-    public void setName(String name) throws GameError {
+    public void setName(String name, String id) throws GameError {
         if (name == null || name.equals("")) {
-            throw INCORRECT_REQUEST;
+            name = "user" + id;
         }
         this.name = name;
     }
@@ -83,7 +81,7 @@ public class Player {  //класс игрока
     }
 
     public void sendMessage(AbstractMessage abstractMessage) {
-        System.out.println("Player sendMessage: TO PLAYER "+ getName() + ": " + abstractMessage);
+        System.out.println("Player sendMessage: TO PLAYER " + getName() + ": " + abstractMessage);
         try {
             session.getBasicRemote().sendObject(abstractMessage);
         } catch (IOException | EncodeException e) {

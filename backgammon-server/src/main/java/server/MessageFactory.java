@@ -20,10 +20,10 @@ public class MessageFactory {
 
     private MessageFactory() {
 
-            map.put("Enter", Enter.class);
-            map.put("ThrowCube", ThrowCube.class);
-            map.put("TestThrowCube", TestThrowCube.class);
-            map.put("MoveAction", MoveAction.class);
+        map.put("Enter", Enter.class);
+        map.put("ThrowCube", ThrowCube.class);
+        map.put("TestThrowCube", TestThrowCube.class);
+        map.put("MoveAction", MoveAction.class);
 
     }
 
@@ -32,7 +32,7 @@ public class MessageFactory {
     }
 
     public Action makeMessage(String className, String jsonObject) {
-        Action action ;
+        Action action;
         map.get(className);
         Gson gson = new Gson();
 

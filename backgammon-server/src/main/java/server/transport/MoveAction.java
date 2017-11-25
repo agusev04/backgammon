@@ -50,7 +50,7 @@ public class MoveAction extends Action {
             Move move = new Move(from, to);
             packageMessageForOpponent.addChange(move);
 
-            if(gameMatch.isChangeCounter(player, to)){
+            if (gameMatch.isChangeCounter(player, to)) {
                 Change change1 = new ChipsCounter(gameMatch);
                 packageMessage.addChange(change1);
                 packageMessageForOpponent.addChange(change1);
