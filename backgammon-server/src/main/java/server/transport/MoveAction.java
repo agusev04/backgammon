@@ -59,8 +59,6 @@ public class MoveAction extends Action {
             Player otherPlayer = gameMatch.getOtherPlayer(player);
 
             otherPlayer.sendMessage(packageMessageForOpponent);
-
-            otherPlayer.sendMessage(packageMessageForOpponent);
             message = packageMessage;
         } catch (GameError gameError) {
             message = new ErrorMessage(gameError);
