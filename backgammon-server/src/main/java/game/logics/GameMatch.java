@@ -395,15 +395,15 @@ public class GameMatch {
         }
     }
 
-    public boolean isChangeCounter(Player plyaer, int to) {
+    public Change countersChange(Player player, int to) {
+        Change change = null;
         boolean result = false;
-        if ((plyaer.getColor() == BLACK) && (to == WHITE_OUT)) {
-            result = true;
+        if ((player.getColor() == BLACK) && (to == WHITE_OUT)) {
+            change = new ChipsCounter(this);
+        } else if ((player.getColor() == WHITE) && (to == BLACK_OUT)) {
+            change = new ChipsCounter(this);
         }
-        if ((plyaer.getColor() == WHITE) && (to == BLACK_OUT)) {
-            result = true;
-        }
-        return result;
+        return change;
     }
 }
 
