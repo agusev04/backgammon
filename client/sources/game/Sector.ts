@@ -12,11 +12,11 @@ export class Sector extends Container
     public greenTrianglSprite_skin: Texture = Texture.fromImage('assets/ActTriangl_green.png');
     public yellowTrianglSprite_skin: Texture = Texture.fromImage('assets/ActTriangl_yell.png');
 
-    public index:number;
 
-    constructor(ind:number){
+
+    constructor(){
         super();
-        this.index = ind;
+
 
         this.sectorSprite.alpha = 0;
         // this.sectorSprite.interactive = true;
