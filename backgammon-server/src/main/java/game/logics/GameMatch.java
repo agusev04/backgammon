@@ -9,8 +9,7 @@ import java.util.Random;
 
 import static game.gameobjects.Cell.*;
 import static game.gameobjects.GameBoard.*;
-import static game.logics.GameError.UNABLE_THROW_DICES;
-import static game.logics.GameError.UNABLE_TURN;
+import static game.logics.GameError.*;
 
 public class GameMatch {
 
@@ -181,12 +180,21 @@ public class GameMatch {
     }
 
 
-    public ArrayList<Move> getPossiblePositions(char color, int cubeValue) {
-        if (currentCubeValue / 10 == cubeValue) {
-            cubeValue = currentCubeValue % 10;
-        } else if (currentCubeValue % 10 == cubeValue) {
-            cubeValue = currentCubeValue / 10;
+    public ArrayList<Move> getPossiblePositions(char color, int cubeValue) throws GameError {
+        if (countMove != 0) {
+            if (currentCubeValue / 10 == currentCubeValue % 10) {
+
+            } else if (currentCubeValue / 10 == cubeValue) {
+                currentCubeValue -= cubeValue*10;
+                cubeValue = currentCubeValue;
+            } else if (currentCubeValue % 10 == cubeValue) {
+                currentCubeValue -= cubeValue;
+                cubeValue = currentCubeValue / 10;
+            }
+        } else {
+            return new ArrayList<>();
         }
+
         ArrayList<Move> arrayList = new ArrayList<>();
         int direction = 0;
         int endGameFlag = isEndGame(color);
