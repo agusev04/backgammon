@@ -17,8 +17,8 @@ export class Network extends EventEmitter
     private _queue:any[] = [];
 
     // Debug Params >>------------------------------------------------------------<<<<
-    private _emulating:boolean = true;
-    private _debug:boolean = true;
+    private _emulating:boolean = false;
+    private _debug:boolean = false;
     private _opponentEmulationIndex:number = 0;
 
     // Init >>--------------------------------------------------------------<<<<

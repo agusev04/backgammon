@@ -253,7 +253,7 @@ export class Board extends Container {
             }else {
                 // this.moveChip(this.firsSelectSectorIndex,this.secondSelectSectorIndex);
                     this.emit(Board.EVENT_MOVE_CHIP, {
-                        CLASS_NAME: 'MoveChip',
+                        CLASS_NAME: 'MoveAction',
                         from: this.firsSelectSectorIndex,
                         to: this.secondSelectSectorIndex
                     });

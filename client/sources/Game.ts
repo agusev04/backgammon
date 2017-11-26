@@ -20,6 +20,7 @@ export class Game extends Container
     public static HEIGHT:number = 768;
     private _myTurn:boolean = true;
     private _myName:string;
+    private _opponent:string;
     private _startBtn:Button;
     private _throwBtn:Button;
     private _dices:Dices;
@@ -27,7 +28,8 @@ export class Game extends Container
     private _ntfBox:NotificationBox;
     private _board:Board;
     private _network:Network;
-    private _myColor:number;
+    private _myColor:string;
+    private _lastMove:number[];
 
     // Init >>--------------------------------------------------------------<<<<
     /**
@@ -36,7 +38,7 @@ export class Game extends Container
     constructor()
     {
         super();
-        this._myName = 'Jp';
+        this._myName = 'id' + Math.floor(Math.random() * (10000000000000));
         this.configure();
     }
 
@@ -58,7 +60,7 @@ export class Game extends Container
         this._network.on(Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
         this._network.on(Network.EVENT_DATA, this.eventData, this);
         this._board.on(Board.EVENT_END_OF_TURN, this.endTurn, this);
-        this._board.on(Board.EVENT_MOVE_CHIP, this.moveChip, this);
+        this._board.on(Board.EVENT_MOVE_CHIP, this.moveAction, this);
 
         // this.addChild(this._board);
         this.addChild(this._msgBox);
@@ -113,7 +115,6 @@ export class Game extends Container
     {
         console.log('Сообщение из гейма: Connecting to server...');
         this._network.openConnection('ws://backgammon.connectivegames.com:8888/ws');
-        this._network.emit(Network.EVENT_GAME_IS_BUSY);
     }
 
     protected showNotification(text:string):void
@@ -136,8 +137,7 @@ export class Game extends Container
     {
         console.log('Сообщение из гейма: Sending enter request...');
         this._network.send({
-            CLASS_NAME: 'Enter',
-            myUserName: 'Jp'
+            CLASS_NAME: 'Enter'
         });
         this.loadGame();
     }
@@ -150,6 +150,7 @@ export class Game extends Container
 
     protected eventData(data:any):void
     {
+        // TODO сделать map
         switch (data.CLASS_NAME)
         {
             case 'GameState':
@@ -164,10 +165,111 @@ export class Game extends Container
             case 'ChangeTable':
                 this.dataOnChangeTable(data);
                 break;
+            case 'ErrorMessage':
+                this.dataOnError(data);
+                break;
+            case 'PackageMessage':
+                this.dataOnMessage(data);
+        }
+    }
+
+    protected eventSuccessfulThrow(data:any):void
+    {
+        if (this._myTurn)
+        {
+            if (data.first == data.second)
+                this.showNotification('OMG !');
+            if (this._myColor == 'w')
+                this._board.startTurn(data.first, data.second, 0);
+            else
+                this._board.startTurn(data.first, data.second, 1);
         }
     }
 
     // Data  >>------------------------------------------------------------<<<<
+
+    protected dataOnMessage(data:any):void
+    {
+        if (data.gameState)
+        {
+            console.log('Msg: GameState. Color: ' + data.gameState.color);
+            this._myName = data.gameState.myName;
+            this._myTurn = data.gameState.stateChange.activePlayerName == this._myName;
+            this._myColor = data.gameState.color;
+
+            if (this._myTurn)
+            {
+                if(this._opponent)
+                {
+                    this.startOfTurn();
+                }
+                console.log('MyTurn, color: ' + this._myColor);
+            }
+            else
+            {
+                console.log('NotMyTurn, color: ' + this._myColor);
+            }
+
+            this.moveDice(this._myTurn);
+        }
+        if (data.changeArrayList)
+        {
+            console.log('Msg: ChangeArrayList.');
+
+            if (data.changeArrayList.length == 2 && data.changeArrayList[1].CLASS_NAME == 'PossibleMoves')
+            {
+                this._board.moveChip(this._lastMove[0], this._lastMove[1]);
+                if (data.changeArrayList[0])
+                {
+                    if (data.changeArrayList[0].CLASS_NAME == 'StateChange')
+                    {
+                        this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
+                        if (this._myTurn)
+                        {
+                            this.startOfTurn();
+                        }
+                        this.moveDice(this._myTurn);
+                    }
+                }
+            }
+            else if (data.changeArrayList.length == 2 && data.changeArrayList[1].CLASS_NAME == 'Move')
+            {
+                this._board.moveOpponentChip(data.changeArrayList[1].from, data.changeArrayList[1].to);
+
+                if (data.changeArrayList[0])
+                {
+                    if (data.changeArrayList[0].CLASS_NAME == 'StateChange') {
+                        this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
+                        if (this._myTurn) {
+                            this.startOfTurn();
+                        }
+                        this.moveDice(this._myTurn);
+                    }
+                }
+            }
+
+            else if (data.changeArrayList[0])
+            {
+                if (data.changeArrayList[0].CLASS_NAME == "CubeValue")
+                {
+                    let first = (data.changeArrayList[0].cubeValues - data.changeArrayList[0].cubeValues % 10)/10;
+                    let second = data.changeArrayList[0].cubeValues % 10;
+                    console.log('Сообщение из гейма: Values from server: ', first + ', ', second);
+                    this.throwCubes(first, second);
+                }
+                else if (data.changeArrayList[0].CLASS_NAME == 'GameStart')
+                {
+                    this._opponent = data.changeArrayList[0].enemyUserName;
+                    if (this._myTurn)
+                    {
+                        this.startOfTurn();
+                    }
+
+                    console.log('Opponent is: ' + this._opponent);
+                }
+            }
+        }
+    }
 
     protected dataOnGameState(data:any):void
     {
@@ -207,6 +309,11 @@ export class Game extends Container
             this._board.moveOpponentChip(data.from, data.to);
     }
 
+    protected dataOnError(data:any):void
+    {
+        this.showNotification(data.message);
+    }
+
     // Game cycle >>------------------------------------------------------------<<<<
     protected requestCubes():void
     {
@@ -224,40 +331,39 @@ export class Game extends Container
         this._dices.on('SuccessfulThrow', this.eventSuccessfulThrow, this);
     }
 
-    protected eventSuccessfulThrow(data:any):void
-    {
-        if (this._myTurn)
-        {
-            if (data.first == data.second)
-                this.showNotification('OMG !');
-            this._board.startTurn(data.first, data.second, this._myColor);
-        }
-    }
-
     protected startOfTurn():void
     {
         console.log('Сообщение из гейма: Текущий цвет на начало хода - ', this._myColor);
         this._dices.hide();
-        if (this._myColor == 0)
+        this._throwBtn.show();
+    }
+
+    protected moveDice(myTurn:boolean)
+    {
+        if (myTurn)
         {
             this._throwBtn.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
             this._dices.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
-            // this.showNotification('White\'s turn');
         }
         else
         {
             this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
             this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-            // this.showNotification('Black\'s turn');
         }
-
-        this._throwBtn.show();
     }
 
-    protected moveChip(data:any):void
+    protected moveAction(data:any):void
     {
-        console.log('Сообщение из гейма: MoveChip пришел {from: ' + data.from + ',to: ' + data.to + '}.');
-        this._network.send(data);
+        console.log('Сообщение из гейма: MoveAction пришел {from: ' + data.from + ',to: ' + data.to + '}.');
+        this._network.send({
+            CLASS_NAME: 'MoveAction',
+            from: data.from + 1,
+            to: data.to + 1,
+            cantMove: false,
+            cubeValue: Math.abs(data.from - data.to)
+        });
+        this._lastMove = [data.from + 1, data.to + 1];
+
     }
 
     protected endTurn():void
@@ -267,9 +373,5 @@ export class Game extends Container
         this._myTurn = false;
         this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
         this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-        this._network.send({
-            CLASS_NAME: 'EndOfTurn',
-            color: this._myColor
-        });
     }
 }
