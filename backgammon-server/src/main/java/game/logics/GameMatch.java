@@ -22,6 +22,7 @@ public class GameMatch {
     private static final int the_final = 3; // конец игры
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
+    int currentCubeValue = 0;
     Player whitePlayer;
     Player blackPlayer;
     //Игровые состояния
@@ -75,6 +76,7 @@ public class GameMatch {
         if (result / 10 == result % 10) { // проверка на дубль
             countMove = 4; //при дубле 4 хода
         }
+        currentCubeValue = result;
         return result;
     }
 
@@ -179,49 +181,112 @@ public class GameMatch {
     }
 
 
-    public ArrayList<Move> getPossiblePositions(char color, int cubeValues) {
+    public ArrayList<Move> getPossiblePositions(char color, int cubeValue) {
+        if (currentCubeValue / 10 == cubeValue) {
+            cubeValue = currentCubeValue % 10;
+        } else if (currentCubeValue % 10 == cubeValue) {
+            cubeValue = currentCubeValue / 10;
+        }
         ArrayList<Move> arrayList = new ArrayList<>();
         int direction = 0;
         int endGameFlag = isEndGame(color);
-        boolean isPossibleCubeValues;
+        int barState;
         if (color == BLACK) {
             direction = BLACK_DIRECTION;
         } else if (color == WHITE) {
             direction = WHITE_DIRECTION;
         }
         Cell[] cells = this.table.getCells();
-        isPossibleCubeValues = checkBar(color, cubeValues, cells, direction);
-        if (isPossibleCubeValues) {
-            for (int from = 0; from < cells.length; from++) {
-                if ((color == cells[from].getColor())) {
-                    int cube1 = cubeValues / 10;
-                    int cube2 = cubeValues % 10;
-                    if (cube1 == cube2) {
-                        int cubeValue;
-                        for (int j = 1; j < 5; j++) {
-                            cubeValue = cube1 * j;
-                            int secondPosition = from + direction * cubeValue;
-                            tryAdd(secondPosition, color, cells, endGameFlag, arrayList, from, cubeValue);
-                        }
-                    } else {
-                        int cubeValue = cube1;
-                        int to = from + direction * cubeValue;
-                        tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
-                        cubeValue = cube2;
-                        to = from + direction * cubeValue;
-                        tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
-                        cubeValue = cube1 + cube2;
-                        to = from + direction * cubeValue;
-                        tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
-                    }
-                }
-            }
-        }
+        barState = checkBar(color, cubeValue, cells, direction);
+        generateMoves(color, arrayList, direction, endGameFlag, barState, cells, cubeValue);
         if (arrayList.size() == 0) {
             countMove = 0;
         }
 
         return arrayList;
+    }
+
+    public ArrayList<Move> getPossiblePositions(char color, int cube1, int cube2) {
+        ArrayList<Move> arrayList = new ArrayList<>();
+        int direction = 0;
+        int endGameFlag = isEndGame(color);
+        int barState1;
+        int barState2;
+        if (color == BLACK) {
+            direction = BLACK_DIRECTION;
+        } else if (color == WHITE) {
+            direction = WHITE_DIRECTION;
+        }
+        Cell[] cells = this.table.getCells();
+
+        barState1 = checkBar(color, cube1, cells, direction);
+        barState2 = checkBar(color, cube2, cells, direction);
+        generateMoves(color, arrayList, direction, endGameFlag, barState1, cells, cube1);
+        generateMoves(color, arrayList, direction, endGameFlag, barState2, cells, cube2);
+
+        if (arrayList.size() == 0) {
+            countMove = 0;
+        }
+
+        return arrayList;
+    }
+
+    private void generateMoves(char color, ArrayList<Move> arrayList, int direction, int endGameFlag, int barState, Cell[] cells, int cubeValue) {
+        if (barState == 2) {
+            for (int from = 0; from < cells.length; from++) {
+                if ((color == cells[from].getColor())) {
+                    int to = from + direction * cubeValue;
+                    tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
+
+                }
+            }
+            addExceptionMoves(color, arrayList, direction, endGameFlag, cells, cubeValue);
+        } else if (barState == 1) {
+            int from;
+            if (color == WHITE) {
+                from = WHITE_OUT;
+            } else {
+                from = BLACK_OUT;
+            }
+            int to = from + direction * cubeValue;
+            tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
+        }
+    }
+
+    private void addExceptionMoves(char color, ArrayList<Move> arrayList, int direction, int endGameFlag, Cell[] cells, int cubeValue) {
+        int to;
+        int home;
+        if (color == WHITE) {
+            to = BLACK_OUT;
+            home = WHITE_HOME;
+        } else {
+            to = WHITE_OUT;
+            home = BLACK_HOME;
+        }
+        int from = to - direction * cubeValue;
+
+        if (endGameFlag == 0) {
+            addExceptionMove(color, arrayList, direction, cells, to, home, from);
+
+        }
+    }
+
+    private void addExceptionMove(char color, ArrayList<Move> arrayList, int direction, Cell[] cells, int to, int home, int from) {
+        boolean bool = false;
+        for (int i = from; i != home - direction; from -= direction) {
+            if (cells[i].getColor() == color) {
+                bool = true;
+                break;
+            }
+        }
+        if (!bool) {
+            for (int i = from; i != to; from += direction) {
+                if (cells[i].getColor() == color) {
+                    arrayList.add(new Move(i, to));
+                    break;
+                }
+            }
+        }
     }
 
     private void tryAdd(int to, char color, Cell cells[], int endGameFlag,
@@ -265,48 +330,26 @@ public class GameMatch {
      * сдвинуть при данном значении кубиков, то игрок пропускает ход
      *
      * @param color
-     * @param cubeValues
+     * @param cubeValue
      * @param cells
      * @param direction
-     * @return false - если нет возможности сходить фишкой на баре, true - есть возможность сходить или
-     * нет фишек на баре.
+     * @return 0 - невозможно убрать фишку из тюрьмы, 1 - возможно убрать фишку из тюрьмы, 2 - нет фишек в тюрьме
      */
-    public boolean checkBar(char color, int cubeValues, Cell[] cells, int direction) {
-        boolean result = false;
+    public int checkBar(char color, int cubeValue, Cell[] cells, int direction) {
+        int result = 0;
         int from;
-        char oppositeColor;
         if (color == WHITE) {
             from = WHITE_OUT;
-            oppositeColor = BLACK;
         } else {
             from = BLACK_OUT;
-            oppositeColor = WHITE;
         }
         if (cells[from].getCount() != 0) {
-            int cube1 = cubeValues / 10;
-            int cube2 = cubeValues % 10;
-            if (cube2 == cube1) {
-                for (int i = 1; i < 5; i++) {
-                    int to = from + direction * cube1 * i;
-                    result = isCorrectTurn(to, oppositeColor, cells);
-                    if (result) {
-                        break;
-                    }
-                }
-            } else {
-                int to = from + direction * cube1;
-                result = isCorrectTurn(to, oppositeColor, cells);
-                to = from + direction * cubeValues & 10;
-                if (!result) {
-                    result = isCorrectTurn(to, oppositeColor, cells);
-                }
-                to = from + direction * (cube1 + cube2);
-                if (!result) {
-                    result = isCorrectTurn(to, oppositeColor, cells);
-                }
+            int to = from + direction * cubeValue;
+            if (isCorrectTurn(color, cells[to])) {
+                result = 1;
             }
         } else {
-            result = true;
+            result = 2;
         }
         return result;
     }
@@ -322,9 +365,13 @@ public class GameMatch {
      */
     private boolean isCorrectTurn(int to, char color, Cell[] cells, int endGameFlag) { //TODO <=
         boolean result = false;
-        if (((to) <= BLACK_OUT + endGameFlag) &&
-                ((to >= WHITE_OUT - endGameFlag))) {
-            result = isCorrectTurn(to, color, cells);
+
+        if (((to) < BLACK_OUT + endGameFlag) &&
+                ((to > WHITE_OUT - endGameFlag))) {
+            result = isCorrectTurn(color, cells[to]);
+        } else if (((to == BLACK_OUT) || (to == WHITE_OUT)) && (endGameFlag == 0)) {
+            System.out.println(to + "      " + endGameFlag);
+            result = true;
         }
         return result;
     }
@@ -332,18 +379,17 @@ public class GameMatch {
     /**
      * Проверка на возможность хода
      *
-     * @param to
      * @param color
-     * @param cells
+     * @param cell
      * @return true - возможно, false - невозможно.
      */
-    private boolean isCorrectTurn(int to, char color, Cell[] cells) {
+    private boolean isCorrectTurn(char color, Cell cell) {
         boolean result = false;
-        if (cells[to].getColor() == color) {
+        if (cell.getColor() == color) {
             result = true;
-        } else if (cells[to].getColor() == NULL) {
+        } else if (cell.getColor() == NULL) {
             result = true;
-        } else if (cells[to].getCount() == 1) {
+        } else if (cell.getCount() == 1) {
             result = true;
         }
 

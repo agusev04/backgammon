@@ -27,7 +27,9 @@ public class TestThrowCube extends Action {
             CubeValue cubeValues = new CubeValue(gameMatch.throwDice(player, cubeValue));
             System.out.println("TestThrowCube: Player " + player.getName() +
                     " ask to calculate possible position for values " + cubeValue / 10 + " and " + cubeValue % 10);
-            // PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValues.getCubeValues()));
+            int cube1 = cubeValues.getCubeValues()/10;
+            int cube2 = cubeValues.getCubeValues()%10;
+            PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cube1, cube2));
 
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(cubeValues);
@@ -40,7 +42,7 @@ public class TestThrowCube extends Action {
             } else {
                 System.out.println("TestThrowCube: WTF!!!!");
             }
-            //    packageMessage.addChange(moves);
+            packageMessage.addChange(moves);
             message = packageMessage;
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);

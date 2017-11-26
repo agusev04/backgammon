@@ -8,7 +8,7 @@ public class MoveAction extends Action {
     public int from;
     public int to;
     private boolean cantMove;
-
+    int cubeValue;
 
     public MoveAction(int from, int to, boolean cantMove) { // For tests
         this.from = from;
@@ -44,7 +44,7 @@ public class MoveAction extends Action {
             change = gameMatch.moveChip(player, this);
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(change);
-
+            packageMessage.addChange(new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValue )));
             PackageMessage packageMessageForOpponent = new PackageMessage();
             packageMessageForOpponent.addChange(change);
             Move move = new Move(from, to);

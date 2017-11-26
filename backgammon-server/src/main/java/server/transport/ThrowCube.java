@@ -18,7 +18,9 @@ public class ThrowCube extends Action {
         try {
             GameMatch gameMatch = player.getGameMatch();
             CubeValue cubeValues = new CubeValue(gameMatch.throwDice(player, null));
-            //    PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValues.getCubeValues()));
+            int cube1 = cubeValues.getCubeValues()/10;
+            int cube2 = cubeValues.getCubeValues()%10;
+            PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cube1, cube2));
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(cubeValues);
             packageMessage.addChange(new StateChange(gameMatch));
@@ -30,7 +32,7 @@ public class ThrowCube extends Action {
             } else {
                 System.out.println("ThrowCube: пользователь не найден");
             }
-            //     packageMessage.addChange(moves);
+            packageMessage.addChange(moves);
             message = packageMessage;
         } catch (GameError gameErrors) {
             message = new ErrorMessage(gameErrors);
