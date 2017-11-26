@@ -218,6 +218,7 @@ export class Game extends Container
 
             if (data.changeArrayList.length == 2 && data.changeArrayList[1].CLASS_NAME == 'PossibleMoves')
             {
+                console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
                 this._board.moveChip(this._lastMove[0], this._lastMove[1]);
                 if (data.changeArrayList[0])
                 {
@@ -234,6 +235,7 @@ export class Game extends Container
             }
             else if (data.changeArrayList.length == 2 && data.changeArrayList[1].CLASS_NAME == 'Move')
             {
+                console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[1].from + ',to: ' + data.changeArrayList[1].to + '}.');
                 this._board.moveOpponentChip(data.changeArrayList[1].from, data.changeArrayList[1].to);
 
                 if (data.changeArrayList[0])
@@ -357,12 +359,12 @@ export class Game extends Container
         console.log('Сообщение из гейма: MoveAction пришел {from: ' + data.from + ',to: ' + data.to + '}.');
         this._network.send({
             CLASS_NAME: 'MoveAction',
-            from: data.from + 1,
-            to: data.to + 1,
+            from: data.from,
+            to: data.to,
             cantMove: false,
             cubeValue: Math.abs(data.from - data.to)
         });
-        this._lastMove = [data.from + 1, data.to + 1];
+        this._lastMove = [data.from, data.to];
 
     }
 
