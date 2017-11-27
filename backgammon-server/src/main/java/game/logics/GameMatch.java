@@ -15,10 +15,10 @@ public class GameMatch {
 
     private static final int WHITE_DIRECTION = 1;
     private static final int BLACK_DIRECTION = -1;
-    private static final int waiting_turn = 0;  // ожидание хода
-    private static final int waiting_throw_dice = 1; // ожидание броска кубика
-    private static final int waiting_move_chip = 2; // ожидание перемещения фишки
-    private static final int the_final = 3; // конец игры
+    public static final int waiting_turn = 0;  // ожидание хода
+    public static final int waiting_throw_dice = 1; // ожидание броска кубика
+    public static final int waiting_move_chip = 2; // ожидание перемещения фишки
+    public static final int the_final = 3; // конец игры
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     int currentCubeValue = 0;
@@ -33,14 +33,6 @@ public class GameMatch {
     public int getCountMove() {
         return countMove;
     }
-
-    //TODO (Michael) подумать, как лучше назвать этот класс !!
-
-    //TODO (Michael) Логика, кто белый, а кто черный, должна быть организована здесь. !!
-    //TODO (Michael) Логика, чей ход - тоже  здесь. !!
-    //TODO (Michael) Логика, можно ли сейчас бросить кубик - тоже. !!
-    //TODO (Michael) Значение кубика должно быть тоже здесь. !!
-    //TODO (Michael) Оппонет должен запрашиваться отсюда ??
 
     public GameBoard getTable() {
         return table;
@@ -155,10 +147,6 @@ public class GameMatch {
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
-
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    } //TODO: этот метод нужен? нигде не используется
 
     public Player getWhitePlayer() {
         return whitePlayer;
@@ -458,6 +446,10 @@ public class GameMatch {
             change = new ChipsCounter(this);
         }
         return change;
+    }
+
+    public boolean isTurnWhite() {
+        return turnWhite;
     }
 }
 

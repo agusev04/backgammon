@@ -13,13 +13,9 @@ public class GameMatchStartTest extends AbstractTest {
 
         /*second player enters*/
         PackageMessage packageMessage = enter("1", "user 2");
-        //TODO (IvchenkoAlexandr) этого синглтона не нужно, ты сперва посмотри, что уже есть, а потом велосипед изобретай :)
-        //Есть Тестовая сессия, в ней есть TestBasicRemote.sendText по сути это и есть то, куда отправляется сообщение игроку.
-        //сейчас там просто пишется в sout, можно куда-то сохранять (например, в тестовую сессию).
-        //Оттуда брать и проверять
 
         GameStart[] starts = new GameStart[2];
-        starts[0] = (GameStart) sessions[0].getTestBasicRemote().getPackageMessage().getChange("GameStart");
+        starts[0] = (GameStart) sessions.get("0").getTestBasicRemote().getPackageMessage().getChange("GameStart");
         starts[1] = (GameStart) packageMessage.getChange("GameStart");
         assertNotNull(starts);
 

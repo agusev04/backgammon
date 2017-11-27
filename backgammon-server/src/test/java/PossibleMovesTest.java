@@ -1,10 +1,19 @@
 import server.transport.Move;
+import server.transport.PackageMessage;
 import server.transport.PossibleMoves;
 import support.AbstractTest;
 
 import java.util.ArrayList;
 
 public class PossibleMovesTest extends AbstractTest {
+
+    //TODO (IvchenkoAlexandr) Общие замечания:
+    //зачем пустой тест?
+    //ни одного теста после хода игрока (все только при первом броске)
+    //в тестах есть условия, которые никогда не выполнятся
+    //Все твои проверки однотипные - "содержит ли список ходов такой-то ход".
+    // Нет проверок - а вдруг список содержит этот ход больше одного раза? Или вдруг содержит помимо этих ходов какие-то еще, неверные?
+    //однотипную логику можно вынести в метод. Можно также использовать новые методы из AbstractTest
 
     public void testEmpty() {
 
@@ -20,7 +29,8 @@ public class PossibleMovesTest extends AbstractTest {
         /*second player enters*/
         enter("1", "user 2");
         int startPosition[] = {1, 12, 17, 19};
-        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 11).getChange("PossibleMoves");
+        PackageMessage packageMessage = (PackageMessage) throwCube("0", 11);
+        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
         ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
 
 
@@ -43,7 +53,8 @@ public class PossibleMovesTest extends AbstractTest {
         enter("1", "user 2");
 
         int startPosition[] = {1, 12, 17, 19};
-        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 26).getChange("PossibleMoves");
+        PackageMessage packageMessage = (PackageMessage) throwCube("0", 26);
+        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
         int[] possibleValues = {2, 6};
         ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {
@@ -72,9 +83,9 @@ public class PossibleMovesTest extends AbstractTest {
         /*second player enters*/
         enter("1", "user 2");
 
-        int startPosition[] = {1, 12, 17, 19};
-
-        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 56).getChange("PossibleMoves");
+        int startPosition[] = {1,   12, 17, 19};
+        PackageMessage packageMessage = (PackageMessage) throwCube("0", 56);
+        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
         int[] possibleValues = {5, 6};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {
@@ -110,7 +121,8 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 23).getChange("PossibleMoves");
+        PackageMessage packageMessage = (PackageMessage) throwCube("0", 23);
+        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
         int[] possibleValues = {2, 3};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {
@@ -141,7 +153,8 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1, 12, 17, 19};
 
-        PossibleMoves possibleMoves = (PossibleMoves) throwCube("0", 43).getChange("PossibleMoves");
+        PackageMessage packageMessage = (PackageMessage) throwCube("0", 43);
+        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
         int[] possibleValues = {4, 3};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {

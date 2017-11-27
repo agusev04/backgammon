@@ -10,13 +10,11 @@ import java.io.IOException;
 public class Player {  //класс игрока
     String name;
     char color; // 'w' or 'b'
-
     GameMatch gameMatch;
-    // Alexandr начал добавлять
     Session session;
+    //TODO (Michael) зачем это поле? если не нужно - убрать
     int number; //это номер в массиве в классе GameMatch
-    // закончил добавлять
-    //TODO (Michael) исправить, как было в задаче с изменением связанного кода
+
 
     public Player(String name, char color) { //конструктор по умолчанию для игрока
     }

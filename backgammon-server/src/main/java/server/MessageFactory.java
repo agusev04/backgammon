@@ -12,9 +12,6 @@ import java.util.HashMap;
  */
 public class MessageFactory {
 
-    //TODO (IvchenkoAlexandr) это не фабричный метод, это обычная фабрика и то...
-    // тот же свитч просто в отдельный клаас перенес.
-    //Сделай тут тогда уже Map c классами по именам
     private static MessageFactory messageFactory = new MessageFactory();
     HashMap<String, Class> map = new HashMap<>();
 
