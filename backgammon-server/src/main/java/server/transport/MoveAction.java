@@ -7,13 +7,14 @@ import game.logics.Player;
 public class MoveAction extends Action {
     public int from;
     public int to;
-    private boolean cantMove;
     int cubeValue;
+    private boolean cantMove;
 
-    public MoveAction(int from, int to, boolean cantMove) { // For tests
+    public MoveAction(int from, int to, boolean cantMove, int cubeValue) { // For tests
         this.from = from;
         this.to = to;
         this.cantMove = cantMove;
+        this.cubeValue = cubeValue;
     }
 
     public MoveAction(boolean cantMove) { // For tests
@@ -44,7 +45,7 @@ public class MoveAction extends Action {
             change = gameMatch.moveChip(player, this);
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(change);
-            packageMessage.addChange(new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValue )));
+            packageMessage.addChange(new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValue)));
             PackageMessage packageMessageForOpponent = new PackageMessage();
             packageMessageForOpponent.addChange(change);
             Move move = new Move(from, to);

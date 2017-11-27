@@ -25,7 +25,7 @@ public class PlayerCantMove extends AbstractTest {
         System.out.println("Active player name " + gameMatch.getActivePlayer().getName() + ". Count move: " + gameMatch.getCountMove());
         System.out.println("*****");
 
-        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, false));
+        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, false, 9));
 
         System.out.println("Active player name " + gameMatch.getActivePlayer().getName() + ". Count move: " + gameMatch.getCountMove());
 

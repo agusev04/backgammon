@@ -6,7 +6,6 @@ package server.transport;
  */
 public class CubeValue extends Response implements Change {
     protected int cubeValues;
-    //TODO (IvchenkoAlexandr) это надо из конструктора убрать, такой логики в конструкторах быть не должно
 
     public CubeValue(int cubeValues) {
         this.cubeValues = cubeValues;

@@ -31,11 +31,13 @@ public class PackageMessage extends Response implements AbstractMessage {
     public Change getChange(String className) {
         Change change = null;
         for (Change change1 : changeArrayList) {
-            if (className.equals(change1.getClass().getSimpleName())) {
-                if (change != null) {
-                    System.out.println("PackageMessage: Message has more than one change");
+            if (change1 != null) {
+                if (className.equals(change1.getClass().getSimpleName())) {
+                    if (change != null) {
+                        System.out.println("PackageMessage: Message has more than one change");
+                    }
+                    change = change1;
                 }
-                change = change1;
             }
         }
         if (change == null) {
