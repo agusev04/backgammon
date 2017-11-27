@@ -15,26 +15,15 @@ public class PlayerCantMove extends AbstractTest {
         PackageMessage packageMessage1 = enter("1", "Sam");
         Player blackPlayer = getPlayers().get(1);
 
-        System.out.println();
-        System.out.println("Active player name: " + gameMatch.getActivePlayer().getName() +
-                ". Condition code: " + gameMatch.getActivePlayerCondition());
 
-        System.out.println("Cube value for player " + gameMatch.getActivePlayer().getName() + " is: "
-                + gameMatch.throwDice(whitePlayer, 25));
-        System.out.println("*****");
-        System.out.println("Active player name " + gameMatch.getActivePlayer().getName() + ". Count move: " + gameMatch.getCountMove());
-        System.out.println("*****");
+        assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после входа в игру черного
+        gameMatch.throwDice(whitePlayer, 24);
+        assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после броска кубика
+        assertEquals(GameMatch.waiting_move_chip, gameMatch.getActivePlayerCondition()); // сменилось ли состояние
 
-        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, false, 9));
+        gameMatch.moveChip(whitePlayer, new MoveAction(true)); // подаем команду, что ходов нету
 
-        System.out.println("Active player name " + gameMatch.getActivePlayer().getName() + ". Count move: " + gameMatch.getCountMove());
-
-//        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, true), false);
-
-        System.out.println("Active player name " + gameMatch.getActivePlayer().getName() + ". Count move: " + gameMatch.getCountMove());
-
-        System.out.println("*****");
-        System.out.println("Active player name " + gameMatch.getActivePlayer().getName() + ". Count move: " + gameMatch.getCountMove());
-        System.out.println("Waiting player name " + gameMatch.getWaitingPlayer().getName() + ". Waiting player condition " + gameMatch.getWhitePlayerCondition());
+        assertFalse(gameMatch.isTurnWhite()); // проверяем, передался ли ход черному
+        assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition()); // сменилось ли состояние у черного
     }
 }

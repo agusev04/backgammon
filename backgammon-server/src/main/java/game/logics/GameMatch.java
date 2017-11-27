@@ -54,8 +54,10 @@ public class GameMatch {
             } else {
                 throw UNABLE_THROW_DICES;
             }
-        } else {
+        } else if (getActivePlayer() == player){
             result = cubeValue.intValue();
+        }else {
+            throw UNABLE_THROW_DICES;
         }
         if (turnWhite && whitePlayerCondition == waiting_throw_dice) {
             whitePlayerCondition = waiting_move_chip;
@@ -86,11 +88,8 @@ public class GameMatch {
                 // и идет переключение флага хода
             }
         }
-        return new StateChange(this); //TODO Миша, я правильно понял, что такая конструкция вернет чендж содержащий имя
-        //активного игрока и его состояние всега равное waiting_throw_dice = 1 (в реалях нашей договоренности это является ожиданием)\
-        //хода, ибо ожидания броска кубика нет, мы сразу кидаем кубик, как только сменился ход, ожидания кубика нет в принципе).
+        return new StateChange(this);
     }
-
     public Change moveChip(Player player, MoveAction move) throws GameError {
         if (turnWhite && whitePlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
@@ -123,8 +122,8 @@ public class GameMatch {
             if ((move.isCantMove()) && (change == null)) { //елси не равно null значит конец игры и менять ход не имеет смысла
                 countMove = 0;
                 changeTurn();
-                change = new StateChange(this);
-                System.out.println("GameMatch: You can not move chips! Change turn, active player is " + getActivePlayer().getName() + " now.");
+                StateChange st = new StateChange(this);
+                change = new TurnChange(this, st);
             }
         } else throw UNABLE_TURN;
         return change;
