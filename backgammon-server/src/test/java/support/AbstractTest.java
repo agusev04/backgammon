@@ -39,13 +39,11 @@ public abstract class AbstractTest extends TestCase {
     }
 
 
-//    protected CubeValue throwDice(String session) throws EncodeException {
-//        ThrowCube pack = new ThrowCube();
-//        System.out.println("REQUEST:" + messageEncoder.encode(pack));
-//        CubeValue cubeValue = (CubeValue) requestHandler.request(pack, new TestSession(session));
-//        System.out.println("RESPONSE:" + messageEncoder.encode(cubeValue));
-//        return cubeValue;
-//    }
+    protected AbstractMessage throwCube(String sessionId) throws EncodeException {
+        ThrowCube pack = new ThrowCube();
+        AbstractMessage packageMessage = requestHandler.request(pack, sessions.get(sessionId));
+        return packageMessage;
+    }
 
     protected AbstractMessage throwCube(String sessionId, int cubeValue) throws EncodeException {
         TestThrowCube pack = new TestThrowCube(cubeValue);

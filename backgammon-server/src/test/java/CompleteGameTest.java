@@ -62,9 +62,11 @@ public class CompleteGameTest extends AbstractTest {
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         /*черный бросает кубик - ошибка*/
-        //TODO (Michael) Черный может бросить кубик за белого
-//        response = throwCube(BLACK, 12);
-//        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
+        response = throwCube(BLACK, 12);
+        assertEquals("ErrorMessage{code=2, message='You can not throw dices now'}", response.toString());
+
+        response = throwCube(BLACK);
+        assertEquals("ErrorMessage{code=2, message='You can not throw dices now'}", response.toString());
 
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
@@ -96,7 +98,9 @@ public class CompleteGameTest extends AbstractTest {
 
         /*Попытка белого опять бросить кубик 1 + 3*/
         response = throwCube(WHITE, 13);
+        //TODO (Michael) Должна быть ошибка "You can not throw dices now"
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
+//        assertEquals("ErrorMessage{code=2, message='IYou can not throw dices now'}", response.toString());
 
         /*Попытка черного бросить кубик 1 + 3*/
         response = throwCube(BLACK, 13);
@@ -121,7 +125,7 @@ public class CompleteGameTest extends AbstractTest {
 
         /*Попытка белого сходить неверно*/
         //TODO (Michael) Белый может сходить неверно
-//        response = moveChip(WHITE, 1, 4, false);
+//        response = moveChip(WHITE, 1, 4, false, 3);
 //        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
 
         /*Белый ходит верно 1 - 3*/
@@ -139,9 +143,8 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
-
-        //TODO (IvchenkoAlexandr) В списке ченджей содержится null из-за чего ломается тест строкой ниже
-        //Однако видно, что PossibleMoves приходят неверные
         checkPossibleMoves(response, new Move(1, 2), new Move(3, 4), new Move(17, 18), new Move(19, 20));
+
+
     }
 }
