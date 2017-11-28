@@ -9,16 +9,17 @@ import java.util.Random;
 
 import static game.gameobjects.Cell.*;
 import static game.gameobjects.GameBoard.*;
-import static game.logics.GameError.*;
+import static game.logics.GameError.UNABLE_THROW_DICES;
+import static game.logics.GameError.UNABLE_TURN;
 
 public class GameMatch {
 
-    private static final int WHITE_DIRECTION = 1;
-    private static final int BLACK_DIRECTION = -1;
     public static final int waiting_turn = 0;  // ожидание хода
     public static final int waiting_throw_dice = 1; // ожидание броска кубика
     public static final int waiting_move_chip = 2; // ожидание перемещения фишки
     public static final int the_final = 3; // конец игры
+    private static final int WHITE_DIRECTION = 1;
+    private static final int BLACK_DIRECTION = -1;
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     int currentCubeValue = 0;
@@ -54,9 +55,9 @@ public class GameMatch {
             } else {
                 throw UNABLE_THROW_DICES;
             }
-        } else if (getActivePlayer() == player){
+        } else if (getActivePlayer() == player) {
             result = cubeValue.intValue();
-        }else {
+        } else {
             throw UNABLE_THROW_DICES;
         }
         if (turnWhite && whitePlayerCondition == waiting_throw_dice) {
@@ -90,6 +91,7 @@ public class GameMatch {
         }
         return new StateChange(this);
     }
+
     public Change moveChip(Player player, MoveAction move) throws GameError {
         if (turnWhite && whitePlayerCondition != waiting_move_chip) {
             throw UNABLE_TURN;
@@ -98,10 +100,16 @@ public class GameMatch {
             throw UNABLE_TURN;
         }
         Change change = null;
+        int to;
+        if (player.getColor() == BLACK) {
+            to = move.from - move.cubeValue;
+        } else {
+            to = move.from + move.cubeValue;
+        }
 
         if (getActivePlayer() == player) {
             if (!move.isCantMove() || countMove > 0) {
-                table.moveChip(move.from, move.to, player.color);
+                table.moveChip(move.from, to, player.color);
                 countMove--;
                 System.out.println("You have move count: " + getCountMove());
                 if (table.isEnd(player.getColor())) {
@@ -172,7 +180,7 @@ public class GameMatch {
             if (currentCubeValue / 10 == currentCubeValue % 10) {
 
             } else if (currentCubeValue / 10 == cubeValue) {
-                currentCubeValue -= cubeValue*10;
+                currentCubeValue -= cubeValue * 10;
                 cubeValue = currentCubeValue;
             } else if (currentCubeValue % 10 == cubeValue) {
                 currentCubeValue -= cubeValue;
@@ -438,7 +446,6 @@ public class GameMatch {
 
     public Change countersChange(Player player, int to) {
         Change change = null;
-        boolean result = false;
         if ((player.getColor() == BLACK) && (to == WHITE_OUT)) {
             change = new ChipsCounter(this);
         } else if ((player.getColor() == WHITE) && (to == BLACK_OUT)) {
@@ -449,6 +456,21 @@ public class GameMatch {
 
     public boolean isTurnWhite() {
         return turnWhite;
+    }
+
+    public int formTo(char color, int cubeValue, int from) {
+        int to;
+        if (color == WHITE) {
+            to = cubeValue + from;
+        } else {
+            to = from - cubeValue;
+        }
+        if (to > BLACK_OUT) {
+            to = BLACK_OUT;
+        } else if (to < WHITE_OUT) {
+            to = WHITE_OUT;
+        }
+        return to;
     }
 }
 

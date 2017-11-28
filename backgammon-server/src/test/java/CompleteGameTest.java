@@ -58,7 +58,7 @@ public class CompleteGameTest extends AbstractTest {
         assertTrue(gameMatch.isTurnWhite());
 
         /*двигаем фишку - ошибка*/
-        AbstractMessage response = moveChip(WHITE, 0, 1, false, 1);
+        AbstractMessage response = moveChip(WHITE, 0, false, 1);
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         /*черный бросает кубик - ошибка*/
@@ -107,7 +107,7 @@ public class CompleteGameTest extends AbstractTest {
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         /*Попытка черного сходить*/
-        response = moveChip(BLACK, 0, 1, false, 1);
+        response = moveChip(BLACK, 0, false, 1);
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         checkWhitePositions(gameMatch,
@@ -129,7 +129,7 @@ public class CompleteGameTest extends AbstractTest {
 //        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
 
         /*Белый ходит верно 1 - 3*/
-        response = moveChip(WHITE, 1, 3, false, 2);
+        response = moveChip(WHITE, 1, false, 2);
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_move_chip, gameMatch.getActivePlayerCondition());
         checkWhitePositions(gameMatch,

@@ -6,13 +6,11 @@ import game.logics.Player;
 
 public class MoveAction extends Action {
     public int from;
-    public int to;
-    int cubeValue;
+    public int cubeValue;
     private boolean cantMove;
 
-    public MoveAction(int from, int to, boolean cantMove, int cubeValue) { // For tests
+    public MoveAction(int from, boolean cantMove, int cubeValue) { // For tests
         this.from = from;
-        this.to = to;
         this.cantMove = cantMove;
         this.cubeValue = cubeValue;
     }
@@ -25,7 +23,6 @@ public class MoveAction extends Action {
     public String toString() {
         return "MoveAction{" +
                 "from=" + from +
-                ", to=" + to +
                 ", cantMove=" + cantMove +
                 ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
@@ -38,7 +35,7 @@ public class MoveAction extends Action {
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
-        System.out.println("MoveAction: " + player.getName() + " move chip from " + from + " to " + to);
+        System.out.println("MoveAction: " + player.getName() + " move chip from " + from + " cubeValue " + cubeValue);
         Change change;
         try {
             GameMatch gameMatch = player.getGameMatch();
@@ -48,6 +45,7 @@ public class MoveAction extends Action {
             packageMessage.addChange(new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValue)));
             PackageMessage packageMessageForOpponent = new PackageMessage();
             packageMessageForOpponent.addChange(change);
+            int to = gameMatch.formTo(player.getColor(), cubeValue, from);
             Move move = new Move(from, to);
             packageMessageForOpponent.addChange(move);
 

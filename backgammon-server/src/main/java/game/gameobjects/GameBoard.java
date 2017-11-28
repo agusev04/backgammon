@@ -38,19 +38,15 @@ public class GameBoard {
     }
 
     public void moveChip(int from, int to, char color) throws GameError { //можно вытащить color из cells[from]
-        if (cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
-            throw UNABLE_MOVE;
-        }
-        int finalPosition;
-        if (color == Cell.BLACK) {
-            finalPosition = WHITE_OUT;
-        } else {
-            finalPosition = BLACK_OUT;
-        }
-        cells[from].takeChip();
-        if (to != finalPosition) {
+        if ((to > WHITE_OUT) && (to < BLACK_OUT)) {
+            if (cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
+                throw UNABLE_MOVE;
+            }
+            cells[from].takeChip();
+
             cells[to].putChip(color);
         } else {
+            cells[from].takeChip();
             if (color == Cell.BLACK) {
                 blackCounter++;
             } else {

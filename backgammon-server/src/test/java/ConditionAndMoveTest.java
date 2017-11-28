@@ -26,9 +26,9 @@ public class ConditionAndMoveTest extends AbstractTest {
 
         System.out.println();
         System.out.println("white player must move chip, count move:  " + gameMatch.getCountMove());
-        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, false, 9));
+        gameMatch.moveChip(whitePlayer, new MoveAction(1, false, 9));
         System.out.println("white player move chip, count move:  " + gameMatch.getCountMove());
-        gameMatch.moveChip(whitePlayer, new MoveAction(1, 10, true, 9));
+        gameMatch.moveChip(whitePlayer, new MoveAction(1, true, 9));
         System.out.println("white player move chip, count move:  " + gameMatch.getCountMove());
 
 
@@ -49,9 +49,9 @@ public class ConditionAndMoveTest extends AbstractTest {
         System.out.println("Active player name (1 turn) " + gameMatch.getActivePlayer().getName() +
                 " Condition code: " + gameMatch.getActivePlayerCondition());
         System.out.println(gameMatch.getCountMove());
-        gameMatch.moveChip(blackPlayer, new MoveAction(24, 23, false, 1));
+        gameMatch.moveChip(blackPlayer, new MoveAction(24, false, 1));
         System.out.println("blackPlayer move ");
-        gameMatch.moveChip(blackPlayer, new MoveAction(24, 23, false, 1));
+        gameMatch.moveChip(blackPlayer, new MoveAction(24, false, 1));
         System.out.println("blackPlayer move ");
 
         gameMatch.changeTurn(); //передача хода
@@ -65,7 +65,7 @@ public class ConditionAndMoveTest extends AbstractTest {
                 " Condition code: " + gameMatch.getActivePlayerCondition());
 
 
-        gameMatch.moveChip(whitePlayer, new MoveAction(17, 18, false, 1));
+        gameMatch.moveChip(whitePlayer, new MoveAction(17, false, 1));
 
         ArrayList<ChipsPosition> whitePositions1 = gameMatch.getTable().getGameState().getWhitePos();
         ArrayList<ChipsPosition> whitePositions2 = gameMatch.getTable().getGameState().getWhitePos();
