@@ -52,10 +52,9 @@ public class MoveAction extends Action {
             packageMessageForOpponent.addChange(move);
 
             change = gameMatch.countersChange(player, to);
-            if (change != null) {
-                packageMessage.addChange(change);
-                packageMessageForOpponent.addChange(change);
-            }
+
+            packageMessage.addChange(change);
+            packageMessageForOpponent.addChange(change);
 
             Player otherPlayer = gameMatch.getOtherPlayer(player);
 

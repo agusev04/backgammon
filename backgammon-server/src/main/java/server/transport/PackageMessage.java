@@ -25,20 +25,21 @@ public class PackageMessage extends Response implements AbstractMessage {
     }
 
     public void addChange(Change change) {
-        changeArrayList.add(change);
+        if (change != null) {
+            changeArrayList.add(change);
+        }
     }
 
     public Change getChange(String className) {
         Change change = null;
         for (Change change1 : changeArrayList) {
-            if (change1 != null) {
-                if (className.equals(change1.getClass().getSimpleName())) {
-                    if (change != null) {
-                        System.out.println("PackageMessage: Message has more than one change");
-                    }
-                    change = change1;
+            if (className.equals(change1.getClass().getSimpleName())) {
+                if (change != null) {
+                    System.out.println("PackageMessage: Message has more than one change");
                 }
+                change = change1;
             }
+
         }
         if (change == null) {
             System.out.println("PackageMessage: Message has not this change");

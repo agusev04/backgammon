@@ -43,11 +43,9 @@ public class RequestHandler {
             где создается FinaleMessage, чтобы убрать лишнюю проверку сообщения (isInstance много жрет)
              */
             if (PackageMessage.class.isInstance(message)) {
+                // можно заменить на if(packageMessage.getChange("Final") != null)
                 if (checkFinal(((PackageMessage) message).getChangeArrayList())) {
-                    Player otherPlayer = thisPlayer.getGameMatch().getOtherPlayer(thisPlayer);
-                    deletePlayer(thisPlayer);
-                    players.remove(Integer.parseInt(otherPlayer.getSession().getId()));
-
+                    deletePlayer(thisPlayer.getSession()); //удаление происходит после отправки финала второму игроку.
                 }
             }
 
@@ -60,12 +58,12 @@ public class RequestHandler {
         AbstractMessage abstractMessage;
         if (currentGameMatch == null) {
             currentGameMatch = new GameMatch();
-            gameMatchArrayList.add(currentGameMatch);
+
         }
         if (currentGameMatch.getNumberOfPlayers() == 2) {
             currentGameMatch = new GameMatch();
-            gameMatchArrayList.add(currentGameMatch);
         }
+
         thisPlayer = new Player(currentGameMatch, session, currentGameMatch.getNumberOfPlayers());
         currentGameMatch.addPlayer(thisPlayer); // здесь уже может броситься игрокам GameStart если вызывать из GameMatch
         abstractMessage = pack.apply(thisPlayer);// здесь второму игроку имя присвоится, один GameStart будет без имени
@@ -77,6 +75,10 @@ public class RequestHandler {
             currentGameMatch.getWhitePlayer().sendMessage(packageMessage);
         }
         players.put(Integer.parseInt(session.getId()), thisPlayer);
+
+        if (currentGameMatch.getNumberOfPlayers() == 2) {
+            gameMatchArrayList.add(currentGameMatch);
+        }
         return abstractMessage;
     }
 
@@ -85,42 +87,35 @@ public class RequestHandler {
         for (Change change : arrayList) {
             if (Final.class.isInstance(change)) {
                 result = true;
+                break;
             }
         }
         return result;
     }
 
-    public void deleteSession(Session session) {
+    public void deletePlayer(Session session) {
         Player player = players.remove(Integer.parseInt(session.getId())); //получаем пользователя, если он прошел рег.
-        deletePlayer(player);
-
-    }
-
-    private void deletePlayer(Player player) {
-        System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + " games before");
-        System.out.println("RequestHandler deletePlayer: " + players.size() + " players before");
         if (player != null) {
-            System.out.println("RequestHandler deletePlayer: Player " + player.getName() + " came out");
+            System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + " games before");
+            System.out.println("RequestHandler deletePlayer: " + (players.size() + 1) + " players before");
 
             GameMatch gameMatch = player.getGameMatch();
-            if (gameMatch != null) { // эта проверка может быть использована для реконекта
-                if (gameMatch == currentGameMatch) {
-                    currentGameMatch = null;
-                }
-                Player otherPlayer = gameMatch.getOtherPlayer(player);
-                player.setGameMatch(null);
-                gameMatch.deletePlayer(player);
-                if (otherPlayer != null) {
-                    otherPlayer.sendMessage(new ErrorMessage(PLAYER_CAME_OUT));
-                    otherPlayer.setGameMatch(null);
-                    gameMatch.deletePlayer(otherPlayer);
-                }
-                gameMatchArrayList.remove(gameMatch);
+            Player otherPlayer = gameMatch.getOtherPlayer(player);
+            if(otherPlayer != null){
+                otherPlayer.sendMessage(new ErrorMessage(PLAYER_CAME_OUT));
+                players.remove(Integer.parseInt(otherPlayer.getSession().getId()));
             }
+
+            gameMatchArrayList.remove(gameMatch);
+            if(currentGameMatch == gameMatch){
+                currentGameMatch = new GameMatch();
+            }
+
+            System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + " games after");
+            System.out.println("RequestHandler deletePlayer: " + players.size() + " players after");
         }
-        System.out.println("RequestHandler deletePlayer: " + gameMatchArrayList.size() + " games after");
-        System.out.println("RequestHandler deletePlayer: " + players.size() + " players after");
     }
+
 
     public ArrayList<GameMatch> getGameMatchArrayList() {
         return gameMatchArrayList;
