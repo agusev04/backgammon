@@ -103,9 +103,9 @@ public class GameMatch {
                         table.moveChip(move.from, to, player.color);
                         countMove--;
                         if (move.cubeValue == currentCubeValue / 10) { // исключаем использованный кубик
-                            currentCubeValue = move.cubeValue % 10;
+                            currentCubeValue = currentCubeValue % 10;
                         } else if (move.cubeValue == currentCubeValue % 10) {
-                            currentCubeValue = move.cubeValue / 10;
+                            currentCubeValue = currentCubeValue/ 10;
                         }
                     } else throw UNABLE_MOVE;
 
@@ -115,13 +115,14 @@ public class GameMatch {
                             activePlayerCondition = the_final;
                         }
                     }
-                } else if ((countMove == 0) && (change == null)) {
-                    changeTurn();
-                    change = new StateChange(this);
                 }
 
             } else throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
         }else throw UNABLE_TURN;
+
+        if ((countMove == 0) && (change == null)) {
+            change = changeTurn();
+        }
         return change;
     }
 

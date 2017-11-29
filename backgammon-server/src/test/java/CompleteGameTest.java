@@ -131,7 +131,6 @@ public class CompleteGameTest extends AbstractTest {
 
         /*Белый ходит верно 1 - 3*/
         response = moveChip(WHITE, 1, 2);
-        assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_move_chip, gameMatch.getActivePlayerCondition());
         checkWhitePositions(gameMatch,
                 new ChipsPosition(1, 1),
@@ -145,6 +144,9 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
 //        checkPossibleMoves(response, new Move(1, 2), new Move(3, 4), new Move(17, 18), new Move(19, 20));
+        response = moveChip(WHITE, 1, 1);
+        assertFalse(gameMatch.isTurnWhite());
+
 
 
     }
