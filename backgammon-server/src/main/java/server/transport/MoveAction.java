@@ -7,31 +7,20 @@ import game.logics.Player;
 public class MoveAction extends Action {
     public int from;
     public int cubeValue;
-    private boolean cantMove;
 
-    public MoveAction(int from, boolean cantMove, int cubeValue) { // For tests
+    public MoveAction(int from, int cubeValue) { // For tests
         this.from = from;
-        this.cantMove = cantMove;
         this.cubeValue = cubeValue;
     }
 
-    public MoveAction(boolean cantMove) { // For tests
-        this.cantMove = cantMove;
-    }
 
     @Override
     public String toString() {
         return "MoveAction{" +
                 "from=" + from +
-                ", cantMove=" + cantMove +
                 ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
     }
-
-    public boolean isCantMove() {
-        return cantMove;
-    }
-
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;

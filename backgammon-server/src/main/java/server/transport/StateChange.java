@@ -8,14 +8,18 @@ import game.logics.GameMatch;
  */
 public class StateChange extends Response implements Change {
     int activePlayerCode;
-    String activePlayerName;
     char  activePlayerColor;
+    String activePlayerName;
+    String message;
 
     public StateChange(GameMatch gameMatch) {
         // получение инфы по активному игроку
         activePlayerCode = gameMatch.getActivePlayerCondition();
-        activePlayerName = gameMatch.getActivePlayer().getName();
         activePlayerColor = gameMatch.getActivePlayer().getColor();
+        activePlayerName = gameMatch.getActivePlayer().getName();
+        if (gameMatch.turnSkipped) {
+            message = activePlayerName + ", can not move chips! Change turn!";
+        }
     }
 
     @Override

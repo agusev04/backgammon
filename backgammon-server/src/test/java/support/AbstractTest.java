@@ -53,8 +53,8 @@ public abstract class AbstractTest extends TestCase {
         return packageMessage;
     }
 
-    protected AbstractMessage moveChip(String sessionId, int from, boolean cantMove, int cubeValue) throws EncodeException {
-        MoveAction action = new MoveAction(from, cantMove, cubeValue);
+    protected AbstractMessage moveChip(String sessionId, int from,  int cubeValue) throws EncodeException {
+        MoveAction action = new MoveAction(from, cubeValue);
         //      System.out.println("REQUEST:" + messageEncoder.encode(action));
         AbstractMessage packageMessage = requestHandler.request(action, sessions.get(sessionId));
 //        System.out.println("RESPONSE:" + messageEncoder.encode(packageMessage1));

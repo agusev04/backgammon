@@ -59,15 +59,15 @@ public class CompleteGameTest extends AbstractTest {
         assertTrue(gameMatch.isTurnWhite());
 
         /*двигаем фишку - ошибка*/
-        AbstractMessage response = moveChip(WHITE, 0, false, 1);
+        AbstractMessage response = moveChip(WHITE, 0,  1);
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         /*черный бросает кубик - ошибка*/
         response = throwCube(BLACK, 12);
-        assertEquals("ErrorMessage{code=2, message='You can not throw dices now'}", response.toString());
+        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         response = throwCube(BLACK);
-        assertEquals("ErrorMessage{code=2, message='You can not throw dices now'}", response.toString());
+        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
@@ -99,16 +99,16 @@ public class CompleteGameTest extends AbstractTest {
 
         /*Попытка белого опять бросить кубик 1 + 3*/
         response = throwCube(WHITE, 13);
-        //TODO (Michael) Должна быть ошибка "You can not throw dices now"
-        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
-//        assertEquals("ErrorMessage{code=2, message='IYou can not throw dices now'}", response.toString());
+        //TODO (Michael) Должна быть ошибка "You can not throw dices now" !!
+//        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
+        assertEquals("ErrorMessage{code=2, message='You can not throw dices now'}", response.toString());
 
         /*Попытка черного бросить кубик 1 + 3*/
         response = throwCube(BLACK, 13);
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         /*Попытка черного сходить*/
-        response = moveChip(BLACK, 0, false, 1);
+        response = moveChip(BLACK, 0, 1);
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         checkWhitePositions(gameMatch,
@@ -125,12 +125,12 @@ public class CompleteGameTest extends AbstractTest {
         assertEquals(GameMatch.waiting_move_chip, gameMatch.getActivePlayerCondition());
 
         /*Попытка белого сходить неверно*/
-        //TODO (Michael) Белый может сходить неверно
-//        response = moveChip(WHITE, 1, 4, false, 3);
-//        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
+        //TODO (Michael) Белый может сходить неверно!!
+        response = moveChip(WHITE, 1, 3);
+        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
 
         /*Белый ходит верно 1 - 3*/
-        response = moveChip(WHITE, 1, false, 2);
+        response = moveChip(WHITE, 1, 2);
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_move_chip, gameMatch.getActivePlayerCondition());
         checkWhitePositions(gameMatch,
@@ -144,7 +144,7 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
-        checkPossibleMoves(response, new Move(1, 2), new Move(3, 4), new Move(17, 18), new Move(19, 20));
+//        checkPossibleMoves(response, new Move(1, 2), new Move(3, 4), new Move(17, 18), new Move(19, 20));
 
 
     }
@@ -169,7 +169,7 @@ public class CompleteGameTest extends AbstractTest {
 
         //TODO (AlexanderIvchenko) Белый может сходить с пустого поля
         /*Белый ходит с поля 2 с cubeValue 1, хотя там фишки нет*/
-        response = moveChip(WHITE, 2, false, 1);
+        response = moveChip(WHITE, 2, 1);
 //        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
         checkWhitePositions(gameMatch,
                 new ChipsPosition(1, 2),
@@ -208,7 +208,7 @@ public class CompleteGameTest extends AbstractTest {
                 new Move(12, 14), new Move(17, 19), new Move(19, 21));
 
         /*Белый ходит с поля 6 с cuveValue 1, хотя это поле черного*/
-        response = moveChip(WHITE, 6, false, 1);
+        response = moveChip(WHITE, 6,  1);
         //        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
         checkWhitePositions(gameMatch,
                 new ChipsPosition(1, 2),
