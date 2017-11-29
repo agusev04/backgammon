@@ -51,11 +51,12 @@ public class GameBoard {
                     cells[BLACK_BAR].putChip(BLACK);
                 }
                 cells[to].takeChip();
+            } else{
+                cells[from].takeChip();
+
+                cells[to].putChip(color);
             }
 
-            cells[from].takeChip();
-
-            cells[to].putChip(color);
         } else {
             cells[from].takeChip();
             if (color == Cell.BLACK) {

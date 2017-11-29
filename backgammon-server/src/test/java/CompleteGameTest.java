@@ -59,7 +59,7 @@ public class CompleteGameTest extends AbstractTest {
         assertTrue(gameMatch.isTurnWhite());
 
         /*двигаем фишку - ошибка*/
-        AbstractMessage response = moveChip(WHITE, 0,  1);
+        AbstractMessage response = moveChip(WHITE, 0, 1);
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
 
         /*черный бросает кубик - ошибка*/
@@ -148,7 +148,6 @@ public class CompleteGameTest extends AbstractTest {
         assertFalse(gameMatch.isTurnWhite());
 
 
-
     }
 
     public void testMoveWithNoChip() throws Exception {
@@ -172,14 +171,14 @@ public class CompleteGameTest extends AbstractTest {
         //TODO (AlexanderIvchenko) Белый может сходить с пустого поля
         /*Белый ходит с поля 2 с cubeValue 1, хотя там фишки нет*/
         response = moveChip(WHITE, 2, 1);
-//        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
+        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
         checkWhitePositions(gameMatch,
                 new ChipsPosition(1, 2),
-                new ChipsPosition(3, 1), //у белого появляется новая фишка в поле 3
+                //               new ChipsPosition(3, 1), //у белого появляется новая фишка в поле 3
                 new ChipsPosition(12, 5),
                 new ChipsPosition(17, 3),
                 new ChipsPosition(19, 5));
-        assertEquals(-1, gameMatch.getTable().getCells()[2].getCount());//на поле 2 становится -1 фишка
+        assertEquals(0, gameMatch.getTable().getCells()[2].getCount());//на поле 2 становится -1 фишка
         checkBlackPositions(gameMatch,
                 new ChipsPosition(6, 5),
                 new ChipsPosition(8, 3),
@@ -210,16 +209,17 @@ public class CompleteGameTest extends AbstractTest {
                 new Move(12, 14), new Move(17, 19), new Move(19, 21));
 
         /*Белый ходит с поля 6 с cuveValue 1, хотя это поле черного*/
-        response = moveChip(WHITE, 6,  1);
-        //        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
+        response = moveChip(WHITE, 6, 1);
+        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
         checkWhitePositions(gameMatch,
                 new ChipsPosition(1, 2),
-                new ChipsPosition(7, 1), //у белого появляется новая фишка в поле 7
+                //     new ChipsPosition(7, 1), //у белого появляется новая фишка в поле 7
                 new ChipsPosition(12, 5),
                 new ChipsPosition(17, 3),
                 new ChipsPosition(19, 5));
         checkBlackPositions(gameMatch,
-                new ChipsPosition(6, 4),//у черного в поле 6 стало на одну фишку меньше
+                //    new ChipsPosition(6, 4),//у черного в поле 6 стало на одну фишку меньше
+                new ChipsPosition(6, 5),
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
