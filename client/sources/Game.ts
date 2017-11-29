@@ -61,6 +61,7 @@ export class Game extends Container
         this._network.on(Network.EVENT_DATA, this.eventData, this);
         this._board.on(Board.EVENT_END_OF_TURN, this.endTurn, this);
         this._board.on(Board.EVENT_MOVE_CHIP, this.moveAction, this);
+        this._board.on(Board.EVENT_MOVE_CHIP_JAIL, this.moveAction, this)
 
         // this.addChild(this._board);
         this.addChild(this._msgBox);
@@ -186,7 +187,7 @@ export class Game extends Container
         }
     }
 
-    // Data  >>------------------------------------------------------------<<<<
+    // Data (server)  >>------------------------------------------------------------<<<<
 
     protected dataOnMessage(data:any):void
     {
@@ -216,10 +217,19 @@ export class Game extends Container
         {
             console.log('Msg: ChangeArrayList.');
 
-            if (data.changeArrayList.length == 2 && data.changeArrayList[1].CLASS_NAME == 'PossibleMoves')
+            if (data.changeArrayList.length == 2)
             {
-                console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
-                this._board.moveChip(this._lastMove[0], this._lastMove[1]);
+                if (data.changeArrayList[1].CLASS_NAME == 'PossibleMoves')
+                {
+                    console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
+                    this._board.moveChip(this._lastMove[0], this._lastMove[1]);
+                }
+                else if (data.changeArrayList[1].CLASS_NAME == 'Move')
+                {
+                    console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[1].from + ',to: ' + data.changeArrayList[1].to + '}.');
+                    this._board.moveOpponentChip(data.changeArrayList[1].from, data.changeArrayList[1].to);
+                }
+
                 if (data.changeArrayList[0])
                 {
                     if (data.changeArrayList[0].CLASS_NAME == 'StateChange')
@@ -227,22 +237,6 @@ export class Game extends Container
                         this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
                         if (this._myTurn)
                         {
-                            this.startOfTurn();
-                        }
-                        this.moveDice(this._myTurn);
-                    }
-                }
-            }
-            else if (data.changeArrayList.length == 2 && data.changeArrayList[1].CLASS_NAME == 'Move')
-            {
-                console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[1].from + ',to: ' + data.changeArrayList[1].to + '}.');
-                this._board.moveOpponentChip(data.changeArrayList[1].from, data.changeArrayList[1].to);
-
-                if (data.changeArrayList[0])
-                {
-                    if (data.changeArrayList[0].CLASS_NAME == 'StateChange') {
-                        this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
-                        if (this._myTurn) {
                             this.startOfTurn();
                         }
                         this.moveDice(this._myTurn);
@@ -273,6 +267,12 @@ export class Game extends Container
         }
     }
 
+    protected dataOnError(data:any):void
+    {
+        this.showNotification(data.message);
+    }
+
+    // Data (emulating) >>------------------------------------------------------------<<<<
     protected dataOnGameState(data:any):void
     {
         console.log('Сообщение из гейма: GameState пришел.');
@@ -311,11 +311,6 @@ export class Game extends Container
             this._board.moveOpponentChip(data.from, data.to);
     }
 
-    protected dataOnError(data:any):void
-    {
-        this.showNotification(data.message);
-    }
-
     // Game cycle >>------------------------------------------------------------<<<<
     protected requestCubes():void
     {
@@ -323,21 +318,6 @@ export class Game extends Container
         this._network.send({
             CLASS_NAME: 'ThrowCube'
         });
-    }
-
-    protected throwCubes(first:number, second:number):void
-    {
-        this._throwBtn.hide();
-        this._dices.show();
-        this._dices.throwDice(first, second);
-        this._dices.on('SuccessfulThrow', this.eventSuccessfulThrow, this);
-    }
-
-    protected startOfTurn():void
-    {
-        console.log('Сообщение из гейма: Текущий цвет на начало хода - ', this._myColor);
-        this._dices.hide();
-        this._throwBtn.show();
     }
 
     protected moveDice(myTurn:boolean)
@@ -354,9 +334,23 @@ export class Game extends Container
         }
     }
 
+    protected startOfTurn():void
+    {
+        console.log('Сообщение из гейма: Текущий цвет на начало хода - ', this._myColor);
+        this._dices.hide();
+        this._throwBtn.show();
+    }
+
+    protected throwCubes(first:number, second:number):void
+    {
+        this._throwBtn.hide();
+        this._dices.show();
+        this._dices.throwDice(first, second);
+        this._dices.on('SuccessfulThrow', this.eventSuccessfulThrow, this);
+    }
+
     protected moveAction(data:any):void
     {
-        console.log('Сообщение из гейма: MoveAction пришел {from: ' + data.from + ',to: ' + data.to + '}.');
         this._network.send({
             CLASS_NAME: 'MoveAction',
             from: data.from,
@@ -367,6 +361,18 @@ export class Game extends Container
         this._lastMove = [data.from, data.to];
 
     }
+
+    // protected moveJailAction(data:any):void
+    // {
+    //     this._network.send({
+    //         CLASS_NAME: 'MoveAction',
+    //         from: data.from,
+    //         to: data.to,
+    //         cantMove: false,
+    //         cubeValue: Math.abs(data.from - data.to)
+    //     });
+    //     this._lastMove = [data.from, data.to];
+    // }
 
     protected endTurn():void
     {
