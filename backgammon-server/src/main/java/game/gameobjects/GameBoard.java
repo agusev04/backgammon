@@ -10,8 +10,8 @@ import static game.logics.GameError.UNABLE_MOVE;
 
 public class GameBoard {
 
-    public static final int WHITE_OUT = 0;
-    public static final int BLACK_OUT = 25;
+    public static final int WHITE_BAR = 0;
+    public static final int BLACK_BAR = 25;
     public static final int WHITE_HOME = 19;
     public static final int BLACK_HOME = 6;
     public static final int CHIPS_OUT = 15;
@@ -23,7 +23,7 @@ public class GameBoard {
     public GameBoard() {
         cells = new Cell[26];
 
-        for (int i = WHITE_OUT; i <= BLACK_OUT; i++) {
+        for (int i = WHITE_BAR; i <= BLACK_BAR; i++) {
             cells[i] = new Cell();
         }
 
@@ -38,10 +38,21 @@ public class GameBoard {
     }
 
     public void moveChip(int from, int to, char color) throws GameError { //можно вытащить color из cells[from]
-        if ((to > WHITE_OUT) && (to < BLACK_OUT)) {
+        if (cells[from].getColor() != color) {
+            throw UNABLE_MOVE;
+        }
+        if ((to > WHITE_BAR) && (to < BLACK_BAR)) {
             if (cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
                 throw UNABLE_MOVE;
+            } else if ((cells[to].getColor() != cells[from].getColor()) && (cells[to].getCount() == 1)) {
+                if (cells[to].getColor() == WHITE) {
+                    cells[WHITE_BAR].putChip(WHITE);
+                } else if (cells[to].getColor() == BLACK) {
+                    cells[BLACK_BAR].putChip(BLACK);
+                }
+                cells[to].takeChip();
             }
+
             cells[from].takeChip();
 
             cells[to].putChip(color);
