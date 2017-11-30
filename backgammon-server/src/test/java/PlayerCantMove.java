@@ -1,12 +1,10 @@
 import game.gameobjects.Cell;
-import game.gameobjects.GameBoard;
 import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
+import server.transport.AbstractMessage;
 import server.transport.PackageMessage;
 import support.AbstractTest;
-
-import static game.gameobjects.Cell.WHITE;
 
 
 public class PlayerCantMove extends AbstractTest {
@@ -38,9 +36,25 @@ public class PlayerCantMove extends AbstractTest {
 
         assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после входа в игру черного
 
-        throwCube(WHITE, 11);
+        //TODO (Michael) Поправить согласо последнему замечанию в BACKGAMMON-63
+        AbstractMessage response = throwCube(WHITE, 11);
         assertEquals(gameMatch.getActivePlayer().getName(), gameMatch.getBlackPlayer().getName());
         assertFalse(gameMatch.isTurnWhite()); // ходит ли белый, после броска кубика
+
+/*        checkWhitePositions(gameMatch,
+                new ChipsPosition(12, 2));
+        checkBlackPositions(gameMatch,
+                new ChipsPosition(13, 2));
+        checkPossibleMoves(response,
+                new Move(1, 2),
+                new Move(17, 18),
+                new Move(19, 20),
+                new Move(1, 3),
+                new Move(12, 14),
+                new Move(17, 19),
+                new Move(19, 21)
+        );*/
+
         moveChip(WHITE, 11, 1);
 
     }
