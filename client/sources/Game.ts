@@ -61,7 +61,7 @@ export class Game extends Container
         this._network.on(Network.EVENT_DATA, this.eventData, this);
         this._board.on(Board.EVENT_END_OF_TURN, this.endTurn, this);
         this._board.on(Board.EVENT_MOVE_CHIP, this.moveAction, this);
-        this._board.on(Board.EVENT_MOVE_CHIP_JAIL, this.moveAction, this)
+        // this._board.on(Board.EVENT_MOVE_CHIP_JAIL, this.moveAction, this);
 
         // this.addChild(this._board);
         this.addChild(this._msgBox);
@@ -213,23 +213,44 @@ export class Game extends Container
 
             this.moveDice(this._myTurn);
         }
+
         if (data.changeArrayList)
         {
             console.log('Msg: ChangeArrayList.');
 
-            if (data.changeArrayList.length == 2)
+            for (let i = 0; i < data.changeArrayList.length; i++)
             {
-                if (data.changeArrayList[1].CLASS_NAME == 'PossibleMoves')
+                if (data.changeArrayList[i].CLASS_NAME == 'GameStart')
+                {
+                    this._opponent = data.changeArrayList[i].enemyUserName;
+                    if (this._myTurn)
+                    {
+                        this.startOfTurn();
+                    }
+
+                    console.log('Opponent is: ' + this._opponent);
+                }
+                else if (data.changeArrayList[i].CLASS_NAME == "CubeValue")
+                {
+                    let first = (data.changeArrayList[i].cubeValues - data.changeArrayList[i].cubeValues % 10)/10;
+                    let second = data.changeArrayList[i].cubeValues % 10;
+                    console.log('Сообщение из гейма: Values from server: ', first + ', ', second);
+                    this.throwCubes(first, second);
+                }
+                else if (data.changeArrayList[i].CLASS_NAME == 'PossibleMoves' && data.changeArrayList.length < 3)
                 {
                     console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
                     this._board.moveChip(this._lastMove[0], this._lastMove[1]);
                 }
-                else if (data.changeArrayList[1].CLASS_NAME == 'Move')
+                else if (data.changeArrayList[i].CLASS_NAME == 'Move')
                 {
-                    console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[1].from + ',to: ' + data.changeArrayList[1].to + '}.');
-                    this._board.moveOpponentChip(data.changeArrayList[1].from, data.changeArrayList[1].to);
+                    console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[i].from + ',to: ' + data.changeArrayList[i].to + '}.');
+                    this._board.moveOpponentChip(data.changeArrayList[i].from, data.changeArrayList[i].to);
                 }
+            }
 
+            if (data.changeArrayList.length == 2)
+            {
                 if (data.changeArrayList[0])
                 {
                     if (data.changeArrayList[0].CLASS_NAME == 'StateChange')
@@ -241,27 +262,6 @@ export class Game extends Container
                         }
                         this.moveDice(this._myTurn);
                     }
-                }
-            }
-
-            else if (data.changeArrayList[0])
-            {
-                if (data.changeArrayList[0].CLASS_NAME == "CubeValue")
-                {
-                    let first = (data.changeArrayList[0].cubeValues - data.changeArrayList[0].cubeValues % 10)/10;
-                    let second = data.changeArrayList[0].cubeValues % 10;
-                    console.log('Сообщение из гейма: Values from server: ', first + ', ', second);
-                    this.throwCubes(first, second);
-                }
-                else if (data.changeArrayList[0].CLASS_NAME == 'GameStart')
-                {
-                    this._opponent = data.changeArrayList[0].enemyUserName;
-                    if (this._myTurn)
-                    {
-                        this.startOfTurn();
-                    }
-
-                    console.log('Opponent is: ' + this._opponent);
                 }
             }
         }
@@ -359,20 +359,19 @@ export class Game extends Container
             cubeValue: Math.abs(data.from - data.to)
         });
         this._lastMove = [data.from, data.to];
-
     }
 
-    // protected moveJailAction(data:any):void
-    // {
-    //     this._network.send({
-    //         CLASS_NAME: 'MoveAction',
-    //         from: data.from,
-    //         to: data.to,
-    //         cantMove: false,
-    //         cubeValue: Math.abs(data.from - data.to)
-    //     });
-    //     this._lastMove = [data.from, data.to];
-    // }
+    protected moveJailAction(data:any):void
+    {
+        this._network.send({
+            CLASS_NAME: 'MoveAction',
+            from: data.from,
+            to: data.to,
+            cantMove: false,
+            cubeValue: Math.abs(data.from - data.to)
+        });
+        this._lastMove = [data.from, data.to];
+    }
 
     protected endTurn():void
     {
