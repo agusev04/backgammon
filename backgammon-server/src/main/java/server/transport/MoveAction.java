@@ -4,6 +4,8 @@ import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
 
+import java.util.ArrayList;
+
 public class MoveAction extends Action {
     public int from;
     public int cubeValue;
@@ -31,7 +33,10 @@ public class MoveAction extends Action {
             change = gameMatch.moveChip(player, this);
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(change);
-            packageMessage.addChange(new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cubeValue)));
+
+            ArrayList<Move> possiblePositions = gameMatch.getPossiblePositions(player.getColor(), cubeValue);
+            PossibleMoves possibleMoves = PossibleMoves.generatePossibleMoves(possiblePositions);
+            packageMessage.addChange(possibleMoves);
             PackageMessage packageMessageForOpponent = new PackageMessage();
             packageMessageForOpponent.addChange(change);
             int to = gameMatch.formTo(player.getColor(), cubeValue, from);

@@ -9,9 +9,7 @@ import java.util.Random;
 
 import static game.gameobjects.Cell.*;
 import static game.gameobjects.GameBoard.*;
-import static game.logics.GameError.UNABLE_MOVE;
-import static game.logics.GameError.UNABLE_THROW_DICES;
-import static game.logics.GameError.UNABLE_TURN;
+import static game.logics.GameError.*;
 
 public class GameMatch {
 
@@ -30,7 +28,7 @@ public class GameMatch {
     //Игровые состояния
     private int activePlayerCondition = waiting_turn; // теперь только состояние активного игрока
     private boolean turnWhite = true;  // если true - ход белых, иначе - ход черных
-    private int countMove = 1; // переменная для количества ходов. //TODO (IvchenkoAlexandr) зачем у нас эта переменная при нициализации равна 1?
+    private int countMove = 1; // переменная для количества ходов
 
     public int getCountMove() {
         return countMove;
@@ -92,32 +90,32 @@ public class GameMatch {
 
 
     public Change moveChip(Player player, MoveAction move) throws GameError {
+        if( move.from <0 || move.from>25){
+            throw UNABLE_MOVE;
+        }
         int to;
         if (player.getColor() == BLACK) {
-            //TODO (IvchenkoAlexandr) Сам же придумал WHITE_DIRECTION и BLACK_DIRECTION, так чего не пользуешься?
-            to = move.from - move.cubeValue;
+            //TODO (IvchenkoAlexandr) Сам же придумал WHITE_DIRECTION и BLACK_DIRECTION, так чего не пользуешься? (РЕШИЛ)
+            to = move.from + BLACK_DIRECTION * move.cubeValue;
         } else {
-            to = move.from + move.cubeValue;
+            to = move.from + WHITE_DIRECTION * move.cubeValue;
         }
         Change change = null;
         if (getActivePlayer() == player) {
             if (activePlayerCondition == waiting_move_chip) {
-                if (countMove > 0) { //TODO (Michael) вот ты проверил, что не 0 ходов, а 0 вообще может быть?
-                    //Если ты так от ошибки защищешься, то надо в else ошибку кинуть
-                    //Если ты уверен, что такого не случится, то тогда условие это лишнее
-                    //а то так движения не будет, а затем какая-то логика еще выполнится
+                if (countMove > 0) {
                     if (((move.cubeValue == (currentCubeValue / 10)) && move.cubeValue != 0) ||
                             ((move.cubeValue == (currentCubeValue % 10)) && move.cubeValue != 0)) {
                         table.moveChip(move.from, to, player.color);
                         countMove--;
-                        if (move.cubeValue == currentCubeValue / 10) { // исключаем использованный кубик
-                            currentCubeValue = currentCubeValue % 10;
-                        } else if (move.cubeValue == currentCubeValue % 10) {
-                            currentCubeValue = currentCubeValue / 10;
-                        }
-                    } else {
-                        throw UNABLE_MOVE;
-                    }
+                        // TODO МИША, это рушило тест. не работает при дубле (кубик 22. после первого хода в currentCubeValue будет 2
+                        //после второго хода сработает else if и в currentCubeValue будет 0. кошерный вариант 176 строка
+//                        if (move.cubeValue == currentCubeValue / 10) { // исключаем использованный кубик
+//                            currentCubeValue = currentCubeValue % 10;
+//                        } else if (move.cubeValue == currentCubeValue % 10) {
+//                            currentCubeValue = currentCubeValue / 10;
+//                        }
+                    } else throw UNABLE_MOVE;
 
                     if (table.isEnd(player.getColor())) {
                         change = new Final(player.getColor(), player.getName());
@@ -126,12 +124,9 @@ public class GameMatch {
                         }
                     }
                 }
-            } else {
-                throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
-            }
-        } else {
-            throw UNABLE_TURN;
-        }
+
+            } else throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
+        } else throw UNABLE_TURN;
 
         if ((countMove == 0) && (change == null)) {
             change = changeTurn();
@@ -180,6 +175,7 @@ public class GameMatch {
 
     public ArrayList<Move> getPossiblePositions(char color, int cubeValue) throws GameError {
         if (countMove != 0) {
+
             if (currentCubeValue / 10 == currentCubeValue % 10) {
 
             } else if (currentCubeValue / 10 == cubeValue) {
@@ -190,7 +186,7 @@ public class GameMatch {
                 cubeValue = currentCubeValue / 10;
             }
         } else {
-            return new ArrayList<>();
+            return null;
         }
 
         ArrayList<Move> arrayList = new ArrayList<>();
@@ -218,8 +214,9 @@ public class GameMatch {
         int direction = 0;
         int endGameFlag = isEndGame(color);
         int barState1;
-        int barState2;
+
         if (color == BLACK) {
+
             direction = BLACK_DIRECTION;
         } else if (color == WHITE) {
             direction = WHITE_DIRECTION;
@@ -227,9 +224,15 @@ public class GameMatch {
         Cell[] cells = this.table.getCells();
 
         barState1 = checkBar(color, cube1, cells, direction);
-        barState2 = checkBar(color, cube2, cells, direction);
+
         generateMoves(color, arrayList, direction, endGameFlag, barState1, cells, cube1);
-        generateMoves(color, arrayList, direction, endGameFlag, barState2, cells, cube2);
+
+
+        if (cube1 != cube2) {
+            int barState2;
+            barState2 = checkBar(color, cube2, cells, direction);
+            generateMoves(color, arrayList, direction, endGameFlag, barState2, cells, cube2);
+        }
 
 //        if (arrayList.size() == 0) {
 ////            countMove = 0;
@@ -302,7 +305,7 @@ public class GameMatch {
     private void tryAdd(int to, char color, Cell cells[], int endGameFlag,
                         ArrayList<Move> arrayList, int from, int cubeValue) {
         if (isCorrectTurn(to, color, cells, endGameFlag)) {
-            Move move = new Move(from, from + cubeValue);
+            Move move = new Move(from, to);
             arrayList.add(move);
         }
     }
