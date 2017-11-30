@@ -249,20 +249,14 @@ export class Game extends Container
                 }
             }
 
-            if (data.changeArrayList.length == 2)
+            if (data.changeArrayList.length == 2 && data.changeArrayList[0] && data.changeArrayList[0].CLASS_NAME == 'StateChange')
             {
-                if (data.changeArrayList[0])
+                this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
+                if (this._myTurn)
                 {
-                    if (data.changeArrayList[0].CLASS_NAME == 'StateChange')
-                    {
-                        this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
-                        if (this._myTurn)
-                        {
-                            this.startOfTurn();
-                        }
-                        this.moveDice(this._myTurn);
-                    }
+                    this.startOfTurn();
                 }
+                this.moveDice(this._myTurn);
             }
         }
     }
