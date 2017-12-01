@@ -14,7 +14,7 @@ public class PossibleMoves extends Response implements Change {
 
     public static PossibleMoves generatePossibleMoves(ArrayList<Move> arrayList) {
         PossibleMoves possibleMoves = null;
-        if (arrayList != null) {
+        if ((arrayList != null) && (arrayList.size() != 0)) {
             possibleMoves = new PossibleMoves(arrayList);
         }
 
