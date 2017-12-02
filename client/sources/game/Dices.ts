@@ -24,12 +24,17 @@ export class Dices extends Container
 
     protected configure()
     {
-        this._animation = [];
-        for (let i=0; i < 30;i++)
+        this._animation = [[],[]];
+        for (let i=0; i < 6;i++)
         {
-            this._animation.push(new PIXI.Rectangle(100 * i,0,100,100));
+            this._animation[1].push(new PIXI.Rectangle(64 * i,0,64,60));
         }
-        let base:BaseTexture = BaseTexture.fromImage('assets/dice.png');
+        for (let i=0; i < 6;i++)
+        {
+            this._animation[0].push(new PIXI.Rectangle(64 * i,60,64,60));
+        }
+
+        let base:BaseTexture = BaseTexture.fromImage('assets/newDice.png');
         this._dice1.visible = false;
         this._dice2.visible = false;
         this._dice1.texture = new Texture(base);
@@ -47,20 +52,60 @@ export class Dices extends Container
     {
         this._dice1.visible = true;
         this._dice2.visible = true;
-        for (let i=0; i < 24;i++)
+        for (let i=0; i < 6;i++)
         {
             setTimeout(function () {
-                this._dice1.texture.frame = this._animation[i];
-                this._dice2.texture.frame = this._animation[i];
-            }.bind(this), i * 80);
+                this._dice1.texture.frame = this._animation[0][i];
+                this._dice2.texture.frame = this._animation[1][i];
+            }.bind(this), i * 100);
         }
         setTimeout(function () {
-            this._dice1.texture.frame = this._animation[23 + val1];
-            this._dice2.texture.frame = this._animation[23 + val2];
-        }.bind(this), 1920);
+            switch (val1)
+            {
+                case 1:
+                    this._dice1.texture.frame = this._animation[0][0];
+                    break;
+                case 2:
+                    this._dice1.texture.frame = this._animation[0][1];
+                    break;
+                case 3:
+                    this._dice1.texture.frame = this._animation[0][2];
+                    break;
+                case 4:
+                    this._dice1.texture.frame = this._animation[0][3];
+                    break;
+                case 5:
+                    this._dice1.texture.frame = this._animation[0][4];
+                    break;
+                case 6:
+                    this._dice1.texture.frame = this._animation[0][5];
+                    break;
+            }
+            switch (val2)
+            {
+                case 1:
+                    this._dice2.texture.frame = this._animation[1][0];
+                    break;
+                case 2:
+                    this._dice2.texture.frame = this._animation[1][1];
+                    break;
+                case 3:
+                    this._dice2.texture.frame = this._animation[1][2];
+                    break;
+                case 4:
+                    this._dice2.texture.frame = this._animation[1][3];
+                    break;
+                case 5:
+                    this._dice2.texture.frame = this._animation[1][4];
+                    break;
+                case 6:
+                    this._dice2.texture.frame = this._animation[1][5];
+                    break;
+            }
+        }.bind(this), 600);
         setTimeout(function () {
             this.emit('SuccessfulThrow', {first: val1, second: val2});
-        }.bind(this), 2100);
+        }.bind(this), 700);
     }
 
     public throwDice(val1:number, val2:number):void
