@@ -22,7 +22,7 @@ public class GameMatch {
     public boolean turnSkipped; // пропущен ли ход
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
-    int currentCubeValue = 0;
+    private int currentCubeValue = 0;
     Player whitePlayer;
     Player blackPlayer;
     //Игровые состояния
@@ -58,7 +58,7 @@ public class GameMatch {
                 if ((getPossiblePositions(getActivePlayer().color, (currentCubeValue / 10), (currentCubeValue % 10)).size() == 0)) {
                     countMove = 0;
                     turnSkipped = true;
-                    changeTurn(); //проверка на наличие возможных ходов после броска, если нету, передача хода
+                    changeTurn();
                 }
                 return result;
             }
@@ -66,24 +66,11 @@ public class GameMatch {
         } else throw UNABLE_TURN;
     }
 
+
     public Change changeTurn() { //метод передачи хода
         if (countMove == 0) {
-            if (activePlayerCondition == waiting_move_chip && turnWhite) {
-                activePlayerCondition = waiting_throw_dice;
-                turnWhite = false;
-
-            } else if (activePlayerCondition == waiting_move_chip && !turnWhite) {
-                //TODO (Michael) Тебе тут даже ИДЕ подсказывает, желтым подсвечивает, что лишнее условие.
-                //Да и видно, что логика дублируется.
-                //Так вообще если подумать, что мы делаем тут? Если активный игрок в состоянии waiting_move_chip,
-                //то 1) передаем ход к противоположному игроку и 2) делаем состояние активного игрока waiting_throw_dice
-                //вся логика.
-                activePlayerCondition = waiting_throw_dice;
-                turnWhite = true;
-                // после перемещения фишек одним игроком, ему передается состояния ожидания хода,
-                // второму - состояние ожидания броска кубика
-                // и идет переключение флага хода
-            }
+            activePlayerCondition = waiting_throw_dice;
+            turnWhite = !turnWhite;
         }
         return new StateChange(this);
     }
@@ -108,13 +95,6 @@ public class GameMatch {
                             ((move.cubeValue == (currentCubeValue % 10)) && move.cubeValue != 0)) {
                         table.moveChip(move.from, to, player.color);
                         countMove--;
-                        // TODO МИША, это рушило тест. не работает при дубле (кубик 22. после первого хода в currentCubeValue будет 2
-                        //после второго хода сработает else if и в currentCubeValue будет 0. кошерный вариант 176 строка
-//                        if (move.cubeValue == currentCubeValue / 10) { // исключаем использованный кубик
-//                            currentCubeValue = currentCubeValue % 10;
-//                        } else if (move.cubeValue == currentCubeValue % 10) {
-//                            currentCubeValue = currentCubeValue / 10;
-//                        }
                     } else throw UNABLE_MOVE;
 
                     if (table.isEnd(player.getColor())) {
@@ -128,6 +108,10 @@ public class GameMatch {
             } else throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
         } else throw UNABLE_TURN;
 
+        if ((getPossiblePositions(getActivePlayer().color, (currentCubeValue / 10), (currentCubeValue % 10)).size() == 0)) {
+            countMove = 0;
+            turnSkipped = true;
+        }
         if ((countMove == 0) && (change == null)) {
             change = changeTurn();
         }

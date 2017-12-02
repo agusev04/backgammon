@@ -10,7 +10,7 @@ public class StateChange extends Response implements Change {
     int activePlayerCode;
     char  activePlayerColor;
     String activePlayerName;
-    String message;
+    private boolean turnSkipped;
 
     public StateChange(GameMatch gameMatch) {
         // получение инфы по активному игроку
@@ -18,7 +18,7 @@ public class StateChange extends Response implements Change {
         activePlayerColor = gameMatch.getActivePlayer().getColor();
         activePlayerName = gameMatch.getActivePlayer().getName();
         if (gameMatch.turnSkipped) {
-            message = activePlayerName + ", can not move chips! Change turn!";
+            turnSkipped = true;
         }
     }
 
@@ -27,6 +27,7 @@ public class StateChange extends Response implements Change {
         return "StateChange{" +
                 "activePlayerName: " + activePlayerName +
                 ", activePlayerCode: " + activePlayerCode +
+                ", turnSkipped: " + turnSkipped +
                 ", CLASS_NAME: " + CLASS_NAME +
                 '}';
     }
