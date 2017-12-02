@@ -241,7 +241,7 @@ public class GameMatch {
             for (int from = 0; from < cells.length; from++) {
                 if ((color == cells[from].getColor())) {
                     int to = from + direction * cubeValue;
-                    tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
+                    tryAdd(to, color, cells, endGameFlag, arrayList, from);
 
                 }
             }
@@ -254,7 +254,8 @@ public class GameMatch {
                 from = BLACK_BAR;
             }
             int to = from + direction * cubeValue;
-            tryAdd(to, color, cells, endGameFlag, arrayList, from, cubeValue);
+            tryAdd(to, color, cells, endGameFlag, arrayList, from);
+
         }
     }
 
@@ -297,8 +298,9 @@ public class GameMatch {
     }
 
     private void tryAdd(int to, char color, Cell cells[], int endGameFlag,
-                        ArrayList<Move> arrayList, int from, int cubeValue) {
+                        ArrayList<Move> arrayList, int from) {
         if (isCorrectTurn(to, color, cells, endGameFlag)) {
+
             Move move = new Move(from, to);
             arrayList.add(move);
         }
@@ -373,11 +375,10 @@ public class GameMatch {
     private boolean isCorrectTurn(int to, char color, Cell[] cells, int endGameFlag) { //TODO <=
         boolean result = false;
 
-        if (((to) < BLACK_BAR + endGameFlag) &&
-                ((to > WHITE_BAR - endGameFlag))) {
+        if (((to) <= BLACK_BAR + endGameFlag) &&
+                ((to >= WHITE_BAR - endGameFlag))) {
             result = isCorrectTurn(color, cells[to]);
         } else if (((to == BLACK_BAR) || (to == WHITE_BAR)) && (endGameFlag == 0)) {
-            System.out.println(to + "      " + endGameFlag);
             result = true;
         }
         return result;

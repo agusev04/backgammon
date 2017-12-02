@@ -198,6 +198,7 @@ public class CompleteGameTest extends AbstractTest {
 //        );
 
         checkPossibleMoves(response,
+                new Move(6, 1),
                 new Move(8, 3),
                 new Move(13, 8),
                 new Move(8, 2),
@@ -536,7 +537,7 @@ public class CompleteGameTest extends AbstractTest {
 
 //        assertTrue(gameMatch.isTurnWhite()); // фи
         assertFalse(gameMatch.isTurnWhite()); //гуд
-//        assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition()); //гуд
+        assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition()); //гуд
 
         checkWhitePositions(gameMatch,
                 new ChipsPosition(0, 1),
@@ -564,9 +565,43 @@ public class CompleteGameTest extends AbstractTest {
         response = throwCube(BLACK, 61); //
 
 //        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString()); // не правильно
-//        checkPossibleMoves(response,
-//                new Move(25, 24));
+        checkPossibleMoves(response,
+                new Move(25, 24));
 
+        response = moveChip(BLACK, 25, 1);
+
+        checkBlackPositions(gameMatch,
+                new ChipsPosition(3, 1),
+                new ChipsPosition(6, 3),
+                new ChipsPosition(8, 3),
+                new ChipsPosition(13, 5),
+                new ChipsPosition(24, 3));
+
+        checkPossibleMoves(response,
+                new Move(8, 2),
+                new Move(13, 7),
+                new Move(24, 18));
+
+        response = moveChip(BLACK, 8, 6);
+
+        checkWhitePositions(gameMatch,
+                new ChipsPosition(0, 2),
+                new ChipsPosition(12, 5),
+                new ChipsPosition(17, 3),
+                new ChipsPosition(19, 5));
+
+        checkBlackPositions(gameMatch,
+                new ChipsPosition(2, 1),
+                new ChipsPosition(3, 1),
+                new ChipsPosition(6, 3),
+                new ChipsPosition(8, 2),
+                new ChipsPosition(13, 5),
+                new ChipsPosition(24, 3));
+
+        assertNull(((PackageMessage) response).getChange("PossibleMoves"));
+
+        assertTrue(gameMatch.isTurnWhite());
+        assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
 
     }
 
