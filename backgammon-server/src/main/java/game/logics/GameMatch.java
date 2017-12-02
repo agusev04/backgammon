@@ -121,7 +121,7 @@ public class GameMatch {
             } else throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
         } else throw UNABLE_TURN;
 
-        if ((getPossiblePositions(getActivePlayer().color, (currentCubeValue / 10), (currentCubeValue % 10)).size() == 0)) {
+        if ((getPossiblePositions(getActivePlayer().color, currentCubeValue).size() == 0)) {
             countMove = 0;
             turnSkipped = true;
         }
