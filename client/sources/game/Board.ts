@@ -20,6 +20,7 @@ import Container2d = PIXI.projection.Container2d;
 export class Board extends Container2d {
     public static EVENT_END_OF_TURN:string = 'EndOfTurn';
     public static EVENT_MOVE_CHIP:string = 'MoveChip';
+    public static EVENT_GAME_END:string = 'GameEnd';
 
 
 
@@ -68,6 +69,7 @@ export class Board extends Container2d {
     //     [],[],[]
     // ];
 
+
     // public arrayChips: any[] = [
     //     [],
     //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
@@ -107,6 +109,9 @@ export class Board extends Container2d {
     // ];
 
 //arrayChips
+
+
+
     public arrayChips: any[] = [
         [],
         [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
@@ -201,6 +206,21 @@ export class Board extends Container2d {
     }
 
     //-----------------Блок отрисовки элементов на доске начало---------------------
+
+    public setState(chipPos:any){
+        for (let i = 0; i < chipPos.length; i++) {
+            for (let j = 0; j < chipPos[i].length; j++) {
+                if(chipPos[i].length==0){
+                    this.arrayChips.push([]);
+                }else if(chipPos[i][j] == 0){
+                    this.arrayChips[i].push(new Chip(Chip.COLOR_WHITE))
+                }else if(chipPos[i][j] == 1){
+                    this.arrayChips[i].push(new Chip(Chip.COLOR_BLACK))
+                }
+            }
+        }
+    }
+
     private setPosition():void {
         //задает позицию фишек
         for (let i = 0; i < this.arrayChips.length; i++) {
@@ -297,6 +317,21 @@ export class Board extends Container2d {
     }
 
     private endOfTurn():void{
+
+        if(this.arrayChips[this._exitWhite].length == 15){
+            console.log('Игра завершена белыми');
+            this.emit(Board.EVENT_GAME_END,{
+                CLASS_NAME: 'EndGame',
+                color: 0
+            });
+        }else if(this.arrayChips[this._exitBlack].length == 15){
+            console.log('Игра завершена черными');
+            this.emit(Board.EVENT_GAME_END,{
+                CLASS_NAME: 'EndGame',
+                color: 1
+            });
+        }
+
         if(this._activeDices.length==0)
         {
             this._activeMoves= 0;
@@ -639,9 +674,6 @@ export class Board extends Container2d {
                 // console.log('черные лефт  '+ this._chipsOnTheLeft);
             }
         }
-
-
-
 
     public metamorphose(x:number):number{
         let metX:number;
