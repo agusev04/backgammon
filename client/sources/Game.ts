@@ -113,14 +113,14 @@ export class Game extends Container
         this._dices.hide();
         if (this._myColor == 0)
         {
-            this._throwBtn.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
-            this._dices.position.set(Game.WIDTH/2 + 225, Game.HEIGHT/2);
+            this._throwBtn.position.set(Game.WIDTH/2 + 185, Game.HEIGHT/2 + 15);
+            this._dices.position.set(Game.WIDTH/2 + 185, Game.HEIGHT/2 + 15);
             // this.showNotification('White\'s turn');
         }
         else
         {
-            this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-            this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
+            this._throwBtn.position.set(Game.WIDTH/2 - 185, Game.HEIGHT/2 + 15);
+            this._dices.position.set(Game.WIDTH/2 - 185, Game.HEIGHT/2 + 15);
             // this.showNotification('Black\'s turn');
         }
 
