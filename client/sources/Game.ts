@@ -147,7 +147,6 @@ export class Game extends Container
     protected eventDisconnected():void
     {
         console.log('Сообщение из гейма: Disconnected from server.');
-        this.showNotification('Con-n er-r');
     }
 
     protected eventData(data:any):void
@@ -199,30 +198,30 @@ export class Game extends Container
             this._myTurn = data.gameState.stateChange.activePlayerName == this._myName;
             this._myColor = data.gameState.color;
 
-            let drawState: any = new Array(24);
-
-            for (let i = 0; i < 24; i++)
-            {
-                drawState[i] = [];
-            }
-
-            data.gameState.whitePositions.forEach(function (sector:any)
-            {
-                for (let i=0; i < sector.quantity;i++)
-                {
-                    drawState[sector.position-1].push(0);
-                }
-            });
-            data.gameState.blackPositions.forEach(function (sector:any)
-            {
-                for (let i=0; i < sector.quantity;i++)
-                {
-                    drawState[sector.position-1].push(1);
-                }
-            });
-
-            console.log(drawState);
-            this._board.setState(drawState);
+            // let drawState: any = new Array(24);
+            //
+            // for (let i = 0; i < 24; i++)
+            // {
+            //     drawState[i] = [];
+            // }
+            //
+            // data.gameState.whitePositions.forEach(function (sector:any)
+            // {
+            //     for (let i=0; i < sector.quantity;i++)
+            //     {
+            //         drawState[sector.position-1].push(0);
+            //     }
+            // });
+            // data.gameState.blackPositions.forEach(function (sector:any)
+            // {
+            //     for (let i=0; i < sector.quantity;i++)
+            //     {
+            //         drawState[sector.position-1].push(1);
+            //     }
+            // });
+            //
+            // console.log(drawState);
+            // this._board.setState(drawState);
 
             if (this._myTurn)
             {
@@ -411,7 +410,5 @@ export class Game extends Container
         console.log('Сообщение из гейма: EndOfTurn пришел.');
         this._dices.hide();
         this._myTurn = false;
-        this._throwBtn.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
-        this._dices.position.set(Game.WIDTH/2 - 225, Game.HEIGHT/2);
     }
 }
