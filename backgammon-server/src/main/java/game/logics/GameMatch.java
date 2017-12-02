@@ -120,11 +120,6 @@ public class GameMatch {
 
             } else throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
         } else throw UNABLE_TURN;
-
-        if ((getPossiblePositions(getActivePlayer().color, (currentCubeValue / 10), (currentCubeValue % 10)).size() == 0)) {
-            countMove = 0;
-            turnSkipped = true;
-        }
         if ((countMove == 0) && (change == null)) {
             change = changeTurn();
         }
@@ -199,9 +194,11 @@ public class GameMatch {
         barState = checkBar(color, cubeValue, cells, direction);
         generateMoves(color, arrayList, direction, endGameFlag, barState, cells, cubeValue);
 
-//        if (arrayList.size() == 0) {
-//            countMove = 0;
-//        }
+        if (arrayList.size() == 0) {
+            countMove = 0;
+            turnSkipped = true;
+            changeTurn();
+        }
 
         return arrayList;
     }
