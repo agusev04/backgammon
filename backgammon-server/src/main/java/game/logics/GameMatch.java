@@ -77,19 +77,32 @@ public class GameMatch {
 
 
     public Change moveChip(Player player, MoveAction move) throws GameError {
-        if( move.from <0 || move.from>25){
-            throw UNABLE_MOVE;
-        }
-        int to;
-        if (player.getColor() == BLACK) {
-            //TODO (IvchenkoAlexandr) Сам же придумал WHITE_DIRECTION и BLACK_DIRECTION, так чего не пользуешься? (РЕШИЛ)
-            to = move.from + BLACK_DIRECTION * move.cubeValue;
-        } else {
-            to = move.from + WHITE_DIRECTION * move.cubeValue;
-        }
+
         Change change = null;
         if (getActivePlayer() == player) {
             if (activePlayerCondition == waiting_move_chip) {
+
+                if (move.from < WHITE_BAR || move.from > BLACK_BAR) {
+                    throw UNABLE_MOVE;
+                }
+                if (getActivePlayer().getColor() == WHITE) { // попытка сходить фишкой не из бара, когда в баре есть фишка
+                    if((move.from != WHITE_BAR )&& (table.getCells()[WHITE_BAR].count != 0)){
+                        throw UNABLE_MOVE;
+                    }
+                } else {
+                    if((move.from != BLACK_BAR )&& (table.getCells()[BLACK_BAR].count != 0)){
+                        throw UNABLE_MOVE;
+                    }
+                }
+
+                int to;
+                if (player.getColor() == BLACK) {
+                    //TODO (IvchenkoAlexandr) Сам же придумал WHITE_DIRECTION и BLACK_DIRECTION, так чего не пользуешься? (РЕШИЛ)
+                    to = move.from + BLACK_DIRECTION * move.cubeValue;
+                } else {
+                    to = move.from + WHITE_DIRECTION * move.cubeValue;
+                }
+
                 if (countMove > 0) {
                     if (((move.cubeValue == (currentCubeValue / 10)) && move.cubeValue != 0) ||
                             ((move.cubeValue == (currentCubeValue % 10)) && move.cubeValue != 0)) {

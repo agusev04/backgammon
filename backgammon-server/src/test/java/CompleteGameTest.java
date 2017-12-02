@@ -525,14 +525,18 @@ public class CompleteGameTest extends AbstractTest {
         response = moveChip(WHITE, 0, 6);
 
         assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
+
+        response = moveChip(WHITE, 17, 6);
+        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
+
         //перемещаем одну фишку. вторую не можем вытащить из бара - пропуск хода
         response = moveChip(WHITE, 0, 2);
-        //возможных ходов нет
+        //возможных ходов нет - переход хода
         assertNull(((PackageMessage) response).getChange("PossibleMoves"));
 
         assertTrue(gameMatch.isTurnWhite()); // фи
 //        assertFalse(gameMatch.isTurnWhite()); //гуд
-//        assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
+//        assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition()); //гуд
 
         checkWhitePositions(gameMatch,
                 new ChipsPosition(0, 1),
@@ -549,10 +553,15 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(24, 2),
                 new ChipsPosition(25, 1));
 
+        //пытаемся сходить, когда в баре есть еще фишка
+        response = moveChip(WHITE, 17, 6);
+        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString()); //должна быть ошибка "ErrorMessage{code=3, message='It is not your turn now'}"
+        response = moveChip(WHITE, 0, 6);
+        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString()); //должна быть ошибка "ErrorMessage{code=3, message='It is not your turn now'}"
         //ОШИБКА (ErrorMessage{code=3, message='It is not your turn now'})
-        response = throwCube(BLACK, 61);
+        response = throwCube(BLACK, 61); //
 
-        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
+        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString()); // не правильно
 //        checkPossibleMoves(response,
 //                new Move(25, 24));
 
