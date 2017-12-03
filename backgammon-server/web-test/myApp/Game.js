@@ -58,7 +58,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         };
         // Base >>--------------------------------------------------------------<<<<
         Game.prototype.set_logo = function () {
-            var bg = Sprite.fromImage('assets/bg.jpg');
+            var bg = Sprite.fromImage('assets/start.png');
             bg.width = Game.WIDTH;
             bg.height = Game.HEIGHT;
             bg.alpha = 0.5;
@@ -215,6 +215,13 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                     else if (data.changeArrayList[i].CLASS_NAME == 'Move') {
                         console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[i].from + ',to: ' + data.changeArrayList[i].to + '}.');
                         this._board.moveOpponentChip(data.changeArrayList[i].from, data.changeArrayList[i].to);
+                        if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange') {
+                            this._myTurn = data.changeArrayList[1].activePlayerName == this._myName;
+                            if (this._myTurn) {
+                                this.startOfTurn();
+                            }
+                            this.moveDice(this._myTurn);
+                        }
                     }
                     else if (data.changeArrayList.length == 1 && data.changeArrayList[0].CLASS_NAME == 'StateChange') {
                         if (this._lastMove[0]) {
@@ -222,13 +229,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                             this._board.moveChip(this._lastMove[0], this._lastMove[1]);
                         }
                     }
-                }
-                if (data.changeArrayList.length == 2 && data.changeArrayList[0] && data.changeArrayList[0].CLASS_NAME == 'StateChange') {
-                    this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
-                    if (this._myTurn) {
-                        this.startOfTurn();
-                    }
-                    this.moveDice(this._myTurn);
                 }
             }
         };
