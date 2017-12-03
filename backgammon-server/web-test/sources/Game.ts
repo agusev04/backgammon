@@ -346,6 +346,15 @@ export class Game extends Container
                         this._lastMove[0] = null;
                         this._lastMove[1] = null;
                     }
+                    if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange')
+                    {
+                        this._myTurn = data.changeArrayList[i + 1].activePlayerName == this._myName;
+                        if (!this._myTurn)
+                        {
+                            this.endTurn();
+                        }
+                        this.moveDice(this._myTurn);
+                    }
                 }
             }
         }
