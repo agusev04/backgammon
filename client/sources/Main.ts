@@ -17,6 +17,7 @@ function eventListenerResize():void
     application.stage.scale.y = scale;
 
     application.render();
+    
 }
 
 eventListenerResize();

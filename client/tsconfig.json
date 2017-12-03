@@ -12,7 +12,16 @@
   "exclude": [],
   "files": [
     "./sources/Main.ts",
-    "./dts/pixi.js.d.ts",
-    "./dts/pixi-filters.d.ts"
+    "./libs/pixi.js/pixi.js.d.ts",
+    "./libs/pixi.js/pixi-projection.d.ts",
+    "./libs/gsap/Animation.d.ts",
+    "./libs/gsap/Ease.d.ts",
+    "./libs/gsap/Plugins.d.ts",
+    "./libs/gsap/Timeline.d.ts",
+    "./libs/gsap/Tween.d.ts",
+    "./libs/gsap/TweenConfig.d.ts",
+    "./libs/createjs/createjs-lib.d.ts",
+    "./libs/createjs/preloadjs.d.ts",
+    "./libs/createjs/soundjs.d.ts"
   ]
 }
