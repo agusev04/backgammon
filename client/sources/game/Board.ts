@@ -68,45 +68,45 @@ export class Board extends Container2d {
     //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [],[],[]
     // ];
-
-
-    public arrayChips: any[] = [
-        [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
-        , [], [], [], [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [], [], [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [], [], [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
-        [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
-        [], [], [], [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [],[],[]
-    ];
+    // public arrayChips: any[]=[];
 
     // public arrayChips: any[] = [
     //     [],
-    //     []
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
     //     , [], [], [], [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [],
-    //     [],
-    //     [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [], [], [],
-    //     [],
-    //     [],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [], [], [],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
     //     [],
-    //     [],
-    //     [],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
     //     [], [], [], [],
-    //     [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [],[],[]
     // ];
+
+    private arrayChips: any[] = [
+        [],
+        []
+        ,[], [], [], [],
+        [],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [],
+        [], [], [], [],
+        [],
+        [],[],[]
+    ];
 
 //arrayChips
 
@@ -213,7 +213,7 @@ export class Board extends Container2d {
                 if(chipPos[i].length==0){
                     this.arrayChips.push([]);
                 }else if(chipPos[i][j] == 0){
-                    this.arrayChips[i].push(new Chip(Chip.COLOR_WHITE))
+                    this.arrayChips[i].push(new Chip(Chip.COLOR_WHITE));
                 }else if(chipPos[i][j] == 1){
                     this.arrayChips[i].push(new Chip(Chip.COLOR_BLACK))
                 }
@@ -234,7 +234,7 @@ export class Board extends Container2d {
         }
     }
 
-    private drawState():void {
+    public drawState():void {
         //задает позицию фишек и рисует фишки
         for (let i = 0; i < this.arrayChips.length; i++) {
             for (let j = 0; j < this.arrayChips[i].length; j++) {
