@@ -51,43 +51,42 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [],[],[]
             // ];
-            _this.arrayChips = [
-                [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
-                [], [], [], [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [], [], [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [], [], [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
-                [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
-                [], [], [], [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [], [], []
-            ];
             // public arrayChips: any[] = [
             //     [],
-            //     []
+            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
             //     , [], [], [], [],
+            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [],
-            //     [],
-            //     [],
+            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [], [], [],
-            //     [],
-            //     [],
+            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
+            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [], [], [],
+            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
             //     [],
-            //     [],
-            //     [],
+            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
             //     [], [], [], [],
-            //     [],
+            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [],[],[]
             // ];
-            //arrayChips
+            _this.arrayChips = [
+                [],
+                [],
+                [], [], [], [],
+                [],
+                [],
+                [],
+                [], [], [],
+                [],
+                [],
+                [], [], [],
+                [],
+                [],
+                [],
+                [], [], [], [],
+                [],
+                [], [], []
+            ];
             // public arrayChips: any[] = [
             //     [],
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
@@ -218,7 +217,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             this.arraySectors[this.sectorJailWhite].position.set(this.arrayPositionSector[this.sectorJailWhite].x, this.arrayPositionSector[this.sectorJailWhite].y); //Jail
             this.arraySectors[this.sectorJailBlack].position.set(this.arrayPositionSector[this.sectorJailBlack].x, this.arrayPositionSector[this.sectorJailBlack].y); //Jail
             this.arraySectors[this._exitBlack].rotation = -3.14;
-            // this.arraySectors[this._exitWhite].rotation = 0;
             this.arraySectors[this._exitWhite].position.set(this.arrayPositionSector[this._exitWhite].x, this.arrayPositionSector[this._exitWhite].y);
             this.arraySectors[this._exitBlack].position.set(this.arrayPositionSector[this._exitBlack].x, this.arrayPositionSector[this._exitBlack].y);
         };
@@ -309,13 +307,12 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             // console.log('cелектЧипВайт  ' + this.selectChipColor);
         };
         Board.prototype.sectorClick = function (data) {
-            //тут начинается магия
             if (this.countClick == 0) {
                 this.countClick++;
                 this.sound.playSoundClickChip();
-                this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target); // делаю это для того что бы можно было воспользоваться сектором на который кликнули первый раз т.е выбрали фишку
-                this.selectChip(this.firsSelectSectorIndex); //в этом методе фишка меняет скин на зеленый (активный)
-                this.deactivationAllSectors(); //убираю интерактив после выбора фишки со всех секторов кроме подсвеченных и кроме того на котором фишка стоит что бы можно было отметить выбранную фишку
+                this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
+                this.selectChip(this.firsSelectSectorIndex);
+                this.deactivationAllSectors();
                 this.arraySectors[this.firsSelectSectorIndex].interactiveOn();
                 // console.log('Выбранный сектор  ' + this.firsSelectSectorIndex );
                 // console.log('cелектЧипВайт  ' + this.selectChipColor);
@@ -399,15 +396,15 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                 this._activeDices.push(first);
                 this._activeDices.push(first);
                 this._activeDices.push(first);
-                this._activeDices.push(first * 2);
-                this._activeDices.push(first * 2);
-                this._activeDices.push(first * 3);
-                this._activeDices.push(first * 4);
+                // this._activeDices.push(first * 2);
+                // this._activeDices.push(first * 2);
+                // this._activeDices.push(first * 3);
+                // this._activeDices.push(first * 4);
             }
             else {
                 this._activeDices.push(first);
                 this._activeDices.push(second);
-                this._activeDices.push(first + second);
+                // this._activeDices.push(first + second);
                 this._activeMoves = first + second;
             }
             console.log('Кол-во возможных ходов: ', this._activeMoves);
