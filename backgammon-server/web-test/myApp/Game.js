@@ -140,8 +140,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         };
         Game.prototype.eventSuccessfulThrow = function (data) {
             if (this._myTurn) {
-                if (data.first == data.second)
-                    this.showNotification('OMG !');
                 if (this._myColor == 'w')
                     this._board.startTurn(data.first, data.second, 0);
                 else
@@ -201,6 +199,13 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                         var second = data.changeArrayList[i].cubeValues % 10;
                         console.log('Сообщение из гейма: Values from server: ', first + ', ', second);
                         this.throwCubes(first, second);
+                        if (data.changeArrayList[i + 1].CLASS_NAME == "StateChange" && !this._myTurn) {
+                            this._myTurn = data.changeArrayList[i + 1].activePlayerName == this._myName;
+                            if (this._myTurn) {
+                                this.startOfTurn();
+                            }
+                            this.moveDice(this._myTurn);
+                        }
                     }
                     else if (data.changeArrayList[i].CLASS_NAME == 'PossibleMoves' && data.changeArrayList.length < 3) {
                         console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
@@ -208,11 +213,27 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                         this._lastMove[0] = null;
                         this._lastMove[1] = null;
                     }
+                    else if (data.changeArrayList[i].CLASS_NAME == 'PossibleMoves') {
+                        if (data.changeArrayList[i].movesQuantity == 0) {
+                            if (this._lastMove[0]) {
+                                console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
+                                this._board.moveChip(this._lastMove[0], this._lastMove[1]);
+                                this._lastMove[0] = null;
+                                this._lastMove[1] = null;
+                                this.showNotification('Blocked dice');
+                                this.endTurn();
+                            }
+                            else if (this._myTurn) {
+                                this.showNotification('Blocked dice');
+                                this.endTurn();
+                            }
+                        }
+                    }
                     else if (data.changeArrayList[i].CLASS_NAME == 'Move') {
                         console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[i].from + ',to: ' + data.changeArrayList[i].to + '}.');
                         this._board.moveOpponentChip(data.changeArrayList[i].from, data.changeArrayList[i].to);
                         if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange') {
-                            this._myTurn = data.changeArrayList[1].activePlayerName == this._myName;
+                            this._myTurn = data.changeArrayList[i + 1].activePlayerName == this._myName;
                             if (this._myTurn) {
                                 this.startOfTurn();
                             }
@@ -223,6 +244,24 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                         if (this._lastMove[0]) {
                             console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
                             this._board.moveChip(this._lastMove[0], this._lastMove[1]);
+                            this._lastMove[0] = null;
+                            this._lastMove[1] = null;
+                        }
+                    }
+                    else if (data.changeArrayList[i].CLASS_NAME == 'MoveBar') {
+                        if (this._myTurn && this._myColor == 'w')
+                            this._board.moveOpponentChip(data.changeArrayList[i].from, 25);
+                        else if (!this._myTurn && this._myColor == 'w')
+                            this._board.moveOpponentChip(data.changeArrayList[i].from, 0);
+                        else if (this._myTurn && this._myColor == 'b')
+                            this._board.moveOpponentChip(data.changeArrayList[i].from, 0);
+                        else
+                            this._board.moveOpponentChip(data.changeArrayList[i].from, 25);
+                        if (this._lastMove[0]) {
+                            console.log('Сообщение из гейма: Move  {from: ' + this._lastMove[0] + ',to: ' + this._lastMove[1] + '}.');
+                            this._board.moveChip(this._lastMove[0], this._lastMove[1]);
+                            this._lastMove[0] = null;
+                            this._lastMove[1] = null;
                         }
                     }
                 }
@@ -294,8 +333,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this._network.send({
                 CLASS_NAME: 'MoveAction',
                 from: data.from,
-                to: data.to,
-                cantMove: false,
                 cubeValue: Math.abs(data.from - data.to)
             });
             this._lastMove = [data.from, data.to];
