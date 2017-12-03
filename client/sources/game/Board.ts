@@ -23,7 +23,6 @@ export class Board extends Container2d {
     public static EVENT_GAME_END:string = 'GameEnd';
 
 
-
     public _newBg:Sprite;
     public metaDice1: number;
     public metaDice2: number;
@@ -40,15 +39,12 @@ export class Board extends Container2d {
     public _chipsOnTheRight = 0;
     private _exitWhite:number = 26;
     private _exitBlack:number = 27;
-    private _countExitWhite:number;
-    private _countExitBlack:number;
     private _maxDice:number = 0;
     private _minDice:number;
     private _isActive:boolean;
     private _activeMoves:number;
     private _activeDices:number[];
     private _activColor:number;
-
     private _container:Container2d;
     // public arrayChips: any[] = [
     //     [],
@@ -70,47 +66,43 @@ export class Board extends Container2d {
     // ];
 
 
-    public arrayChips: any[] = [
-        [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
-        , [], [], [], [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [], [], [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [], [], [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
-        [],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
-        [], [], [], [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [],[],[]
-    ];
-
     // public arrayChips: any[] = [
     //     [],
-    //     []
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
     //     , [], [], [], [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [],
-    //     [],
-    //     [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [], [], [],
-    //     [],
-    //     [],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [], [], [],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
     //     [],
-    //     [],
-    //     [],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)],
     //     [], [], [], [],
-    //     [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
     //     [],[],[]
     // ];
 
-//arrayChips
-
-
+    private arrayChips: any[] = [
+        [],
+        []
+        ,[], [], [], [],
+        [],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [],
+        [], [], [], [],
+        [],
+        [],[],[]
+    ];
 
     // public arrayChips: any[] = [
     //     [],
@@ -159,7 +151,6 @@ export class Board extends Container2d {
         new PIXI.Point(515,618),
 
         new PIXI.Point(885,628),new PIXI.Point(885,313)];
-
 
     public arrayPositionSector: Point[] = [
         new PIXI.Point(515,250),
@@ -213,7 +204,7 @@ export class Board extends Container2d {
                 if(chipPos[i].length==0){
                     this.arrayChips.push([]);
                 }else if(chipPos[i][j] == 0){
-                    this.arrayChips[i].push(new Chip(Chip.COLOR_WHITE))
+                    this.arrayChips[i].push(new Chip(Chip.COLOR_WHITE));
                 }else if(chipPos[i][j] == 1){
                     this.arrayChips[i].push(new Chip(Chip.COLOR_BLACK))
                 }
@@ -234,7 +225,7 @@ export class Board extends Container2d {
         }
     }
 
-    private drawState():void {
+    public drawState():void {
         //задает позицию фишек и рисует фишки
         for (let i = 0; i < this.arrayChips.length; i++) {
             for (let j = 0; j < this.arrayChips[i].length; j++) {
@@ -258,7 +249,6 @@ export class Board extends Container2d {
         this.arraySectors[this.sectorJailWhite].position.set(this.arrayPositionSector[this.sectorJailWhite].x,this.arrayPositionSector[this.sectorJailWhite].y);     //Jail
         this.arraySectors[this.sectorJailBlack].position.set(this.arrayPositionSector[this.sectorJailBlack].x,this.arrayPositionSector[this.sectorJailBlack].y);    //Jail
         this.arraySectors[this._exitBlack].rotation = -3.14;
-        // this.arraySectors[this._exitWhite].rotation = 0;
         this.arraySectors[this._exitWhite].position.set(this.arrayPositionSector[this._exitWhite].x,this.arrayPositionSector[this._exitWhite].y);
         this.arraySectors[this._exitBlack].position.set(this.arrayPositionSector[this._exitBlack].x,this.arrayPositionSector[this._exitBlack].y);
     }
@@ -273,7 +263,6 @@ export class Board extends Container2d {
     //-----------------Блок отрисовки элементов на доске конец---------------------
 
     //-----------------Блок деактивации элементов на доске начало---------------------
-
 
     private deactivationAllSectors():void{
         for (let i = 0; i < this.arraySectors.length; i++) {
@@ -308,7 +297,6 @@ export class Board extends Container2d {
         }
     }
     //-----------------Блок деактивации элементов на доске конец---------------------
-
 
     public startTurn(firsDice:number,secondDice:number,activColor:number):void{ //начало хода
         this.setDice(firsDice,secondDice);
@@ -364,13 +352,12 @@ export class Board extends Container2d {
     }
 
     private sectorClick(data: InteractionData): void {
-        //тут начинается магия
         if (this.countClick == 0) {
             this.countClick++;
             this.sound.playSoundClickChip();
-            this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target);    // делаю это для того что бы можно было воспользоваться сектором на который кликнули первый раз т.е выбрали фишку
-            this.selectChip(this.firsSelectSectorIndex);    //в этом методе фишка меняет скин на зеленый (активный)
-            this.deactivationAllSectors();//убираю интерактив после выбора фишки со всех секторов кроме подсвеченных и кроме того на котором фишка стоит что бы можно было отметить выбранную фишку
+            this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
+            this.selectChip(this.firsSelectSectorIndex);
+            this.deactivationAllSectors();
             this.arraySectors[this.firsSelectSectorIndex].interactiveOn();
             // console.log('Выбранный сектор  ' + this.firsSelectSectorIndex );
             // console.log('cелектЧипВайт  ' + this.selectChipColor);
@@ -397,6 +384,7 @@ export class Board extends Container2d {
             }
         }
     }
+
     private selectChip(selectSectorIndex:number):void {
 
         if(this.arrayChips[selectSectorIndex].length!=0){
@@ -463,16 +451,16 @@ export class Board extends Container2d {
             this._activeDices.push(first);
             this._activeDices.push(first);
             this._activeDices.push(first);
-            this._activeDices.push(first * 2);
-            this._activeDices.push(first * 2);
-            this._activeDices.push(first * 3);
-            this._activeDices.push(first * 4);
+            // this._activeDices.push(first * 2);
+            // this._activeDices.push(first * 2);
+            // this._activeDices.push(first * 3);
+            // this._activeDices.push(first * 4);
         }
         else
         {
             this._activeDices.push(first);
             this._activeDices.push(second);
-            this._activeDices.push(first + second);
+            // this._activeDices.push(first + second);
             this._activeMoves = first + second;
         }
         console.log('Кол-во возможных ходов: ', this._activeMoves, );
@@ -575,6 +563,7 @@ export class Board extends Container2d {
             this.arraySectors[way].highlightMove();
         }
     }
+
     private goExitWhite(sectorIndex: number){
         if(this._chipsOnTheLeft==0){
             if(this._chipsOnTheRight==sectorIndex){
@@ -584,7 +573,6 @@ export class Board extends Container2d {
             this.arraySectors[this._exitWhite].highlightMoveExit();
         }
     }
-
 
     private goExitBlack(sectorIndex: number){
         if(this._chipsOnTheLeft==0){
@@ -694,6 +682,7 @@ export class Board extends Container2d {
         }
         return metX;
     }
+
     public metamorphoseForWhite(x:number):number{
         let metX:number;
         switch(x){
