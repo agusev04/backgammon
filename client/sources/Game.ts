@@ -368,7 +368,6 @@ export class Game extends Container
     protected startOfTurn():void
     {
         console.log('Сообщение из гейма: Текущий цвет на начало хода - ', this._myColor);
-        this.moveDice(this._myTurn);
         this._dices.hide();
         this._throwBtn.show();
     }
@@ -410,5 +409,6 @@ export class Game extends Container
         console.log('Сообщение из гейма: EndOfTurn пришел.');
         this._dices.hide();
         this._myTurn = false;
+        this.moveDice(this._myTurn);
     }
 }
