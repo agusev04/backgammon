@@ -273,6 +273,15 @@ export class Game extends Container
                 {
                     console.log('Сообщение из гейма: Move  {from: ' + data.changeArrayList[i].from + ',to: ' + data.changeArrayList[i].to + '}.');
                     this._board.moveOpponentChip(data.changeArrayList[i].from, data.changeArrayList[i].to);
+                    if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange')
+                    {
+                        this._myTurn = data.changeArrayList[1].activePlayerName == this._myName;
+                        if (this._myTurn)
+                        {
+                            this.startOfTurn();
+                        }
+                        this.moveDice(this._myTurn);
+                    }
                 }
                 else if (data.changeArrayList.length == 1 && data.changeArrayList[0].CLASS_NAME == 'StateChange')
                 {
@@ -282,16 +291,6 @@ export class Game extends Container
                         this._board.moveChip(this._lastMove[0], this._lastMove[1]);
                     }
                 }
-            }
-
-            if (data.changeArrayList.length == 2 && data.changeArrayList[0] && data.changeArrayList[0].CLASS_NAME == 'StateChange')
-            {
-                this._myTurn = data.changeArrayList[0].activePlayerName == this._myName;
-                if (this._myTurn)
-                {
-                    this.startOfTurn();
-                }
-                this.moveDice(this._myTurn);
             }
         }
     }
