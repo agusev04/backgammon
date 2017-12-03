@@ -72,7 +72,7 @@ export class Game extends Container
     // Base >>--------------------------------------------------------------<<<<
     protected set_logo():void
     {
-        let bg:Sprite = Sprite.fromImage('assets/bg.jpg');
+        let bg:Sprite = Sprite.fromImage('assets/start.png');
         bg.width = Game.WIDTH;
         bg.height = Game.HEIGHT;
         bg.alpha = 0.5;
