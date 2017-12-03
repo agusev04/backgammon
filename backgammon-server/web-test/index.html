@@ -1,52 +1,41 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Test WS</title>
-</head>
-
-<script type="text/javascript">
-    var socket = new WebSocket("ws://backgammon.connectivegames.com:8888/ws");
-    socket.onopen = function () {
-        log(socket.url + ': Connected!');
-    };
-    socket.onclose = function () {
-        log(socket.url + ': Connection closed.');
-    };
-    socket.onmessage = function (event) {
-        log('Message from server:' + event.data);
-    };
-    function send(messageString) {
-        try {
-            socket.send(messageString);
-            log('Request: ' + messageString);
-        } catch (e) {
-            log(socket.url + ': Connection error');
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ConnectiveGames TypeScript demo Project</title>
+    <style>
+        html
+        {
+            background-color : #001100;
         }
-    }
-    function log(message) {
-        var container = document.getElementById('endPageContainer');
-        container.innerHTML = container.innerHTML + '<div>'+message+'</div>';
-        console.log(message);
-    }
-</script>
-
+        body
+        {
+            background-color : #001100;
+            padding: 0;
+            margin: 0;
+            /* force hardware acceleration on certain devices */
+            transform :  translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+            transform :  translateZ(0);
+            -webkit-transform: translateZ(0);
+            -ms-touch-action: none; /* отключение появления меню */
+            width : 100%;
+            height : 100%;
+            position : fixed;
+        }
+    </style>
+</head>
 <body>
-    <div>Sample requests</div>
-    <div><input type="button" value="{'CLASS_NAME' : 'Enter', 'myUserName' : 'Player1'}"
-                onclick="inputArea.value = this.value;"/></div>
-    <div><input type="button" value="{'CLASS_NAME' : 'ThrowCube'}"
-                onclick="inputArea.value = this.value;"/></div>
-    <div><input type="button" value="{'CLASS_NAME' : 'TestThrowCube', 'cubeValue' : 11}"
-                onclick="inputArea.value = this.value;"/></div>
-    <div><input type="button" value="{'CLASS_NAME' : 'MoveAction', 'from' : 0, 'cubeValue' : 0}"
-                onclick="inputArea.value = this.value;"/></div>
-    <div> Request to send: <textarea id="inputArea" class="input_field" rows="4" cols="100"></textarea></div>
-    <p>
-      <button onclick="send(inputArea.value)">
-      <span>Send</span>
-      </button>
-    </p>
-    <div id="endPageContainer"><strong>Log:</strong></div>
+    <script src="libs/pixi.js/pixi.js"></script>
+    <script src="libs/pixi.js/pixi-projection.js"></script>
+    <script src="libs/createjs/soundjs.combined.js"></script>
+    <script src="libs/gsap/minified/TweenLite.min.js"></script>
+    <script src="libs/gsap/minified/TweenMax.min.js"></script>
+    <script src="libs/gsap/minified/TimelineLite.min.js"></script>
+    <script src="libs/gsap/minified/plugins/TweenSprite.min.js"></script>
+    <script src="libs/requirejs/require.js"></script>
+    <script>
+        requirejs([ "app/Main.js" ]);
+    </script>
 </body>
 </html>
