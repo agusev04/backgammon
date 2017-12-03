@@ -2,6 +2,11 @@ package game.gameobjects;
 
 import game.logics.ChipsPositions;
 import game.logics.GameError;
+import game.logics.GameMatch;
+import server.transport.Change;
+import server.transport.ChipsCounter;
+import server.transport.Move;
+import server.transport.MoveBar;
 
 import static game.gameobjects.Cell.BLACK;
 import static game.gameobjects.Cell.WHITE;
@@ -21,6 +26,7 @@ public class GameBoard {
 
 
     public GameBoard() {
+
         cells = new Cell[26];
 
         for (int i = WHITE_BAR; i <= BLACK_BAR; i++) {
@@ -37,18 +43,21 @@ public class GameBoard {
         cells[24].setCell(Cell.BLACK, 2);
     }
 
-    public void moveChip(int from, int to, char color) throws GameError { //можно вытащить color из cells[from]
+    public Change moveChip(int from, int to, char color) throws GameError { //можно вытащить color из cells[from]
+        Change change = null;
         if (cells[from].getColor() != color) {
             throw UNABLE_MOVE;
         }
-        if ((to > WHITE_BAR) && (to < BLACK_BAR)) {
+        if ((to > WHITE_BAR) && (to < BLACK_BAR)) { //ход по доске
             if (cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
                 throw UNABLE_MOVE;
-            } else if ((cells[to].getColor() != cells[from].getColor()) && (cells[to].getCount() == 1)) {
+            } else if ((cells[to].getColor() != cells[from].getColor()) && (cells[to].getCount() == 1)) { //вывод с бар
                 if (cells[to].getColor() == WHITE) {
                     cells[WHITE_BAR].putChip(WHITE);
+                    change = new MoveBar(WHITE, to);
                 } else if (cells[to].getColor() == BLACK) {
                     cells[BLACK_BAR].putChip(BLACK);
+                    change = new MoveBar(BLACK, to);
                 }
                 cells[to].takeChip();
             }
@@ -57,15 +66,16 @@ public class GameBoard {
             cells[to].putChip(color);
 
 
-        } else {
+        } else { //вывод с доски
             cells[from].takeChip();
             if (color == Cell.BLACK) {
                 blackCounter++;
             } else {
                 whiteCounter++;
             }
+            change = new ChipsCounter(blackCounter, whiteCounter);
         }
-
+        return change;
     }
 
     public ChipsPositions getGameState() {

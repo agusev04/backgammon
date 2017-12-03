@@ -472,6 +472,7 @@ public class CompleteGameTest extends AbstractTest {
                 new Move(24, 20));
 
         response = moveChip(BLACK, 6, 3);
+        assertTrue(((PackageMessage) response).getChangeArrayList().contains(new MoveBar('w', 3))); //белая улетает в бар
 
         checkPossibleMoves(response,
                 new Move(6, 2),
@@ -492,13 +493,13 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(24, 2));
 
         response = moveChip(BLACK, 6, 4);
+        assertTrue(((PackageMessage) response).getChangeArrayList().contains(new MoveBar('w', 2))); //белая улетает в бар
 
         assertNull(((PackageMessage) response).getChange("PossibleMoves"));
 
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
 
-        //TODO МИША сброс хода.
 
         // на белом баре две фишки
         checkWhitePositions(gameMatch,
@@ -532,6 +533,8 @@ public class CompleteGameTest extends AbstractTest {
 
         //перемещаем одну фишку. вторую не можем вытащить из бара - пропуск хода
         response = moveChip(WHITE, 0, 2);
+        assertTrue(((PackageMessage) response).getChangeArrayList().contains(new MoveBar('b', 2)));
+
         //возможных ходов нет - переход хода
         assertNull(((PackageMessage) response).getChange("PossibleMoves"));
 
@@ -556,12 +559,11 @@ public class CompleteGameTest extends AbstractTest {
 
         //пытаемся сходить, когда в баре есть еще фишка
         response = moveChip(WHITE, 17, 6);
-//        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString()); //должна быть ошибка "ErrorMessage{code=3, message='It is not your turn now'}"
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
+
         response = moveChip(WHITE, 0, 6);
-//        assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString()); //должна быть ошибка "ErrorMessage{code=3, message='It is not your turn now'}"
         assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString());
-        //ОШИБКА (ErrorMessage{code=3, message='It is not your turn now'})
+
         response = throwCube(BLACK, 61); //
 
 //        assertEquals("ErrorMessage{code=3, message='It is not your turn now'}", response.toString()); // не правильно

@@ -12,4 +12,9 @@ public class ChipsCounter extends Response implements Change {
         blackChipCounter = gameMatch.getTable().getBlackCounter();
         whiteChipCounter = gameMatch.getTable().getWhiteCounter();
     }
+
+    public ChipsCounter(int blackChipCounter, int whiteChipCounter) {
+        this.blackChipCounter = blackChipCounter;
+        this.whiteChipCounter = whiteChipCounter;
+    }
 }

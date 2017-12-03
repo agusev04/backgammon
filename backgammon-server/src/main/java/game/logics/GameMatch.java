@@ -22,13 +22,15 @@ public class GameMatch {
     public boolean turnSkipped; // пропущен ли ход
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
-    private int currentCubeValue = 0;
     Player whitePlayer;
     Player blackPlayer;
+    private int currentCubeValue = 0;
     //Игровые состояния
     private int activePlayerCondition = waiting_turn; // теперь только состояние активного игрока
     private boolean turnWhite = true;  // если true - ход белых, иначе - ход черных
     private int countMove = 1; // переменная для количества ходов
+
+
 
     public int getCountMove() {
         return countMove;
@@ -55,11 +57,11 @@ public class GameMatch {
                 }
                 currentCubeValue = result;
                 activePlayerCondition = waiting_move_chip;
-                if ((getPossiblePositions(getActivePlayer().color, (currentCubeValue / 10), (currentCubeValue % 10)).size() == 0)) {
-                    countMove = 0;
-                    turnSkipped = true;
-                    changeTurn();
-                }
+//                if ((getPossiblePositions(getActivePlayer().color, (currentCubeValue / 10), (currentCubeValue % 10)).size() == 0)) {
+//                    countMove = 0;
+//                    turnSkipped = true;
+//                    changeTurn();
+//                }
                 return result;
             }
 
@@ -86,11 +88,11 @@ public class GameMatch {
                     throw UNABLE_MOVE;
                 }
                 if (getActivePlayer().getColor() == WHITE) { // попытка сходить фишкой не из бара, когда в баре есть фишка
-                    if((move.from != WHITE_BAR )&& (table.getCells()[WHITE_BAR].count != 0)){
+                    if ((move.from != WHITE_BAR) && (table.getCells()[WHITE_BAR].count != 0)) {
                         throw UNABLE_MOVE;
                     }
                 } else {
-                    if((move.from != BLACK_BAR )&& (table.getCells()[BLACK_BAR].count != 0)){
+                    if ((move.from != BLACK_BAR) && (table.getCells()[BLACK_BAR].count != 0)) {
                         throw UNABLE_MOVE;
                     }
                 }
@@ -106,7 +108,7 @@ public class GameMatch {
                 if (countMove > 0) {
                     if (((move.cubeValue == (currentCubeValue / 10)) && move.cubeValue != 0) ||
                             ((move.cubeValue == (currentCubeValue % 10)) && move.cubeValue != 0)) {
-                        table.moveChip(move.from, to, player.color);
+                        change = table.moveChip(move.from, to, player.color); //добавлено 03,12,17
                         countMove--;
                     } else throw UNABLE_MOVE;
 
@@ -120,9 +122,9 @@ public class GameMatch {
 
             } else throw UNABLE_TURN; // для этого if предложил новую ошибку ввести на подобии UNABLE_THROW_DICES
         } else throw UNABLE_TURN;
-        if ((countMove == 0) && (change == null)) {
-            change = changeTurn();
-        }
+//        if ((countMove == 0) && (change == null)) {
+//            change = changeTurn();
+//        }
         return change;
     }
 
@@ -197,7 +199,7 @@ public class GameMatch {
         if (arrayList.size() == 0) {
             countMove = 0;
             turnSkipped = true;
-            changeTurn();
+            //changeTurn();
         }
 
         return arrayList;
@@ -231,6 +233,11 @@ public class GameMatch {
 //        if (arrayList.size() == 0) {
 ////            countMove = 0;
 //        }
+        if (arrayList.size() == 0) {
+            countMove = 0;
+            turnSkipped = true;
+            //changeTurn();
+        }
 
         return arrayList;
     }
@@ -426,15 +433,15 @@ public class GameMatch {
         }
     }
 
-    public Change countersChange(Player player, int to) {
-        Change change = null;
-        if ((player.getColor() == BLACK) && (to == WHITE_BAR)) {
-            change = new ChipsCounter(this);
-        } else if ((player.getColor() == WHITE) && (to == BLACK_BAR)) {
-            change = new ChipsCounter(this);
-        }
-        return change;
-    }
+//    public Change countersChange(Player player, int to) {
+//        Change change = null;
+//        if ((player.getColor() == BLACK) && (to == WHITE_BAR)) {
+//            change = new ChipsCounter(this);
+//        } else if ((player.getColor() == WHITE) && (to == BLACK_BAR)) {
+//            change = new ChipsCounter(this);
+//        }
+//        return change;
+//    }
 
     public boolean isTurnWhite() {
         return turnWhite;

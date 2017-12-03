@@ -23,6 +23,7 @@ public class MoveAction extends Action {
                 ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
     }
+
     @Override
     public AbstractMessage apply(Player player) {
         AbstractMessage message;
@@ -30,26 +31,27 @@ public class MoveAction extends Action {
         Change change;
         try {
             GameMatch gameMatch = player.getGameMatch();
-            change = gameMatch.moveChip(player, this);
             PackageMessage packageMessage = new PackageMessage();
+            PackageMessage packageMessageForOpponent = new PackageMessage();
+
+            change = gameMatch.moveChip(player, this);
+
             packageMessage.addChange(change);
+            packageMessageForOpponent.addChange(change);
 
             ArrayList<Move> possiblePositions = gameMatch.getPossiblePositions(player.getColor(), cubeValue);
             PossibleMoves possibleMoves = PossibleMoves.generatePossibleMoves(possiblePositions);
             packageMessage.addChange(possibleMoves);
-            PackageMessage packageMessageForOpponent = new PackageMessage();
-            packageMessageForOpponent.addChange(change);
+
             int to = gameMatch.formTo(player.getColor(), cubeValue, from);
             Move move = new Move(from, to);
             packageMessageForOpponent.addChange(move);
 
-            change = gameMatch.countersChange(player, to);
-
+            change = gameMatch.changeTurn();
             packageMessage.addChange(change);
             packageMessageForOpponent.addChange(change);
 
             Player otherPlayer = gameMatch.getOtherPlayer(player);
-
             otherPlayer.sendMessage(packageMessageForOpponent);
             message = packageMessage;
         } catch (GameError gameError) {

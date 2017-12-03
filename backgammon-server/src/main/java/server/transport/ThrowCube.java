@@ -18,12 +18,12 @@ public class ThrowCube extends Action {
         try {
             GameMatch gameMatch = player.getGameMatch();
             CubeValue cubeValues = new CubeValue(gameMatch.throwDice(player, null));
-            int cube1 = cubeValues.getCubeValues()/10;
-            int cube2 = cubeValues.getCubeValues()%10;
+            int cube1 = cubeValues.getCubeValues() / 10;
+            int cube2 = cubeValues.getCubeValues() % 10;
             PossibleMoves moves = new PossibleMoves(gameMatch.getPossiblePositions(player.getColor(), cube1, cube2));
             PackageMessage packageMessage = new PackageMessage();
             packageMessage.addChange(cubeValues);
-            packageMessage.addChange(new StateChange(gameMatch));
+            packageMessage.addChange(gameMatch.changeTurn());
             message = packageMessage;
             if (player == gameMatch.getBlackPlayer()) {
                 gameMatch.getWhitePlayer().sendMessage(message);
