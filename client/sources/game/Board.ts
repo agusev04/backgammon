@@ -444,25 +444,25 @@ export class Board extends Container2d {
         this.metaDice1 = this.metamorphose(first);
         this.metaDice2 = this.metamorphose(second);
         this._activeDices = [];
-        // if (first == second)
-        // {
-        //     this._activeMoves = first * 4;
-        //     this._activeDices.push(first);
-        //     this._activeDices.push(first);
-        //     this._activeDices.push(first);
-        //     this._activeDices.push(first);
-        //     this._activeDices.push(first * 2);
-        //     this._activeDices.push(first * 2);
-        //     this._activeDices.push(first * 3);
-        //     this._activeDices.push(first * 4);
-        // }
-        // else
-        // {
+        if (first == second)
+        {
+            this._activeMoves = first * 4;
+            this._activeDices.push(first);
+            this._activeDices.push(first);
+            this._activeDices.push(first);
+            this._activeDices.push(first);
+            // this._activeDices.push(first * 2);
+            // this._activeDices.push(first * 2);
+            // this._activeDices.push(first * 3);
+            // this._activeDices.push(first * 4);
+        }
+        else
+        {
             this._activeDices.push(first);
             this._activeDices.push(second);
             // this._activeDices.push(first + second);
             this._activeMoves = first + second;
-        // }
+        }
         console.log('Кол-во возможных ходов: ', this._activeMoves, );
         console.log('Активные кубики: ', this._activeDices);
         this._isActive = this._activeMoves != 0;
