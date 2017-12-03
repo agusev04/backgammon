@@ -198,30 +198,26 @@ export class Game extends Container
             this._myTurn = data.gameState.stateChange.activePlayerName == this._myName;
             this._myColor = data.gameState.color;
 
-            // let drawState: any = new Array(24);
-            //
-            // for (let i = 0; i < 24; i++)
-            // {
-            //     drawState[i] = [];
-            // }
-            //
-            // data.gameState.whitePositions.forEach(function (sector:any)
-            // {
-            //     for (let i=0; i < sector.quantity;i++)
-            //     {
-            //         drawState[sector.position-1].push(0);
-            //     }
-            // });
-            // data.gameState.blackPositions.forEach(function (sector:any)
-            // {
-            //     for (let i=0; i < sector.quantity;i++)
-            //     {
-            //         drawState[sector.position-1].push(1);
-            //     }
-            // });
-            //
-            // console.log(drawState);
-            // this._board.setState(drawState);
+            let arrayChips: any[] = [
+                [],
+                [0,0]
+                ,[], [], [], [],
+                [1,1,1,1,1],
+                [],
+                [1,1,1],
+                [], [], [],
+                [0,0,0,0,0],
+                [1,1,1,1,1],
+                [], [], [],
+                [0,0,0],
+                [],
+                [0,0,0,0,0],
+                [], [], [], [],
+                [1,1],
+                [],[],[]
+            ];
+            this._board.setState(arrayChips);
+            this._board.drawState();
 
             if (this._myTurn)
             {
