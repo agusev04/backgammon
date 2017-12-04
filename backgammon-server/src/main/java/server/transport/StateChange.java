@@ -17,7 +17,7 @@ public class StateChange extends Response implements Change {
         activePlayerCode = gameMatch.getActivePlayerCondition();
         activePlayerColor = gameMatch.getActivePlayer().getColor();
         activePlayerName = gameMatch.getActivePlayer().getName();
-        if (gameMatch.turnSkipped) {
+        if (gameMatch.isTurnSkipped()) {
             turnSkipped = true;
         }
     }

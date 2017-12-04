@@ -41,6 +41,7 @@ public class PlayerCantMove extends AbstractTest {
         assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после входа в игру черного
 
         AbstractMessage response = throwCube(WHITE, 11); // белому выпали кости когда он не может ходить
+        assertFalse(gameMatch.isTurnSkipped());
         assertEquals(gameMatch.getActivePlayer().getName(), gameMatch.getBlackPlayer().getName());
 
         assertFalse(gameMatch.isTurnWhite()); // ходит ли белый, после броска кубика
@@ -78,11 +79,13 @@ public class PlayerCantMove extends AbstractTest {
         assertEquals(1, gameMatch.getActivePlayerCondition());
 
         throwCube(WHITE, 32);
+        assertFalse(gameMatch.isTurnSkipped());
 
         assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после броска кубика
         assertEquals(2, gameMatch.getActivePlayerCondition());
 
         moveChip(WHITE, 12, 2);
+        assertFalse(gameMatch.isTurnSkipped());
         assertTrue(gameMatch.isTurnWhite());// ходит ли черный, после броска кубика
         assertEquals(2, gameMatch.getActivePlayerCondition());
         checkWhitePositions(gameMatch,
@@ -168,7 +171,8 @@ public class PlayerCantMove extends AbstractTest {
 
         response = (PackageMessage) throwCube(BLACK, 11);
         assertFalse(gameMatch.isTurnWhite());
-//        assertFalse(stateChange.isTurnSkipped());
+        assertTrue(stateChange.isTurnSkipped());
+        assertFalse(gameMatch.isTurnSkipped());
         //TODO (Michael) Ошибка - после пропуска хода черному также приходит  isTurnSkipped = true
 
         moveChip(BLACK, 14, 1);

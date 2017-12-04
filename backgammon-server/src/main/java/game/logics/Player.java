@@ -12,8 +12,7 @@ public class Player {  //класс игрока
     char color; // 'w' or 'b'
     GameMatch gameMatch;
     Session session;
-    //TODO (Michael) зачем это поле? если не нужно - убрать
-    int number; //это номер в массиве в классе GameMatch
+    //TODO (Michael) зачем это поле? если не нужно - убрать !!!!
 
 
     public Player(String name, char color) { //конструктор по умолчанию для игрока
@@ -25,7 +24,6 @@ public class Player {  //класс игрока
     public Player(GameMatch gameMatch, Session session, int number) {
         this.gameMatch = gameMatch;
         this.session = session;
-        this.number = number;
     }
 
     public String getName() {
@@ -60,14 +58,6 @@ public class Player {  //класс игрока
 
     public void setSession(Session session) {
         this.session = session;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public char getColor() {

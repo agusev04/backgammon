@@ -19,7 +19,7 @@ public class GameMatch {
     public static final int the_final = 3; // конец игры
     private static final int WHITE_DIRECTION = 1;
     private static final int BLACK_DIRECTION = -1;
-    public boolean turnSkipped; // пропущен ли ход
+    private boolean turnSkipped; // пропущен ли ход
     GameBoard table = new GameBoard();
     int numberOfPlayers = 0;
     Player whitePlayer;
@@ -30,6 +30,10 @@ public class GameMatch {
     private boolean turnWhite = true;  // если true - ход белых, иначе - ход черных
     private int countMove = 1; // переменная для количества ходов
 
+
+    public boolean isTurnSkipped() {
+        return turnSkipped;
+    }
 
     public int getCountMove() {
         return countMove;
@@ -258,9 +262,6 @@ public class GameMatch {
             generateMoves(color, arrayList, direction, endGameFlag, barState2, cells, cube2);
         }
 
-//        if (arrayList.size() == 0) {
-////            countMove = 0;
-//        }
         if (arrayList.size() == 0) {
             countMove = 0;
             turnSkipped = true;
@@ -309,21 +310,20 @@ public class GameMatch {
 
         if (endGameFlag == 0) {
             addExceptionMove(color, arrayList, direction, cells, to, home, from);
-
         }
     }
 
     private void addExceptionMove(char color, ArrayList<Move> arrayList, int direction, Cell[] cells, int to,
                                   int home, int from) {
         boolean bool = false;
-        for (int i = from; i != home - direction; from -= direction) {
+        for (int i = from; i != home - direction; i -= direction) {
             if (cells[i].getColor() == color) {
                 bool = true;
                 break;
             }
         }
         if (!bool) {
-            for (int i = from; i != to; from += direction) {
+            for (int i = from; i != to; i += direction) {
                 if (cells[i].getColor() == color) {
                     arrayList.add(new Move(i, to));
                     break;
