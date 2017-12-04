@@ -20,7 +20,7 @@ public class MoveAction extends Action {
     public String toString() {
         return "MoveAction{" +
                 "from=" + from +
-                ", cubeValue=" + cubeValue +
+                ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
     }
 
@@ -46,6 +46,7 @@ public class MoveAction extends Action {
             int to = gameMatch.formTo(player.getColor(), cubeValue, from);
             Move move = new Move(from, to);
             packageMessageForOpponent.addChange(move);
+            packageMessage.addChange(move);
 
             change = gameMatch.changeTurn();
             packageMessage.addChange(change);
