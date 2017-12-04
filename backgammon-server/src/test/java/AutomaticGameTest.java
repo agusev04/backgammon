@@ -133,14 +133,12 @@ public class AutomaticGameTest extends AbstractTest {
                 System.out.println("Проверяем PossibleMoves...");
                 assertFalse(testAllMoves.isEmpty());
                 ArrayList<Move> possibleMovesSortedForComparison = possibleMoves.getPossibleMoves();
-//                possibleMovesSortedForComparison.sort(Comparator.comparingInt(o -> (o.from * 100 + direction * o.to)));
                 possibleMovesSortedForComparison.sort(Comparator.comparingInt(o -> (o.from * 100 + getDir(testTurnWhite) * o.to)));
+                assertEquals(testAllMoves.stream()
+                                .map(moveAction -> new Move(moveAction.from, calcTo(testTurnWhite, moveAction)))
+                                .collect(Collectors.toList()).toString(),
+                        possibleMovesSortedForComparison.toString());
 
-//                assertEquals(testAllMoves.stream()
-//                                .map(moveAction -> new Move(moveAction.from, calcTo(testTurnWhite, moveAction)))
-//                                .collect(Collectors.toList()).toString(),
-//                        possibleMovesSortedForComparison.toString());
-//
                 System.out.println("ОК!!, ходы = " + possibleMoves.getPossibleMoves().toString());
 
                 //Select a move
@@ -151,8 +149,7 @@ public class AutomaticGameTest extends AbstractTest {
                 packageMessage = (PackageMessage) response;
                 System.out.println("ОК");
 
-                ///////todo MOVE
-                //todo go out of field
+                //Do the move
                 testBoard.getCells()[testSelectedMove.from].takeChip();
                 int testTo = calcTo(testTurnWhite, testSelectedMove);
                 if (testBoard.getCells()[testTo].getColor() == getColor(testTurnWhite)) { /*на свою*/
