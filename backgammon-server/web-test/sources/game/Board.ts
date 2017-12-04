@@ -364,17 +364,30 @@ export class Board extends Container2d {
             // console.log('Чип он ве райт '+ this._chipsOnTheRight);
             this.highlightSector(this._firsSelectSectorIndex);
         } else
-            if (this._countClick == 1) {
-            this._secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
+            if (this.countClick == 1) {
+            this.secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
             // console.log('сектор второй '+ this.secondSelectSectorIndex);
-            if(this._firsSelectSectorIndex == this._secondSelectSectorIndex) {
-                this.deselectChip(this._firsSelectSectorIndex);
+            if(this.firsSelectSectorIndex == this.secondSelectSectorIndex) {
+                this.deselectChip(this.firsSelectSectorIndex);
             } else{
 
+                let currentMove = Math.abs(this.firsSelectSectorIndex - this.secondSelectSectorIndex);
+
+                switch (this.secondSelectSectorIndex)
+                {
+                    case this._exitBlack: this.secondSelectSectorIndex = 0;
+                        currentMove = this.firsSelectSectorIndex;
+                        break;
+                    case this._exitWhite: this.secondSelectSectorIndex = 25;
+                        currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+                        break;
+                }
+
+                console.log('СекторДва  ' +this.secondSelectSectorIndex);
                 this.emit(Board.EVENT_MOVE_CHIP, {
                     CLASS_NAME: 'MoveChip',
-                    from: this._firsSelectSectorIndex,
-                    to: this._secondSelectSectorIndex
+                    from: this.firsSelectSectorIndex,
+                    cubeValues: currentMove
                 });
 
             }
