@@ -9,7 +9,13 @@ public class Move extends Response implements Change {
     public int to;
 
     public Move(int from, int to) {
-        this.to = to;
+        if(to == 0){
+            this.to = 27;
+        } else if(to == 25){
+            this.to = 27;
+        } else{
+            this.to = to;
+        }
         this.from = from;
 
 
