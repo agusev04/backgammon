@@ -139,7 +139,6 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
-        //TODO (AlexanderIvchenko) должны остаться возможные ходы с кубиком 1 (РЕШЕНО)
         checkPossibleMoves(response,
                 new Move(1, 2),
                 new Move(3, 4),
@@ -179,23 +178,6 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
-        //TODO (Michael) некорректные ходы черного, в том числе за пределы поля с 24 на 30 (РЕШЕНО)
-//        checkPossibleMoves(response,
-//                new Move(8, 13),
-//                new Move(13, 18),
-//                new Move(8, 14),
-//                new Move(13, 19),
-//                new Move(24, 30)
-//        );
-//        Вот верные ходы (ПОРЯДОК НЕ ВЕРНЫЙ)))
-//        checkPossibleMoves(response,
-//                new Move(24, 18),
-//                new Move(13, 8),
-//                new Move(13, 7),
-//                new Move(8, 3),
-//                new Move(8, 2)
-//        );
-
         checkPossibleMoves(response,
                 new Move(6, 1),
                 new Move(8, 3),
@@ -210,7 +192,6 @@ public class CompleteGameTest extends AbstractTest {
         response = moveChip(BLACK, 8, 5);
         assertFalse(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_move_chip, gameMatch.getActivePlayerCondition());
-        //TODO (Michael) Черный ходит не в свою сторону (РЕШЕНО)
         checkWhitePositions(gameMatch,
                 new ChipsPosition(0, 1),
                 new ChipsPosition(2, 1),
@@ -230,8 +211,6 @@ public class CompleteGameTest extends AbstractTest {
 
 
         );
-
-        //TODO (Michael) Проверить, что ход опять корр[ектно переходит к белому. Подробно.
     }
 
     public void testIncorrectMoves() throws Exception {
@@ -252,13 +231,11 @@ public class CompleteGameTest extends AbstractTest {
         checkPossibleMoves(response, new Move(1, 2), new Move(17, 18), new Move(19, 20), new Move(1, 3),
                 new Move(12, 14), new Move(17, 19), new Move(19, 21));
 
-        //TODO (Michael) ArrayIndexOutOfBoundsException (РЕШИЛ)
         response = moveChip(WHITE, -1, 1);
 
         response = moveChip(WHITE, 0, 1);
         assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
 
-        //TODO (Michael) ArrayIndexOutOfBoundsException  (РЕШИЛ)
         response = moveChip(WHITE, 100, 1);
         assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
 
@@ -292,7 +269,6 @@ public class CompleteGameTest extends AbstractTest {
         for (int f : from) {
             for (int cubeValue : cubeValues) {
                 System.out.println("Move from " + f + " with " + cubeValue);
-                //TODO (Michael) Все эти некорректные комбинации должны обрабатываться штатно (РЕШИЛ)
                 response = moveChip(WHITE, f, cubeValue);
                 assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
             }
@@ -406,8 +382,6 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
-        //TODO (AlexanderIvchenko) Мувы приходят каждый по 2 раза (РЕШЕНО)
-//      checkPossibleMoves(response, new Move(1, 2), new Move(17, 18), new Move(19, 20), new Move(1, 2), new Move(17, 18), new Move(19, 20));
         checkPossibleMoves(response, new Move(1, 2), new Move(17, 18), new Move(19, 20));
     }
 

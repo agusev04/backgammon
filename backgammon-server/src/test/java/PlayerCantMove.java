@@ -40,7 +40,6 @@ public class PlayerCantMove extends AbstractTest {
 
         assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после входа в игру черного
 
-        //TODO (Michael) Поправить согласо последнему замечанию в BACKGAMMON-63 !!
         AbstractMessage response = throwCube(WHITE, 11); // белому выпали кости когда он не может ходить
         assertEquals(gameMatch.getActivePlayer().getName(), gameMatch.getBlackPlayer().getName());
 
