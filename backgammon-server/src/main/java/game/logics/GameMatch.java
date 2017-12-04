@@ -71,11 +71,16 @@ public class GameMatch {
     }
 
     public Change changeTurn() { //метод передачи хода
+        StateChange stateChange;
         if (countMove == 0) {
             activePlayerCondition = waiting_throw_dice;
             turnWhite = !turnWhite;
+            stateChange = new StateChange(this);
+            turnSkipped = false;
+        } else{
+            stateChange = new StateChange(this);
         }
-        return new StateChange(this);
+        return stateChange;
     }
 
     public Change moveChip(Player player, MoveAction move) throws GameError {
