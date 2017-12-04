@@ -12,6 +12,7 @@ import {MessageBox} from "./components/MessageBox";
 import {Dices} from "./game/Dices";
 import {Network} from "./core/Network";
 import {NotificationBox} from "./components/NotificationBox";
+import {UserBoard} from "./components/UserBoard";
 
 export class Game extends Container
 {
