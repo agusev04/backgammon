@@ -46,6 +46,7 @@ export class Board extends Container2d {
     private _activeDices:number[];
     private _activColor:number;
     private _container:Container2d;
+    private currentMove:number;
     // public arrayChips: any[] = [
     //     [],
     //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
@@ -85,33 +86,11 @@ export class Board extends Container2d {
     //     [],[],[]
     // ];
 
-    private arrayChips: any[] = [
-        [],
-        []
-        ,[], [], [], [],
-        [],
-        [],
-        [],
-        [], [], [],
-        [],
-        [],
-        [], [], [],
-        [],
-        [],
-        [],
-        [], [], [], [],
-        [],
-        [],[],[]
-    ];
-
-    // public arrayChips: any[] = [
+    // private arrayChips: any[] = [
     //     [],
-    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
-    //
-    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-    //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+    //     []
+    //     ,[], [], [], [],
     //     [],
-    //     [ new Chip(Chip.COLOR_BLACK)],
     //     [],
     //     [],
     //     [], [], [],
@@ -121,13 +100,35 @@ export class Board extends Container2d {
     //     [],
     //     [],
     //     [],
+    //     [], [], [], [],
     //     [],
-    //     [],
-    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
-    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
-    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
     //     [],[],[]
     // ];
+
+    public arrayChips: any[] = [
+        [],
+        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
+
+        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+        [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+        [],
+        [ new Chip(Chip.COLOR_BLACK)],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
+        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
+        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
+        [],[],[]
+    ];
 
     // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
     public arraySectors: any[] = [new Sector(),new Sector(), new Sector(), new Sector(),
@@ -303,7 +304,10 @@ export class Board extends Container2d {
         this._activColor = activColor;
         this.turnDependsOfTheColor();
     }
-
+    public blockOfTurn():void{
+        this._activeDices = [];
+        this.endOfTurn();
+    }
     private endOfTurn():void{
 
         if(this.arrayChips[this._exitWhite].length == 15){
@@ -375,10 +379,23 @@ export class Board extends Container2d {
                 this.deselectChip(this.firsSelectSectorIndex);
             } else{
 
+                let currentMove = Math.abs(this.firsSelectSectorIndex - this.secondSelectSectorIndex);
+
+                switch (this.secondSelectSectorIndex)
+                {
+                    case this._exitBlack: this.secondSelectSectorIndex = 0;
+                        currentMove = this.firsSelectSectorIndex;
+                        break;
+                    case this._exitWhite: this.secondSelectSectorIndex = 25;
+                        currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+                        break;
+                }
+
+                console.log('СекторДва  ' +this.secondSelectSectorIndex);
                 this.emit(Board.EVENT_MOVE_CHIP, {
                     CLASS_NAME: 'MoveChip',
                     from: this.firsSelectSectorIndex,
-                    to: this.secondSelectSectorIndex
+                    cubeValues: currentMove
                 });
 
             }
@@ -703,23 +720,23 @@ export class Board extends Container2d {
     }
 
     private calculateMoves(newPosition:number,oldPosition:number){
-        let currentMove:number;
-        currentMove = Math.abs(newPosition - oldPosition);
+        // let currentMove:number;
+        this.currentMove = Math.abs(newPosition - oldPosition);
         switch (newPosition){
             case this._exitBlack: newPosition = 0;
-            currentMove = this.firsSelectSectorIndex;
+            this.currentMove = this.firsSelectSectorIndex;
             break;
             case this._exitWhite: newPosition = 25;
-            currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+            this.currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
             break;
         }
-        this._activeMoves -= currentMove;
-        this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+        this._activeMoves -= this.currentMove;
+        this._activeDices.splice(this._activeDices.indexOf(this.currentMove), 1);
         this._activeDices = this._activeDices.filter(function(number) {
             return number <= this._activeMoves;
         }, this);
         this._isActive = this._activeMoves != 0;
-        console.log('Сделан ход: '+currentMove);
+        console.log('Сделан ход: '+this.currentMove);
         console.log('Кол-во возможных ходов: '+this._activeMoves );
         console.log('Активные кубики: '+this._activeDices);
 

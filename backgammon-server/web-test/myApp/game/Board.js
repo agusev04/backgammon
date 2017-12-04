@@ -69,32 +69,11 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [],[],[]
             // ];
-            _this.arrayChips = [
-                [],
-                [],
-                [], [], [], [],
-                [],
-                [],
-                [],
-                [], [], [],
-                [],
-                [],
-                [], [], [],
-                [],
-                [],
-                [],
-                [], [], [], [],
-                [],
-                [], [], []
-            ];
-            // public arrayChips: any[] = [
+            // private arrayChips: any[] = [
             //     [],
-            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
-            //
-            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-            //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+            //     []
+            //     ,[], [], [], [],
             //     [],
-            //     [ new Chip(Chip.COLOR_BLACK)],
             //     [],
             //     [],
             //     [], [], [],
@@ -104,13 +83,33 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             //     [],
             //     [],
             //     [],
+            //     [], [], [], [],
             //     [],
-            //     [],
-            //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
-            //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
-            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
             //     [],[],[]
             // ];
+            _this.arrayChips = [
+                [],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [], [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [],
+                [],
+                [], [], [],
+                [],
+                [],
+                [], [], [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE),],
+                [], [], []
+            ];
             // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
             _this.arraySectors = [new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(),
                 new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(),
@@ -265,6 +264,10 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             this._activColor = activColor;
             this.turnDependsOfTheColor();
         };
+        Board.prototype.blockOfTurn = function () {
+            this._activeDices = [];
+            this.endOfTurn();
+        };
         Board.prototype.endOfTurn = function () {
             if (this.arrayChips[this._exitWhite].length == 15) {
                 console.log('Игра завершена белыми');
@@ -330,10 +333,22 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                     this.deselectChip(this.firsSelectSectorIndex);
                 }
                 else {
+                    var currentMove = Math.abs(this.firsSelectSectorIndex - this.secondSelectSectorIndex);
+                    switch (this.secondSelectSectorIndex) {
+                        case this._exitBlack:
+                            this.secondSelectSectorIndex = 0;
+                            currentMove = this.firsSelectSectorIndex;
+                            break;
+                        case this._exitWhite:
+                            this.secondSelectSectorIndex = 25;
+                            currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+                            break;
+                    }
+                    console.log('СекторДва  ' + this.secondSelectSectorIndex);
                     this.emit(Board.EVENT_MOVE_CHIP, {
                         CLASS_NAME: 'MoveChip',
                         from: this.firsSelectSectorIndex,
-                        to: this.secondSelectSectorIndex
+                        cubeValues: currentMove
                     });
                 }
             }
@@ -627,25 +642,25 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             return metX;
         };
         Board.prototype.calculateMoves = function (newPosition, oldPosition) {
-            var currentMove;
-            currentMove = Math.abs(newPosition - oldPosition);
+            // let currentMove:number;
+            this.currentMove = Math.abs(newPosition - oldPosition);
             switch (newPosition) {
                 case this._exitBlack:
                     newPosition = 0;
-                    currentMove = this.firsSelectSectorIndex;
+                    this.currentMove = this.firsSelectSectorIndex;
                     break;
                 case this._exitWhite:
                     newPosition = 25;
-                    currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+                    this.currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
                     break;
             }
-            this._activeMoves -= currentMove;
-            this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+            this._activeMoves -= this.currentMove;
+            this._activeDices.splice(this._activeDices.indexOf(this.currentMove), 1);
             this._activeDices = this._activeDices.filter(function (number) {
                 return number <= this._activeMoves;
             }, this);
             this._isActive = this._activeMoves != 0;
-            console.log('Сделан ход: ' + currentMove);
+            console.log('Сделан ход: ' + this.currentMove);
             console.log('Кол-во возможных ходов: ' + this._activeMoves);
             console.log('Активные кубики: ' + this._activeDices);
         };
