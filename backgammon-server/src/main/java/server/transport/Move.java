@@ -12,7 +12,7 @@ public class Move extends Response implements Change {
         if(to == 0){
             this.to = 27;
         } else if(to == 25){
-            this.to = 27;
+            this.to = 26;
         } else{
             this.to = to;
         }
