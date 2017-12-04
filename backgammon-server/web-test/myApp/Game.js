@@ -109,8 +109,8 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         Game.prototype.eventConnected = function () {
             console.log('Сообщение из гейма: Sending enter request...');
             this._network.send({
-                CLASS_NAME: 'Enter',
-                myUserName: 'root'
+                CLASS_NAME: 'Enter'
+                // myUserName: 'root'
             });
             this.loadGame();
         };
@@ -154,26 +154,26 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 this._myName = data.gameState.myName;
                 this._myTurn = data.gameState.stateChange.activePlayerColor == this._myColor;
                 this._myColor = data.gameState.color;
-                // let arrayChips: any[] = [
-                //     [],
-                //     [0,0]
-                //     ,[], [], [], [],
-                //     [1,1,1,1,1],
-                //     [],
-                //     [1,1,1],
-                //     [], [], [],
-                //     [0,0,0,0,0],
-                //     [1,1,1,1,1],
-                //     [], [], [],
-                //     [0,0,0],
-                //     [],
-                //     [0,0,0,0,0],
-                //     [], [], [], [],
-                //     [1,1],
-                //     [],[],[]
-                // ];
-                // this._board.setState(arrayChips);
-                // this._board.drawState();
+                var arrayChips = [
+                    [],
+                    [0, 0],
+                    [], [], [], [],
+                    [1, 1, 1, 1, 1],
+                    [],
+                    [1, 1, 1],
+                    [], [], [],
+                    [0, 0, 0, 0, 0],
+                    [1, 1, 1, 1, 1],
+                    [], [], [],
+                    [0, 0, 0],
+                    [],
+                    [0, 0, 0, 0, 0],
+                    [], [], [], [],
+                    [1, 1],
+                    [], [], []
+                ];
+                this._board.setState(arrayChips);
+                this._board.drawState();
                 if (this._myTurn) {
                     if (this._opponent) {
                         this.startOfTurn();

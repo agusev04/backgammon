@@ -86,33 +86,11 @@ export class Board extends Container2d {
     //     [],[],[]
     // ];
 
-    // private arrayChips: any[] = [
-    //     [],
-    //     []
-    //     ,[], [], [], [],
-    //     [],
-    //     [],
-    //     [],
-    //     [], [], [],
-    //     [],
-    //     [],
-    //     [], [], [],
-    //     [],
-    //     [],
-    //     [],
-    //     [], [], [], [],
-    //     [],
-    //     [],[],[]
-    // ];
-
-    public arrayChips: any[] = [
+    private arrayChips: any[] = [
         [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
-
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+        []
+        ,[], [], [], [],
         [],
-        [ new Chip(Chip.COLOR_BLACK)],
         [],
         [],
         [], [], [],
@@ -122,13 +100,35 @@ export class Board extends Container2d {
         [],
         [],
         [],
+        [], [], [], [],
         [],
-        [],
-        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
-        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
         [],[],[]
     ];
+
+    // public arrayChips: any[] = [
+    //     [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
+    //
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+    //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+    //     [],
+    //     [ new Chip(Chip.COLOR_BLACK)],
+    //     [],
+    //     [],
+    //     [], [], [],
+    //     [],
+    //     [],
+    //     [], [], [],
+    //     [],
+    //     [],
+    //     [],
+    //     [],
+    //     [],
+    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
+    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
+    //     [],[],[]
+    // ];
 
     // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
     public arraySectors: any[] = [new Sector(),new Sector(), new Sector(), new Sector(),
