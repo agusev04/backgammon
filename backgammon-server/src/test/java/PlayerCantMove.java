@@ -5,6 +5,7 @@ import game.logics.Player;
 import server.transport.AbstractMessage;
 import server.transport.ChipsPosition;
 import server.transport.PackageMessage;
+import server.transport.StateChange;
 import support.AbstractTest;
 
 
@@ -39,7 +40,6 @@ public class PlayerCantMove extends AbstractTest {
 
         assertTrue(gameMatch.isTurnWhite()); // ходит ли белый, после входа в игру черного
 
-        //TODO (Michael) Поправить согласо последнему замечанию в BACKGAMMON-63 !!
         AbstractMessage response = throwCube(WHITE, 11); // белому выпали кости когда он не может ходить
         assertEquals(gameMatch.getActivePlayer().getName(), gameMatch.getBlackPlayer().getName());
 
@@ -125,22 +125,6 @@ public class PlayerCantMove extends AbstractTest {
                 new ChipsPosition(10, 1));
         assertEquals(2, gameMatch.getCountMove());
         assertFalse(gameMatch.isTurnWhite());
-        /*        checkWhitePositions(gameMatch,
-                new ChipsPosition(12, 2));
-        checkBlackPositions(gameMatch,
-                new ChipsPosition(13, 2));
-        checkPossibleMoves(response,
-                new Move(1, 2),
-                new Move(17, 18),
-                new Move(19, 20),
-                new Move(1, 3),
-                new Move(12, 14),
-                new Move(17, 19),
-                new Move(19, 21)
-        );*/
-
-//        moveChip(WHITE, 11, 1);
-
     }
     public void testPlayerCantMoveInProgress() throws Exception, GameError {
 
@@ -166,11 +150,12 @@ public class PlayerCantMove extends AbstractTest {
         gameMatch.getTable().cells[13].setCell(Cell.BLACK, 2);
         gameMatch.getTable().cells[14].setCell(Cell.BLACK, 2);
 
-    throwCube(WHITE, 12);
-    assertTrue(gameMatch.isTurnWhite());
-    assertEquals(2, gameMatch.getActivePlayerCondition());
+        throwCube(WHITE, 12);
+        assertTrue(gameMatch.isTurnWhite());
+        assertEquals(2, gameMatch.getActivePlayerCondition());
 
-    moveChip(WHITE, 11, 1);
+        PackageMessage response = (PackageMessage) moveChip(WHITE, 11, 1);
+        StateChange stateChange = response.getChange(StateChange.class);
 
         checkWhitePositions(gameMatch,
                 new ChipsPosition(12, 4));
@@ -179,9 +164,12 @@ public class PlayerCantMove extends AbstractTest {
                 new ChipsPosition(14, 2));
         assertFalse(gameMatch.isTurnWhite()); //ход черного
         assertEquals(0, gameMatch.getCountMove());
+        assertTrue(stateChange.isTurnSkipped());
 
-        throwCube(BLACK, 11);
+        response = (PackageMessage) throwCube(BLACK, 11);
         assertFalse(gameMatch.isTurnWhite());
+//        assertFalse(stateChange.isTurnSkipped());
+        //TODO (Michael) Ошибка - после пропуска хода черному также приходит  isTurnSkipped = true
 
         moveChip(BLACK, 14, 1);
         moveChip(BLACK, 14, 1);

@@ -22,13 +22,16 @@ public class StateChange extends Response implements Change {
         }
     }
 
+    public boolean isTurnSkipped() {
+        return turnSkipped;
+    }
+
     @Override
     public String toString() {
         return "StateChange{" +
                 "activePlayerName: " + activePlayerName +
                 ", activePlayerCode: " + activePlayerCode +
                 ", turnSkipped: " + turnSkipped +
-                ", CLASS_NAME: " + CLASS_NAME +
                 '}';
     }
 }

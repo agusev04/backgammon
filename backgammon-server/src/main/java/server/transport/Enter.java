@@ -1,5 +1,6 @@
 package server.transport;
 
+import game.gameobjects.GameBoard;
 import game.logics.GameError;
 import game.logics.Player;
 
@@ -34,6 +35,11 @@ public class Enter extends Action {
                 throw CANT_REENTER;
             }
             player.setName(myUserName, player.getSession().getId());
+            if (myUserName != null) {
+                if (myUserName.equals("root")) {
+                    player.getGameMatch().setTable(new GameBoard(1));
+                }
+            }
             GameState gameState = new GameState(player.getGameMatch(), "",
                     player.getGameMatch().getWhitePlayer().getName() + "s backgammon table created",
                     player.getColor(), player.getName());
