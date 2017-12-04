@@ -463,50 +463,50 @@ export class Board extends Container2d {
     }
 
     public moveChip(oldPosition:number,newPosition:number) {
-
-        if( this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].color != this.arrayChips[newPosition][0].color)
-        {
-            let positionJail_X:number;
-            let positionJail_Y:number;
+        //
+        // if( this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].color != this.arrayChips[newPosition][0].color)
+        // {
+        //     let positionJail_X:number;
+        //     let positionJail_Y:number;
+        //
+        //     let oldChip:Chip = this.arrayChips[oldPosition].pop();
+        //     this._container.addChild(oldChip);
+        //
+        //     let opponentChip:Chip = this.arrayChips[newPosition][0];
+        //     this._container.addChild(opponentChip);
+        //
+        //     switch (opponentChip.color)
+        //     {
+        //         case Chip.COLOR_WHITE:
+        //             this.arrayChips[this._sectorJailWhite].push(opponentChip);
+        //             positionJail_X = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).x;
+        //             positionJail_Y = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).y;
+        //             break;
+        //         case Chip.COLOR_BLACK:
+        //             this.arrayChips[this._sectorJailBlack].push(opponentChip);
+        //             positionJail_X = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).x;
+        //             positionJail_Y = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).y;
+        //     }
+        //     this.arrayChips[newPosition].pop();
+        //     this.animationMoveChip(opponentChip,positionJail_X,positionJail_Y);
+        //     let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
+        //     let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
+        //     this.animationMoveChip(oldChip,newPositionX,newPositionY);
+        //     this.arrayChips[newPosition].push(oldChip);
+        //     this.calculateMoves(newPosition,oldPosition);
+        //     this._countClick = 0;
+        // }
+        // else{
 
             let oldChip:Chip = this.arrayChips[oldPosition].pop();
             this._container.addChild(oldChip);
-
-            let opponentChip:Chip = this.arrayChips[newPosition][0];
-            this._container.addChild(opponentChip);
-
-            switch (opponentChip.color)
-            {
-                case Chip.COLOR_WHITE:
-                    this.arrayChips[this._sectorJailWhite].push(opponentChip);
-                    positionJail_X = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).x;
-                    positionJail_Y = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).y;
-                    break;
-                case Chip.COLOR_BLACK:
-                    this.arrayChips[this._sectorJailBlack].push(opponentChip);
-                    positionJail_X = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).x;
-                    positionJail_Y = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).y;
-            }
-            this.arrayChips[newPosition].pop();
-            this.animationMoveChip(opponentChip,positionJail_X,positionJail_Y);
             let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
             let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
             this.animationMoveChip(oldChip,newPositionX,newPositionY);
             this.arrayChips[newPosition].push(oldChip);
             this.calculateMoves(newPosition,oldPosition);
             this._countClick = 0;
-        }
-        else{
-
-            let oldChip:Chip = this.arrayChips[oldPosition].pop();
-            this._container.addChild(oldChip);
-            let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
-            let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
-            this.animationMoveChip(oldChip,newPositionX,newPositionY);
-            this.arrayChips[newPosition].push(oldChip);
-            this.calculateMoves(newPosition,oldPosition);
-            this._countClick = 0;
-        }
+        // }
         this.offHighLightSectors();  //отключаю подсветку
         this.turnDependsOfTheColor();
         this.endOfTurn();
