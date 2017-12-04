@@ -51,7 +51,7 @@ public class GameBoard {
         if ((to > WHITE_BAR) && (to < BLACK_BAR)) { //ход по доске
             if (cells[to].getColor() != cells[from].getColor() && cells[to].getCount() > 1) {
                 throw UNABLE_MOVE;
-            } else if ((cells[to].getColor() != cells[from].getColor()) && (cells[to].getCount() == 1)) { //вывод с бар
+            } else if ((cells[to].getColor() != color) && (cells[to].getCount() == 1)) { //вывод с бар
                 if (cells[to].getColor() == WHITE) {
                     cells[WHITE_BAR].putChip(WHITE);
                     change = new MoveBar(WHITE, to);

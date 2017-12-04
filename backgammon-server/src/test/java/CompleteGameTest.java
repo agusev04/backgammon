@@ -531,9 +531,26 @@ public class CompleteGameTest extends AbstractTest {
         response = moveChip(WHITE, 17, 6);
         assertEquals("ErrorMessage{code=4, message='You can not do this move'}", response.toString());
 
+        checkBlackPositions(gameMatch,
+                new ChipsPosition(2, 1),
+                new ChipsPosition(3, 1),
+                new ChipsPosition(6, 3),
+                new ChipsPosition(8, 3),
+                new ChipsPosition(13, 5),
+                new ChipsPosition(24, 2));
+
         //перемещаем одну фишку. вторую не можем вытащить из бара - пропуск хода
         response = moveChip(WHITE, 0, 2);
+
         assertTrue(((PackageMessage) response).getChangeArrayList().contains(new MoveBar('b', 2)));
+
+        checkBlackPositions(gameMatch,
+                new ChipsPosition(3, 1),
+                new ChipsPosition(6, 3),
+                new ChipsPosition(8, 3),
+                new ChipsPosition(13, 5),
+                new ChipsPosition(24, 2),
+                new ChipsPosition(25, 1));
 
         //возможных ходов нет - переход хода
         assertNull(((PackageMessage) response).getChange("PossibleMoves"));
