@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./components/Button", "./game/Board", "./components/MessageBox", "./game/Dices", "./core/Network", "./components/NotificationBox"], function (require, exports, Button_1, Board_1, MessageBox_1, Dices_1, Network_1, NotificationBox_1) {
+define(["require", "exports", "./components/Button", "./game/Board", "./components/MessageBox", "./game/Dices", "./core/Network", "./components/NotificationBox", "./components/UserBar"], function (require, exports, Button_1, Board_1, MessageBox_1, Dices_1, Network_1, NotificationBox_1, UserBar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -46,6 +46,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this._msgBox = new MessageBox_1.MessageBox();
             this._ntfBox = new NotificationBox_1.NotificationBox();
             this._network = new Network_1.Network();
+            this._UserBar = new UserBar_1.UserBar();
             this._network.on(Network_1.Network.EVENT_CONNECTED, this.eventConnected, this);
             this._network.on(Network_1.Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
             this._network.on(Network_1.Network.EVENT_DATA, this.eventData, this);
@@ -87,6 +88,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this.addChild(this._throwBtn);
             this._throwBtn.hide();
             this._dices.hide();
+            this.addChild(this._UserBar);
         };
         Game.prototype.gameStart = function () {
             this.startOfTurn();
@@ -154,6 +156,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 this._myName = data.gameState.myName;
                 this._myTurn = data.gameState.stateChange.activePlayerColor == this._myColor;
                 this._myColor = data.gameState.color;
+                this._UserBar.setUserBar(this._myColor);
                 var arrayChips = [
                     [],
                     [0, 0],
@@ -254,6 +257,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 }
                 this.moveDice(this._myTurn);
             }
+            this._UserBar.setActivePlayer(this._myTurn, this._myColor);
         };
         Game.prototype.dataOnError = function (data) {
             this.showNotification(data.message);

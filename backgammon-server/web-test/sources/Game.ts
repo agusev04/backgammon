@@ -12,7 +12,7 @@ import {MessageBox} from "./components/MessageBox";
 import {Dices} from "./game/Dices";
 import {Network} from "./core/Network";
 import {NotificationBox} from "./components/NotificationBox";
-import {UserBoard} from "./components/UserBoard";
+import {UserBar} from "./components/UserBar";
 
 export class Game extends Container
 {
@@ -29,6 +29,7 @@ export class Game extends Container
     private _ntfBox:NotificationBox;
     private _board:Board;
     private _network:Network;
+    private _UserBar: UserBar;
     private _myColor:string;
 
     // Init >>--------------------------------------------------------------<<<<
@@ -57,6 +58,7 @@ export class Game extends Container
         this._msgBox = new MessageBox();
         this._ntfBox = new NotificationBox();
         this._network = new Network();
+        this._UserBar = new UserBar();
         this._network.on(Network.EVENT_CONNECTED, this.eventConnected, this);
         this._network.on(Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
         this._network.on(Network.EVENT_DATA, this.eventData, this);
@@ -106,6 +108,7 @@ export class Game extends Container
         this.addChild(this._throwBtn);
         this._throwBtn.hide();
         this._dices.hide();
+        this.addChild(this._UserBar);
     }
 
     protected gameStart():void
@@ -195,6 +198,7 @@ export class Game extends Container
             this._myName = data.gameState.myName;
             this._myTurn = data.gameState.stateChange.activePlayerColor == this._myColor;
             this._myColor = data.gameState.color;
+            this._UserBar.setUserBar(this._myColor);
 
             let arrayChips: any[] = [
                 [],
@@ -329,6 +333,7 @@ export class Game extends Container
             }
             this.moveDice(this._myTurn);
         }
+        this._UserBar.setActivePlayer(this._myTurn, this._myColor);
     }
 
     protected dataOnError(data:any):void

@@ -14,15 +14,15 @@ define(["require", "exports", "../Game"], function (require, exports, Game_1) {
     var Container = PIXI.Container;
     var Sprite = PIXI.Sprite;
     var TextStyle = PIXI.TextStyle;
-    var UserBoard = (function (_super) {
-        __extends(UserBoard, _super);
-        function UserBoard() {
+    var UserBar = (function (_super) {
+        __extends(UserBar, _super);
+        function UserBar() {
             var _this = _super.call(this) || this;
             _this._textStyle = new TextStyle({ fill: '#ffffff', fontSize: 28, fontWeight: '600', dropShadow: true, align: 'center' });
             _this.configure();
             return _this;
         }
-        UserBoard.prototype.configure = function () {
+        UserBar.prototype.configure = function () {
             this._blackIcon = Sprite.fromImage('assets/UI/black.png');
             this._whiteIcon = Sprite.fromImage('assets/UI/white.png');
             this._whiteIcon.anchor.set(0, 0);
@@ -44,7 +44,7 @@ define(["require", "exports", "../Game"], function (require, exports, Game_1) {
             this.addChild(this._whiteName);
             this.addChild(this._blackName);
         };
-        UserBoard.prototype.setUserBoard = function (color) {
+        UserBar.prototype.setUserBar = function (color) {
             if (color == 'w') {
                 this._whiteName.text = 'You';
                 this._blackName.text = 'Opponent';
@@ -54,22 +54,22 @@ define(["require", "exports", "../Game"], function (require, exports, Game_1) {
                 this._blackName.text = 'You';
             }
         };
-        UserBoard.prototype.setActivePlayer = function (whiteTurn) {
-            if (whiteTurn) {
+        UserBar.prototype.setActivePlayer = function (myTurn, color) {
+            if (myTurn && color == 'w' || !myTurn && color == 'b') {
                 this._whiteName.alpha = 1;
                 this._whiteIcon.alpha = 1;
-                this._blackName.alpha = 0.5;
-                this._blackIcon.alpha = 0.5;
+                this._blackName.alpha = 0.3;
+                this._blackIcon.alpha = 0.3;
             }
-            else {
-                this._whiteName.alpha = 0.5;
-                this._whiteIcon.alpha = 0.5;
+            else if (myTurn && color == 'b' || !myTurn && color == 'w') {
+                this._whiteName.alpha = 0.3;
+                this._whiteIcon.alpha = 0.3;
                 this._blackName.alpha = 1;
                 this._blackIcon.alpha = 1;
             }
         };
-        return UserBoard;
+        return UserBar;
     }(Container));
-    exports.UserBoard = UserBoard;
+    exports.UserBar = UserBar;
 });
-//# sourceMappingURL=UserBoard.js.map
+//# sourceMappingURL=UserBar.js.map
