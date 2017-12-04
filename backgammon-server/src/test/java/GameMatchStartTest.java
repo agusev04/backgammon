@@ -15,8 +15,8 @@ public class GameMatchStartTest extends AbstractTest {
         PackageMessage packageMessage = enter("1", "user 2");
 
         GameStart[] starts = new GameStart[2];
-        starts[0] = (GameStart) sessions.get("0").getTestBasicRemote().getPackageMessage().getChange("GameStart");
-        starts[1] = (GameStart) packageMessage.getChange("GameStart");
+        starts[0] = sessions.get("0").getTestBasicRemote().getPackageMessage().getChange(GameStart.class);
+        starts[1] = packageMessage.getChange(GameStart.class);
         assertNotNull(starts);
 
         assertEquals(2, starts.length);

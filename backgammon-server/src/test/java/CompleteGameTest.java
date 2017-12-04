@@ -162,8 +162,7 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 3),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 2));
-        //TODO (AlexanderIvchenko) зачем-то приходит пустой массив PossibleMoves (РЕШЕНО)
-        assertNull(((PackageMessage) response).getChange("PossibleMoves"));
+        assertNull(((PackageMessage) response).getChange(PossibleMoves.class));
 
         /*Черный бросает кубик*/
         response = throwCube(BLACK, 56);
@@ -495,7 +494,7 @@ public class CompleteGameTest extends AbstractTest {
         response = moveChip(BLACK, 6, 4);
         assertTrue(((PackageMessage) response).getChangeArrayList().contains(new MoveBar('w', 2))); //белая улетает в бар
 
-        assertNull(((PackageMessage) response).getChange("PossibleMoves"));
+        assertNull(((PackageMessage) response).getChange(PossibleMoves.class));
 
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
@@ -536,7 +535,7 @@ public class CompleteGameTest extends AbstractTest {
         assertTrue(((PackageMessage) response).getChangeArrayList().contains(new MoveBar('b', 2)));
 
         //возможных ходов нет - переход хода
-        assertNull(((PackageMessage) response).getChange("PossibleMoves"));
+        assertNull(((PackageMessage) response).getChange(PossibleMoves.class));
 
 //        assertTrue(gameMatch.isTurnWhite()); // фи
         assertFalse(gameMatch.isTurnWhite()); //гуд
@@ -585,13 +584,11 @@ public class CompleteGameTest extends AbstractTest {
                 new Move(24, 18));
 
         response = moveChip(BLACK, 8, 6);
-
         checkWhitePositions(gameMatch,
                 new ChipsPosition(0, 2),
                 new ChipsPosition(12, 5),
                 new ChipsPosition(17, 3),
                 new ChipsPosition(19, 5));
-
         checkBlackPositions(gameMatch,
                 new ChipsPosition(2, 1),
                 new ChipsPosition(3, 1),
@@ -599,9 +596,7 @@ public class CompleteGameTest extends AbstractTest {
                 new ChipsPosition(8, 2),
                 new ChipsPosition(13, 5),
                 new ChipsPosition(24, 3));
-
-        assertNull(((PackageMessage) response).getChange("PossibleMoves"));
-
+        assertNull(((PackageMessage) response).getChange(PossibleMoves.class));
         assertTrue(gameMatch.isTurnWhite());
         assertEquals(GameMatch.waiting_throw_dice, gameMatch.getActivePlayerCondition());
 

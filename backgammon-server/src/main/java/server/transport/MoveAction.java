@@ -20,7 +20,7 @@ public class MoveAction extends Action {
     public String toString() {
         return "MoveAction{" +
                 "from=" + from +
-                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+                ", cubeValue=" + cubeValue +
                 '}';
     }
 

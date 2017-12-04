@@ -30,7 +30,7 @@ public class PossibleMovesTest extends AbstractTest {
         enter("1", "user 2");
         int startPosition[] = {1, 12, 17, 19};
         PackageMessage packageMessage = (PackageMessage) throwCube("0", 11);
-        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
+        PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
         ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
 
 
@@ -54,7 +54,7 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1, 12, 17, 19};
         PackageMessage packageMessage = (PackageMessage) throwCube("0", 26);
-        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
+        PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
         int[] possibleValues = {2, 6};
         ArrayList<Move> possibleMoves1 = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {
@@ -85,7 +85,7 @@ public class PossibleMovesTest extends AbstractTest {
 
         int startPosition[] = {1,   12, 17, 19};
         PackageMessage packageMessage = (PackageMessage) throwCube("0", 56);
-        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
+        PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
         int[] possibleValues = {5, 6};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {
@@ -122,7 +122,7 @@ public class PossibleMovesTest extends AbstractTest {
         int startPosition[] = {1, 12, 17, 19};
 
         PackageMessage packageMessage = (PackageMessage) throwCube("0", 23);
-        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
+        PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
         int[] possibleValues = {2, 3};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {
@@ -154,7 +154,7 @@ public class PossibleMovesTest extends AbstractTest {
         int startPosition[] = {1, 12, 17, 19};
 
         PackageMessage packageMessage = (PackageMessage) throwCube("0", 43);
-        PossibleMoves possibleMoves = (PossibleMoves) packageMessage.getChange("PossibleMoves");
+        PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
         int[] possibleValues = {4, 3};
         ArrayList<Move> possiblePositions = possibleMoves.getPossibleMoves();
         for (int i = 0; i < 2; i++) {

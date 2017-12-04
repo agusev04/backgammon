@@ -66,7 +66,7 @@ public abstract class AbstractTest extends TestCase {
     }
 
     protected void checkPossibleMoves(AbstractMessage response, Move... expectedMoves) {
-        PossibleMoves possibleMoves = (PossibleMoves) ((PackageMessage) response).getChange("PossibleMoves");
+        PossibleMoves possibleMoves = ((PackageMessage) response).getChange(PossibleMoves.class);
         System.out.println(possibleMoves.getPossibleMoves().toString());
         assertEquals(Arrays.asList(expectedMoves).toString(), possibleMoves.getPossibleMoves().toString());
     }

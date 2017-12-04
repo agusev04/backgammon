@@ -31,6 +31,10 @@ public class Cell {
         return count;
     }
 
+    public void inc() {
+        count++;
+    }
+
     public void setCount(int count) {
         this.count = count;
     }

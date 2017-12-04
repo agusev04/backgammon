@@ -9,6 +9,14 @@ public class ChipsPosition extends Response {
         this.quantity = quantity;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,10 +37,9 @@ public class ChipsPosition extends Response {
 
     @Override
     public String toString() {
-        return "ChipsPosition{" +
-                "position=" + position +
-                ", quantity=" + quantity +
-                ", CLASS_NAME='" + CLASS_NAME + '\'' +
+        return "{" +
+                position + ", " +
+                quantity +
                 '}';
     }
 }
