@@ -15,26 +15,22 @@ import Container2d = PIXI.projection.Container2d;
 
 //TODO исправить метод для звука
 
-//TODO если мы отменим клик с фишки которая в тюрьме можно будет пользоваться любой фишкой
 
 export class Board extends Container2d {
+
     public static EVENT_END_OF_TURN:string = 'EndOfTurn';
     public static EVENT_MOVE_CHIP:string = 'MoveChip';
     public static EVENT_GAME_END:string = 'GameEnd';
 
-
-    public _newBg:Sprite;
-    public metaDice1: number;
-    public metaDice2: number;
-    public OFFSET: number = 30;
-    public countClick: number = 0;
-    public tl = new TimelineLite();
-    public selectChipColor:string;
-    public firsSelectSectorIndex:any;
-    public secondSelectSectorIndex:any;
+    private _newBg:Sprite;
+    private _OFFSET: number = 30;
+    private _countClick: number = 0;
+    private _selectChipColor:string;
+    private _firsSelectSectorIndex:any;
+    private _secondSelectSectorIndex:any;
     public sound:Sound = new Sound();
-    public sectorJailWhite:number = 0;
-    public sectorJailBlack:number = 25;
+    private _sectorJailWhite:number = 0;
+    private _sectorJailBlack:number = 25;
     public _chipsOnTheLeft = 0;
     public _chipsOnTheRight = 0;
     private _exitWhite:number = 26;
@@ -217,9 +213,9 @@ export class Board extends Container2d {
         for (let i = 0; i < this.arrayChips.length; i++) {
             for (let j = 0; j < this.arrayChips[i].length; j++) {
                 if (i >= 1 && i < 13) {
-                    this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x,this.arrayPositionChip[i].y + this.OFFSET * j);
+                    this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x,this.arrayPositionChip[i].y + this._OFFSET * j);
                 } else {
-                    this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x,this.arrayPositionChip[i].y - this.OFFSET * j);
+                    this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x,this.arrayPositionChip[i].y - this._OFFSET * j);
                 }
             }
         }
@@ -245,9 +241,9 @@ export class Board extends Container2d {
                 this.arraySectors[i].position.set(this.arrayPositionSector[i].x, this.arrayPositionSector[i].y);
             }
         }
-        this.arraySectors[this.sectorJailWhite].rotation = -3.14;
-        this.arraySectors[this.sectorJailWhite].position.set(this.arrayPositionSector[this.sectorJailWhite].x,this.arrayPositionSector[this.sectorJailWhite].y);     //Jail
-        this.arraySectors[this.sectorJailBlack].position.set(this.arrayPositionSector[this.sectorJailBlack].x,this.arrayPositionSector[this.sectorJailBlack].y);    //Jail
+        this.arraySectors[this._sectorJailWhite].rotation = -3.14;
+        this.arraySectors[this._sectorJailWhite].position.set(this.arrayPositionSector[this._sectorJailWhite].x,this.arrayPositionSector[this._sectorJailWhite].y);     //Jail
+        this.arraySectors[this._sectorJailBlack].position.set(this.arrayPositionSector[this._sectorJailBlack].x,this.arrayPositionSector[this._sectorJailBlack].y);    //Jail
         this.arraySectors[this._exitBlack].rotation = -3.14;
         this.arraySectors[this._exitWhite].position.set(this.arrayPositionSector[this._exitWhite].x,this.arrayPositionSector[this._exitWhite].y);
         this.arraySectors[this._exitBlack].position.set(this.arrayPositionSector[this._exitBlack].x,this.arrayPositionSector[this._exitBlack].y);
@@ -345,20 +341,20 @@ export class Board extends Container2d {
         this.arrayChips[firsSelectSectorIndex][this.arrayChips[firsSelectSectorIndex].length - 1 ].selected = false;
         this._chipsOnTheLeft=0;
         this._chipsOnTheRight=0;
-        this.selectChipColor = '';
-        this.countClick = 0;
+        this._selectChipColor = '';
+        this._countClick = 0;
         // console.log('cелектЧипВайт  ' + this.selectChipColor);
 
     }
 
     private sectorClick(data: InteractionData): void {
-        if (this.countClick == 0) {
-            this.countClick++;
+        if (this._countClick == 0) {
+            this._countClick++;
             this.sound.playSoundClickChip();
-            this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
-            this.selectChip(this.firsSelectSectorIndex);
+            this._firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
+            this.selectChip(this._firsSelectSectorIndex);
             this.deactivationAllSectors();
-            this.arraySectors[this.firsSelectSectorIndex].interactiveOn();
+            this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
             // console.log('Выбранный сектор  ' + this.firsSelectSectorIndex );
             // console.log('cелектЧипВайт  ' + this.selectChipColor);
             // console.log('cелектЧипВайт через гет '+this.arrayChips[this.firsSelectSectorIndex][0].color);
@@ -366,19 +362,19 @@ export class Board extends Container2d {
             // console.log('пока ол хом '+this.pokaAllHome());
             // console.log('Чип он ве лефт '+ this._chipsOnTheLeft);
             // console.log('Чип он ве райт '+ this._chipsOnTheRight);
-            this.highlightSector(this.firsSelectSectorIndex);
+            this.highlightSector(this._firsSelectSectorIndex);
         } else
-            if (this.countClick == 1) {
-            this.secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
+            if (this._countClick == 1) {
+            this._secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
             // console.log('сектор второй '+ this.secondSelectSectorIndex);
-            if(this.firsSelectSectorIndex == this.secondSelectSectorIndex) {
-                this.deselectChip(this.firsSelectSectorIndex);
+            if(this._firsSelectSectorIndex == this._secondSelectSectorIndex) {
+                this.deselectChip(this._firsSelectSectorIndex);
             } else{
 
                 this.emit(Board.EVENT_MOVE_CHIP, {
                     CLASS_NAME: 'MoveChip',
-                    from: this.firsSelectSectorIndex,
-                    to: this.secondSelectSectorIndex
+                    from: this._firsSelectSectorIndex,
+                    to: this._secondSelectSectorIndex
                 });
 
             }
@@ -388,12 +384,12 @@ export class Board extends Container2d {
     private selectChip(selectSectorIndex:number):void {
 
         if(this.arrayChips[selectSectorIndex].length!=0){
-            if (this.countClick == 1) {
+            if (this._countClick == 1) {
                 this.arrayChips[selectSectorIndex][this.arrayChips[selectSectorIndex].length - 1 ].selected = true;
                 if(this.arrayChips[selectSectorIndex][this.arrayChips[selectSectorIndex].length - 1 ]._color == 'white'){
-                    this.selectChipColor = 'white';
+                    this._selectChipColor = 'white';
                 }else {
-                    this.selectChipColor = 'black';
+                    this._selectChipColor = 'black';
                 }
             }
         }
@@ -410,9 +406,9 @@ export class Board extends Container2d {
         }
 
         if(this.arrayPositionChip[sectorIndex].y == 618){
-            y = this.arrayPositionChip[sectorIndex].y - this.OFFSET * chipIndex;
+            y = this.arrayPositionChip[sectorIndex].y - this._OFFSET * chipIndex;
         }else {
-            y = this.arrayPositionChip[sectorIndex].y + this.OFFSET * chipIndex;
+            y = this.arrayPositionChip[sectorIndex].y + this._OFFSET * chipIndex;
         }
         return new Point(x,y);
     }
@@ -441,8 +437,6 @@ export class Board extends Container2d {
     }
 
     public setDice(first:number,second:number){
-        this.metaDice1 = this.metamorphose(first);
-        this.metaDice2 = this.metamorphose(second);
         this._activeDices = [];
         if (first == second)
         {
@@ -484,14 +478,14 @@ export class Board extends Container2d {
             switch (opponentChip.color)
             {
                 case Chip.COLOR_WHITE:
-                    this.arrayChips[this.sectorJailWhite].push(opponentChip);
-                    positionJail_X = this.getChipPosition(this.sectorJailWhite,this.arrayChips[this.sectorJailWhite].length).x;
-                    positionJail_Y = this.getChipPosition(this.sectorJailWhite,this.arrayChips[this.sectorJailWhite].length).y;
+                    this.arrayChips[this._sectorJailWhite].push(opponentChip);
+                    positionJail_X = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).x;
+                    positionJail_Y = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).y;
                     break;
                 case Chip.COLOR_BLACK:
-                    this.arrayChips[this.sectorJailBlack].push(opponentChip);
-                    positionJail_X = this.getChipPosition(this.sectorJailBlack,this.arrayChips[this.sectorJailBlack].length).x;
-                    positionJail_Y = this.getChipPosition(this.sectorJailBlack,this.arrayChips[this.sectorJailBlack].length).y;
+                    this.arrayChips[this._sectorJailBlack].push(opponentChip);
+                    positionJail_X = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).x;
+                    positionJail_Y = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).y;
             }
             this.arrayChips[newPosition].pop();
             this.animationMoveChip(opponentChip,positionJail_X,positionJail_Y);
@@ -500,7 +494,7 @@ export class Board extends Container2d {
             this.animationMoveChip(oldChip,newPositionX,newPositionY);
             this.arrayChips[newPosition].push(oldChip);
             this.calculateMoves(newPosition,oldPosition);
-            this.countClick = 0;
+            this._countClick = 0;
         }
         else{
 
@@ -511,7 +505,7 @@ export class Board extends Container2d {
             this.animationMoveChip(oldChip,newPositionX,newPositionY);
             this.arrayChips[newPosition].push(oldChip);
             this.calculateMoves(newPosition,oldPosition);
-            this.countClick = 0;
+            this._countClick = 0;
         }
         this.offHighLightSectors();  //отключаю подсветку
         this.turnDependsOfTheColor();
@@ -519,7 +513,7 @@ export class Board extends Container2d {
     }
 
     private highlightSector(sectorIndex: number) {
-        if (this.selectChipColor == 'white')
+        if (this._selectChipColor == 'white')
         {
             this._activeDices.forEach(function (element)
             {
@@ -549,7 +543,7 @@ export class Board extends Container2d {
 
         if(this.arrayChips[way].length!=0)
         {
-            if(this.arrayChips[way][0].color == this.selectChipColor)
+            if(this.arrayChips[way][0].color == this._selectChipColor)
             {
                 this.arraySectors[way].highlightMove();
             }
@@ -707,10 +701,10 @@ export class Board extends Container2d {
         currentMove = Math.abs(newPosition - oldPosition);
         switch (newPosition){
             case this._exitBlack: newPosition = 0;
-            currentMove = this.firsSelectSectorIndex;
+            currentMove = this._firsSelectSectorIndex;
             break;
             case this._exitWhite: newPosition = 25;
-            currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+            currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
             break;
         }
         this._activeMoves -= currentMove;
