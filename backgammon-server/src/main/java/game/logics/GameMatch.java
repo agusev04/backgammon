@@ -39,6 +39,9 @@ public class GameMatch {
         return table;
     }
 
+    public void setTable(GameBoard table) {
+        this.table = table;
+    }
 
     public int throwDice(Player player, Integer cubeValue) throws GameError {
         if (getActivePlayer() == player) {
@@ -67,7 +70,6 @@ public class GameMatch {
         } else throw UNABLE_TURN;
     }
 
-
     public Change changeTurn() { //метод передачи хода
         if (countMove == 0) {
             activePlayerCondition = waiting_throw_dice;
@@ -75,7 +77,6 @@ public class GameMatch {
         }
         return new StateChange(this);
     }
-
 
     public Change moveChip(Player player, MoveAction move) throws GameError {
 
@@ -95,7 +96,6 @@ public class GameMatch {
                         throw UNABLE_MOVE;
                     }
                 }
-
                 int to;
                 if (player.getColor() == BLACK) {
                     //TODO (IvchenkoAlexandr) Сам же придумал WHITE_DIRECTION и BLACK_DIRECTION, так чего не пользуешься? (РЕШИЛ)
@@ -109,7 +109,18 @@ public class GameMatch {
                             ((move.cubeValue == (currentCubeValue % 10)) && move.cubeValue != 0)) {
                         change = table.moveChip(move.from, to, player.color); //добавлено 03,12,17
                         countMove--;
-                    } else throw UNABLE_MOVE;
+                    } else if (((move.cubeValue < (currentCubeValue / 10)) && move.cubeValue != 0) || ((move.cubeValue < (currentCubeValue % 10)) && move.cubeValue != 0)) {
+                        if(table.checkHome(player.getColor())==0){
+                            change = table.moveChip(move.from, to, player.color); //добавлено 03,12,17
+                            countMove--;
+                        } else{
+                            throw UNABLE_MOVE;
+                        }
+                    }else{
+                        throw UNABLE_MOVE;
+                    }
+
+
 
                     if (table.isEnd(player.getColor())) {
                         change = new Final(player.getColor(), player.getName());
@@ -154,10 +165,6 @@ public class GameMatch {
         return blackPlayer;
     }
 
-    public void setTable(GameBoard table) {
-        this.table = table;
-    }
-
     public Player getOtherPlayer(Player player) {
         Player player1 = null;
         if (player == whitePlayer) {
@@ -172,14 +179,28 @@ public class GameMatch {
     public ArrayList<Move> getPossiblePositions(char color, int cubeValue) throws GameError {
         if (countMove != 0) {
 
-            if (currentCubeValue / 10 == currentCubeValue % 10) {
+            int cube1 = currentCubeValue / 10;
+            int cube2 = currentCubeValue % 10;
 
-            } else if (currentCubeValue / 10 == cubeValue) {
+            if (cube1 == cube2) {
+                cubeValue = cube1;
+            } else if (cube1 == cubeValue) {
                 currentCubeValue -= cubeValue * 10;
                 cubeValue = currentCubeValue;
-            } else if (currentCubeValue % 10 == cubeValue) {
+            } else if (cube2 == cubeValue) {
                 currentCubeValue -= cubeValue;
-                cubeValue = currentCubeValue / 10;
+                cubeValue = cube1;
+            }
+            if ((cubeValue < cube1) || (cubeValue < cube2)) {
+                if (cube1 < cube2) {
+                    currentCubeValue = cube1;
+                    cubeValue = currentCubeValue;
+                } else if (cube1 > cube2) {
+                    currentCubeValue = cube2;
+                    cubeValue = currentCubeValue;
+                } else if (cube1 == cube2) {
+                    cubeValue = cube1;
+                }
             }
         } else {
             return null;

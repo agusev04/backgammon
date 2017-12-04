@@ -9,8 +9,9 @@ public class Move extends Response implements Change {
     public int to;
 
     public Move(int from, int to) {
-        this.from = from;
         this.to = to;
+        this.from = from;
+
 
     }
 

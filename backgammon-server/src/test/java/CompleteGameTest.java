@@ -624,6 +624,25 @@ public class CompleteGameTest extends AbstractTest {
 
     }
 
+    public void testFinal() throws EncodeException {
+        enter(WHITE, "root");
+        enter(BLACK, "myName");
+        GameMatch gameMatch1 = getGameMatch(WHITE);
+
+        AbstractMessage response = throwCube(WHITE, 21);
+
+        checkPossibleMoves(response,
+                new Move(22, 24),
+                new Move(23, 25),
+                new Move(22, 23),
+                new Move(23, 24),
+
+                new Move(24, 25));
+
+
+
+    }
+
     private GameMatch startSimpleMatch() throws EncodeException {
         enter(WHITE, "user1name");
         enter(BLACK, "user2name");
