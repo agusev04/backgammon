@@ -37,7 +37,7 @@ export class Board extends Container2d {
     private _activeDices:number[];
     private _activColor:number;
     private _container:Container2d;
-    private currentMove:number;
+    private _currentMove:number;
     // public arrayChips: any[] = [
     //     [],
     //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
@@ -334,8 +334,6 @@ export class Board extends Container2d {
         this._chipsOnTheRight=0;
         this._selectChipColor = '';
         this._countClick = 0;
-        // console.log('cелектЧипВайт  ' + this.selectChipColor);
-
     }
 
     private sectorClick(data: InteractionData): void {
@@ -346,13 +344,7 @@ export class Board extends Container2d {
             this.selectChip(this._firsSelectSectorIndex);
             this.deactivationAllSectors();
             this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
-            // console.log('Выбранный сектор  ' + this.firsSelectSectorIndex );
-            // console.log('cелектЧипВайт  ' + this.selectChipColor);
-            // console.log('cелектЧипВайт через гет '+this.arrayChips[this.firsSelectSectorIndex][0].color);
             this.pokaAllHome();
-            // console.log('пока ол хом '+this.pokaAllHome());
-            // console.log('Чип он ве лефт '+ this._chipsOnTheLeft);
-            // console.log('Чип он ве райт '+ this._chipsOnTheRight);
             this.highlightSector(this._firsSelectSectorIndex);
         } else
             if (this._countClick == 1) {
@@ -467,50 +459,50 @@ export class Board extends Container2d {
 
     public moveChip(oldPosition:number,newPosition:number) {
 
-        if( this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].color != this.arrayChips[newPosition][0].color)
-        {
-            let positionJail_X:number;
-            let positionJail_Y:number;
+        // if( this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].color != this.arrayChips[newPosition][0].color)
+        // {
+        //     let positionJail_X:number;
+        //     let positionJail_Y:number;
+        //
+        //     let oldChip:Chip = this.arrayChips[oldPosition].pop();
+        //     this._container.addChild(oldChip);
+        //
+        //     let opponentChip:Chip = this.arrayChips[newPosition][0];
+        //     this._container.addChild(opponentChip);
+        //
+        //     switch (opponentChip.color)
+        //     {
+        //         case Chip.COLOR_WHITE:
+        //             this.arrayChips[this._sectorJailWhite].push(opponentChip);
+        //             positionJail_X = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).x;
+        //             positionJail_Y = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).y;
+        //             break;
+        //         case Chip.COLOR_BLACK:
+        //             this.arrayChips[this._sectorJailBlack].push(opponentChip);
+        //             positionJail_X = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).x;
+        //             positionJail_Y = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).y;
+        //     }
+        //     this.arrayChips[newPosition].pop();
+        //     this.animationMoveChip(opponentChip,positionJail_X,positionJail_Y);
+        //     let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
+        //     let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
+        //     this.animationMoveChip(oldChip,newPositionX,newPositionY);
+        //     this.arrayChips[newPosition].push(oldChip);
+        //     this.calculateMoves(newPosition,oldPosition);
+        //     this._countClick = 0;
+        // }
+        // else{
 
             let oldChip:Chip = this.arrayChips[oldPosition].pop();
             this._container.addChild(oldChip);
-
-            let opponentChip:Chip = this.arrayChips[newPosition][0];
-            this._container.addChild(opponentChip);
-
-            switch (opponentChip.color)
-            {
-                case Chip.COLOR_WHITE:
-                    this.arrayChips[this._sectorJailWhite].push(opponentChip);
-                    positionJail_X = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).x;
-                    positionJail_Y = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).y;
-                    break;
-                case Chip.COLOR_BLACK:
-                    this.arrayChips[this._sectorJailBlack].push(opponentChip);
-                    positionJail_X = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).x;
-                    positionJail_Y = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).y;
-            }
-            this.arrayChips[newPosition].pop();
-            this.animationMoveChip(opponentChip,positionJail_X,positionJail_Y);
             let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
             let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
             this.animationMoveChip(oldChip,newPositionX,newPositionY);
             this.arrayChips[newPosition].push(oldChip);
             this.calculateMoves(newPosition,oldPosition);
             this._countClick = 0;
-        }
-        else{
-
-            let oldChip:Chip = this.arrayChips[oldPosition].pop();
-            this._container.addChild(oldChip);
-            let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
-            let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
-            this.animationMoveChip(oldChip,newPositionX,newPositionY);
-            this.arrayChips[newPosition].push(oldChip);
-            this.calculateMoves(newPosition,oldPosition);
-            this._countClick = 0;
-        }
-        this.offHighLightSectors();  //отключаю подсветку
+        // }
+        this.offHighLightSectors();
         this.turnDependsOfTheColor();
         this.endOfTurn();
     }
@@ -618,7 +610,6 @@ export class Board extends Container2d {
             this._maxDice = getMaxOfArray(DiceArray);
         }
 
-
         if(this._activColor==0){
 
             let maxDice1=this._maxDice;
@@ -629,17 +620,12 @@ export class Board extends Container2d {
                     this._chipsOnTheLeft = this.metamorphose(maxDice2);
                 }
             }
-            // console.log('белые лефт  '+ this._chipsOnTheLeft );
-
             for(maxDice1;maxDice1>=1;maxDice1--){
                 if(this.arrayChips[this.metamorphose(maxDice1)].length!=0){
                     this._chipsOnTheRight= this.metamorphose(maxDice1);
                     break;
                 }
             }
-            // console.log('белые райт  '+ this._chipsOnTheRight);
-
-
         }else  {
             let maxDice1=this._maxDice;
             let maxDice2=this._maxDice;
@@ -650,13 +636,11 @@ export class Board extends Container2d {
                         break;
                     }
                 }
-                // console.log('черные райт  '+ this._chipsOnTheRight);
                 for(maxDice1;maxDice1<=6;maxDice1++){
                     if(this.arrayChips[maxDice1].length!=0) {
                         this._chipsOnTheLeft=maxDice1;
                     }
                 }
-                // console.log('черные лефт  '+ this._chipsOnTheLeft);
             }
         }
 
@@ -700,22 +684,22 @@ export class Board extends Container2d {
     }
 
     private calculateMoves(newPosition:number,oldPosition:number){
-        this.currentMove = Math.abs(newPosition - oldPosition);
+        this._currentMove = Math.abs(newPosition - oldPosition);
         switch (newPosition){
             case this._exitBlack: newPosition = 0;
-            this.currentMove = this._firsSelectSectorIndex;
+            this._currentMove = this._firsSelectSectorIndex;
             break;
             case this._exitWhite: newPosition = 25;
-            this.currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
+            this._currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
             break;
         }
-        this._activeMoves -= this.currentMove;
-        this._activeDices.splice(this._activeDices.indexOf(this.currentMove), 1);
+        this._activeMoves -= this._currentMove;
+        this._activeDices.splice(this._activeDices.indexOf(this._currentMove), 1);
         this._activeDices = this._activeDices.filter(function(number) {
             return number <= this._activeMoves;
         }, this);
         this._isActive = this._activeMoves != 0;
-        console.log('Сделан ход: '+this.currentMove);
+        console.log('Сделан ход: '+this._currentMove);
         console.log('Кол-во возможных ходов: '+this._activeMoves );
         console.log('Активные кубики: '+this._activeDices);
 
