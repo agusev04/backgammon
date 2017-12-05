@@ -66,41 +66,40 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [],[],[]
             // ];
+            // private arrayChips: any[] = [
+            //     [],
+            //     [],[],[],[],[],
+            //     [],[],[],[],[],
+            //     [],[],[],[],[],
+            //     [],[],[],[],[],
+            //     [],[],[],[],
+            //     [],
+            //     [],[]
+            // ];
+            //
             _this.arrayChips = [
                 [],
-                [], [], [], [], [],
-                [], [], [], [], [],
-                [], [], [], [], [],
-                [], [], [], [], [],
-                [], [], [], [],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [], [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
                 [],
-                [], []
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [],
+                [],
+                [], [], [],
+                [],
+                [],
+                [], [], [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
+                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE),],
+                [], [], []
             ];
-            //
-            // public arrayChips: any[] = [
-            //     [],
-            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
-            //
-            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-            //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-            //     [],
-            //     [ new Chip(Chip.COLOR_BLACK)],
-            //     [],
-            //     [],
-            //     [], [], [],
-            //     [],
-            //     [],
-            //     [], [], [],
-            //     [],
-            //     [],
-            //     [],
-            //     [],
-            //     [],
-            //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
-            //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
-            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
-            //     [],[],[]
-            // ];
             // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
             _this.arraySectors = [new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(),
                 new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(),

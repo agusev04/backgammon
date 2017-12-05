@@ -40,18 +40,19 @@ define(["require", "exports"], function (require, exports) {
                     new Texture(BaseTexture.fromImage('assets/Dice/5 - 2.png')),
                     new Texture(BaseTexture.fromImage('assets/Dice/6 - 2.png')),
                 ]];
+            // 77 на 72
+            // 72 на 70
             this._animation = [[], []];
-            for (var i = 0; i < 6; i++) {
-                this._animation[1].push(new PIXI.Rectangle(64 * i, 0, 64, 60));
+            for (var i = 0; i < 18; i++) {
+                this._animation[0].push(new PIXI.Rectangle(77 * i, 0, 77, 72));
             }
-            for (var i = 0; i < 6; i++) {
-                this._animation[0].push(new PIXI.Rectangle(64 * i, 60, 64, 60));
+            for (var i = 0; i < 18; i++) {
+                this._animation[1].push(new PIXI.Rectangle(71 * i, 0, 71, 70));
             }
-            this._baseTexture = BaseTexture.fromImage('assets/newDice.png');
             this._dice1.visible = false;
             this._dice2.visible = false;
-            this._dice1.texture = new Texture(this._baseTexture);
-            this._dice2.texture = new Texture(this._baseTexture);
+            this._dice1.texture = new Texture(BaseTexture.fromImage('assets/dice_1.png'));
+            this._dice2.texture = new Texture(BaseTexture.fromImage('assets/dice_2.png'));
             this._dice1.anchor.set(0.5);
             this._dice2.anchor.set(0.5);
             this._dice1.scale.set(0.7);
@@ -62,31 +63,30 @@ define(["require", "exports"], function (require, exports) {
             this.addChild(this._dice2);
         };
         Dices.prototype.animate = function (val1, val2) {
-            //
-            // this._dice1.texture = new Texture(this._baseTexture);
-            // this._dice2.texture = new Texture(this._baseTexture);
-            // this._dice1.visible = true;
-            // this._dice2.visible = true;
-            // for (let i=0; i < 6;i++)
-            // {
-            //     setTimeout(function () {
-            //         this._dice1.texture.frame = this._animation[0][i];
-            //         this._dice2.texture.frame = this._animation[1][i];
-            //     }.bind(this), i * 100);
-            // }
-            // setTimeout(function () {
-            //     this._dice1.texture.frame = new PIXI.Rectangle(0,0,77,72);
-            //     this._dice2.texture.frame = new PIXI.Rectangle(0,0,71,70);
-            //     this._dice1.texture = this._diceFinal[0][val1-1];
-            //     this._dice2.texture = this._diceFinal[1][val2-1];
-            // }.bind(this), 600);
+            console.log('Animate DICE');
+            this._dice1.texture = new Texture(BaseTexture.fromImage('assets/dice_1.png'));
+            this._dice2.texture = new Texture(BaseTexture.fromImage('assets/dice_2.png'));
             this._dice1.visible = true;
             this._dice2.visible = true;
-            this._dice1.texture = this._diceFinal[0][val1 - 1];
-            this._dice2.texture = this._diceFinal[1][val2 - 1];
+            var _loop_1 = function (i) {
+                setTimeout(function () {
+                    this._dice1.texture.frame = this._animation[0][i];
+                    this._dice2.texture.frame = this._animation[1][i];
+                }.bind(this_1), i * 80);
+            };
+            var this_1 = this;
+            for (var i = 0; i < 18; i++) {
+                _loop_1(i);
+            }
+            setTimeout(function () {
+                this._dice1.texture = this._diceFinal[0][val1 - 1];
+                this._dice2.texture = this._diceFinal[1][val2 - 1];
+                this._dice1.texture.frame = new PIXI.Rectangle(0, 0, 77, 72);
+                this._dice2.texture.frame = new PIXI.Rectangle(0, 0, 71, 70);
+            }.bind(this), 1440);
             setTimeout(function () {
                 this.emit('SuccessfulThrow', { first: val1, second: val2 });
-            }.bind(this), 100);
+            }.bind(this), 1500);
         };
         Dices.prototype.throwDice = function (val1, val2) {
             this._val1 = val1;
