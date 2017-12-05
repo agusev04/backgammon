@@ -12,7 +12,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var Sprite2d = PIXI.projection.Sprite2d;
-    var Sector = /** @class */ (function (_super) {
+    var Sector = (function (_super) {
         __extends(Sector, _super);
         function Sector() {
             var _this = _super.call(this, Sector.TEXTURE_SECTOR_RED) || this;

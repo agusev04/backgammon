@@ -12,7 +12,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var EventEmitter = PIXI.utils.EventEmitter;
-    var Network = /** @class */ (function (_super) {
+    var Network = (function (_super) {
         __extends(Network, _super);
         // Init >>--------------------------------------------------------------<<<<
         /**

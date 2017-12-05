@@ -48,6 +48,7 @@ export class UserBar extends Container
 
     public setUserBar(color: string, opponent: string)
     {
+        console.log('User Bar updated');
         if (color == 'w')
         {
             this._whiteName.text = 'You';

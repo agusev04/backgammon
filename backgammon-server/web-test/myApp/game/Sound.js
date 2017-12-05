@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Sound = /** @class */ (function () {
+    var Sound = (function () {
         function Sound() {
             this.soundClickChip = '1';
             this.soundMoveChip = '2';
