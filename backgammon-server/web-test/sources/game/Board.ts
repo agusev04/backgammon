@@ -38,6 +38,8 @@ export class Board extends Container2d {
     private _activColor:number;
     private _container:Container2d;
     private _currentMove:number;
+    private _maxCube:number;
+    private _minCube:number;
     // public arrayChips: any[] = [
     //     [],
     //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
@@ -359,14 +361,33 @@ export class Board extends Container2d {
                 switch (this._secondSelectSectorIndex)
                 {
                     case this._exitBlack: this._secondSelectSectorIndex = 0;
-                        currentMove = this._firsSelectSectorIndex;
+                        if(this._firsSelectSectorIndex!=this._maxCube&&this._firsSelectSectorIndex>this._minCube){
+                            currentMove = this._maxCube;
+                        }else{
+                            currentMove =  this._firsSelectSectorIndex;
+                        }
+
                         break;
                     case this._exitWhite: this._secondSelectSectorIndex = 25;
-                        currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
+                        if(this.metamorphoseForWhite(this._firsSelectSectorIndex)!=this._maxCube&&this.metamorphoseForWhite(this._firsSelectSectorIndex)>this._minCube){
+                            currentMove = this._maxCube;
+                        }else {
+                            currentMove=this.metamorphoseForWhite(this._firsSelectSectorIndex);
+                        }
+
                         break;
                 }
+                    this._activeMoves -= currentMove;
+                    this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                    this._activeDices = this._activeDices.filter(function(number) {
+                        return number <= this._activeMoves;
+                    }, this);
 
+                    this._isActive = this._activeMoves != 0;
 
+                console.log('Сделан ход: '+currentMove);
+                console.log('Кол-во возможных ходов: ', this._activeMoves, );
+                console.log('Активные кубики: ', this._activeDices);
                 this.emit(Board.EVENT_MOVE_CHIP, {
                     CLASS_NAME: 'MoveChip',
                     from: this._firsSelectSectorIndex,
@@ -451,7 +472,19 @@ export class Board extends Container2d {
             this._activeDices.push(second);
             // this._activeDices.push(first + second);
             this._activeMoves = first + second;
+
         }
+
+        this._maxCube = getMaxOfArray(this._activeDices);
+        this._minCube = getMinOfArray(this._activeDices);
+
+        function getMaxOfArray(numArray:any):number {
+            return Math.max.apply(null, numArray);
+        }
+        function getMinOfArray(numArray:any):number {
+            return Math.min.apply(null, numArray);
+        }
+        console.log('Мax and Min  '+ this._maxCube +', '+this._minCube );
         console.log('Кол-во возможных ходов: ', this._activeMoves, );
         console.log('Активные кубики: ', this._activeDices);
         this._isActive = this._activeMoves != 0;
@@ -499,9 +532,10 @@ export class Board extends Container2d {
             let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
             this.animationMoveChip(oldChip,newPositionX,newPositionY);
             this.arrayChips[newPosition].push(oldChip);
-            this.calculateMoves(newPosition,oldPosition);
+            // this.calculateMoves(newPosition,oldPosition);
             this._countClick = 0;
         // }
+
         this.offHighLightSectors();
         this.turnDependsOfTheColor();
         this.endOfTurn();
@@ -683,25 +717,25 @@ export class Board extends Container2d {
         return metX;
     }
 
-    private calculateMoves(newPosition:number,oldPosition:number){
-        this._currentMove = Math.abs(newPosition - oldPosition);
-        switch (newPosition){
-            case this._exitBlack: newPosition = 0;
-            this._currentMove = this._firsSelectSectorIndex;
-            break;
-            case this._exitWhite: newPosition = 25;
-            this._currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
-            break;
-        }
-        this._activeMoves -= this._currentMove;
-        this._activeDices.splice(this._activeDices.indexOf(this._currentMove), 1);
-        this._activeDices = this._activeDices.filter(function(number) {
-            return number <= this._activeMoves;
-        }, this);
-        this._isActive = this._activeMoves != 0;
-        console.log('Сделан ход: '+this._currentMove);
-        console.log('Кол-во возможных ходов: '+this._activeMoves );
-        console.log('Активные кубики: '+this._activeDices);
-
-    }
+    // private calculateMoves(newPosition:number,oldPosition:number){
+    //     this._currentMove = Math.abs(newPosition - oldPosition);
+    //     switch (newPosition){
+    //         case this._exitBlack: newPosition = 0;
+    //         this._currentMove = this._firsSelectSectorIndex;
+    //         break;
+    //         case this._exitWhite: newPosition = 25;
+    //         this._currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
+    //         break;
+    //     }
+    //     this._activeMoves -= this._currentMove;
+    //     this._activeDices.splice(this._activeDices.indexOf(this._currentMove), 1);
+    //     this._activeDices = this._activeDices.filter(function(number) {
+    //         return number <= this._activeMoves;
+    //     }, this);
+    //     this._isActive = this._activeMoves != 0;
+    //     console.log('Сделан ход: '+this._currentMove);
+    //     console.log('Кол-во возможных ходов: '+this._activeMoves );
+    //     console.log('Активные кубики: '+this._activeDices);
+    //
+    // }
 }
