@@ -13,13 +13,11 @@ import java.io.File;
 public class Launcher {
     public static void main(String[] args) throws Exception {
 
-        System.setProperty("log4j.configuration", new File(".", File.separatorChar+"log4j.properties").toURL().toString());
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        Logger loger = Logger.getLogger(Launcher.class);
-        System.out.println("************************"+contextClassLoader.getResource("."));
+//        System.setProperty("log4j.configuration", new File(".", File.separatorChar+"log4j.properties").toURL().toString());
+//        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+//        Logger loger = Logger.getLogger(Launcher.class);
+//        System.out.println("************************"+contextClassLoader.getResource("."));
         System.out.println("Launcher: Server started");
-        loger.debug("йух");
-        loger.fatal("где файл");
         String webappDirLocation = "web-test";
         Tomcat tomcat = new Tomcat();
         tomcat.addWebapp("", new File(webappDirLocation).getAbsolutePath());
