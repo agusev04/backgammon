@@ -278,7 +278,6 @@ public class GameMatch {
                 if ((color == cells[from].getColor())) {
                     int to = from + direction * cubeValue;
                     tryAdd(to, color, cells, endGameFlag, arrayList, from);
-
                 }
             }
             addExceptionMoves(color, arrayList, direction, endGameFlag, cells, cubeValue);
@@ -410,10 +409,10 @@ public class GameMatch {
     private boolean isCorrectTurn(int to, char color, Cell[] cells, int endGameFlag) { //TODO <=
         boolean result = false;
 
-        if (((to) <= BLACK_BAR + endGameFlag) &&
-                ((to >= WHITE_BAR - endGameFlag))) {
+        if (((to) <= BLACK_BAR + endGameFlag) && ((to >= WHITE_BAR - endGameFlag))) {
             result = isCorrectTurn(color, cells[to]);
-        } else if (((to == BLACK_BAR) || (to == WHITE_BAR)) && (endGameFlag == 0)) {
+        }
+        if (((to == BLACK_BAR) || (to == WHITE_BAR)) && (endGameFlag == 0)) {
             result = true;
         }
         return result;

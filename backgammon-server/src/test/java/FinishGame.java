@@ -531,12 +531,10 @@ public class FinishGame extends AbstractTest {
 
         moveChip(WHITE, 24, 3);
 
-//        moveChip(WHITE, 24, 2);
-// TODO Если убрать комментирование строчки выше получим => Полный GAME OVER.
+        moveChip(WHITE, 24, 2);
 
-
-//        assertEquals(15, gameMatch.getTable().getWhiteCounter());
-//        assertEquals(11, gameMatch.getTable().getBlackCounter());
+        assertEquals(15, gameMatch.getTable().getWhiteCounter());
+        assertEquals(11, gameMatch.getTable().getBlackCounter());
     }
 
 //    public void testRepeatError() throws Exception, GameError {

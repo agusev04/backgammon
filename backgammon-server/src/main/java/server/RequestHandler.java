@@ -43,12 +43,12 @@ public class RequestHandler {
             проверака на финальный ход. возможно следует сделать вызов удаления игроков и матча из места
             где создается FinaleMessage, чтобы убрать лишнюю проверку сообщения (isInstance много жрет)
              */
-            if (PackageMessage.class.isInstance(message)) {
-                // можно заменить на if(packageMessage.getChange("Final") != null)
-                if (checkFinal(((PackageMessage) message).getChangeArrayList())) {
-                    deletePlayer(thisPlayer.getSession()); //удаление происходит после отправки финала второму игроку.
-                }
-            }
+//            if (PackageMessage.class.isInstance(message)) {
+//                // можно заменить на if(packageMessage.getChange("Final") != null)
+//                if (checkFinal(((PackageMessage) message).getChangeArrayList())) {
+//                    deletePlayer(thisPlayer.getSession()); //удаление происходит после отправки финала второму игроку.
+//                } TODO Закомменчено до востребования или корректной доработки
+//            }
 
         }
         return message;
