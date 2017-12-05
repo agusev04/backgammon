@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import game.logics.GameError;
+import org.apache.log4j.Logger;
 import server.transport.*;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.HashMap;
  * наследника{@link AbstractMessage}
  */
 public class MessageFactory {
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     private static MessageFactory messageFactory = new MessageFactory();
     HashMap<String, Class> map = new HashMap<>();
@@ -37,6 +39,7 @@ public class MessageFactory {
         try {
             action = (Action) gson.fromJson(jsonObject, thisClass);
         } catch (Exception ex) {
+            logger.error(ex);
             action = new ErrorMessage(GameError.UNKNOWN_REQUEST);
         }
 

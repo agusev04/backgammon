@@ -3,6 +3,7 @@ package server.transport;
 import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
+import org.apache.log4j.Logger;
 
 /**
  * Класс {@link ThrowCube} имплементирует {@link AbstractMessage}, реализует запрос от клиента
@@ -13,7 +14,8 @@ public class ThrowCube extends Action {
 
     @Override
     public AbstractMessage apply(Player player) {
-        System.out.println("ThrowCube: " + player.getName() + " is throwing dices");
+        final Logger logger = Logger.getLogger(this.getClass());
+        logger.info(player.getName() + " is throwing dices");
         AbstractMessage message;
         try {
             GameMatch gameMatch = player.getGameMatch();
@@ -30,14 +32,15 @@ public class ThrowCube extends Action {
             } else if (player == gameMatch.getWhitePlayer()) {
                 gameMatch.getBlackPlayer().sendMessage(message);
             } else {
-                System.out.println("ThrowCube: пользователь не найден");
+                logger.error("пользователь не найден");
             }
             packageMessage.addChange(moves);
             message = packageMessage;
         } catch (GameError gameErrors) {
+            logger.error(gameErrors);
             message = new ErrorMessage(gameErrors);
         }
-        System.out.println("ThrowCube: SERVER SENT TO " + player.getName() + ": " + message);
+        logger.info("SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 

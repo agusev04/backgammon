@@ -1,6 +1,7 @@
 package server;
 
 import game.logics.GameError;
+import org.apache.log4j.Logger;
 import server.transport.AbstractMessage;
 import server.transport.Action;
 import server.transport.ErrorMessage;
@@ -16,6 +17,7 @@ import java.io.IOException;
  */
 @ServerEndpoint(value = "/ws", encoders = {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public class WsServer {
+    private final Logger logger = Logger.getLogger(this.getClass());
     private static final RequestHandler REQUEST_HANDLER = new RequestHandler();
 
     public WsServer() {
@@ -24,29 +26,30 @@ public class WsServer {
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("WsServer: Open Connection " + session.getId());
+        logger.info("Open Connection " + session.getId());
     }
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("WsServer: Close Connection " + session.getId());
+        logger.info("Close Connection " + session.getId());
         REQUEST_HANDLER.deletePlayer(session);
     }
 
     @OnMessage
     public AbstractMessage onMessage(Action pack, Session session) {
+        logger.info(pack.toString());
         return REQUEST_HANDLER.request(pack, session);
     }
 
     @OnError
     public void onError(Throwable e, Session session) {
-        System.out.println("WsServer: .......");
-        e.printStackTrace();
+    //    logger.error(e);
         ErrorMessage errorMessage = new ErrorMessage(GameError.UNKNOWN_REQUEST);
 
         try {
             session.getBasicRemote().sendObject(errorMessage);
         } catch (EncodeException | IOException e1) {
+ //           logger.error(e1);
             e1.printStackTrace();
         }
     }

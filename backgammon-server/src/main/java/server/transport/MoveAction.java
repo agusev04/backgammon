@@ -3,6 +3,7 @@ package server.transport;
 import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -26,8 +27,10 @@ public class MoveAction extends Action {
 
     @Override
     public AbstractMessage apply(Player player) {
+        final Logger logger = Logger.getLogger(this.getClass());
+
         AbstractMessage message;
-        System.out.println("MoveAction: " + player.getName() + " move chip from " + from + " cubeValue " + cubeValue);
+        logger.info(player.getName() + " move chip from " + from + " cubeValue " + cubeValue);
         Change change;
         try {
             GameMatch gameMatch = player.getGameMatch();
@@ -56,9 +59,10 @@ public class MoveAction extends Action {
             otherPlayer.sendMessage(packageMessageForOpponent);
             message = packageMessage;
         } catch (GameError gameError) {
+            logger.error(gameError);
             message = new ErrorMessage(gameError);
         }
-        System.out.println("MoveAction: SERVER SENT TO " + player.getName() + ": " + message);
+        logger.info("SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 }

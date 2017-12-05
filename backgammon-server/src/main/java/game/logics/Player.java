@@ -1,6 +1,7 @@
 package game.logics;
 
 
+import org.apache.log4j.Logger;
 import server.transport.AbstractMessage;
 
 import javax.websocket.EncodeException;
@@ -14,7 +15,7 @@ public class Player {  //класс игрока
     Session session;
     //TODO (Michael) зачем это поле? если не нужно - убрать !!!!
 
-
+    public final Logger logger = Logger.getLogger(this.getClass());
     public Player(String name, char color) { //конструктор по умолчанию для игрока
     }
 
@@ -69,7 +70,7 @@ public class Player {  //класс игрока
     }
 
     public void sendMessage(AbstractMessage abstractMessage) {
-        System.out.println("Player sendMessage: TO PLAYER " + getName() + ": " + abstractMessage);
+        logger.info("TO INACTIVE PLAYER  " + getName() + ": " + abstractMessage);
         try {
             session.getBasicRemote().sendObject(abstractMessage);
         } catch (IOException | EncodeException e) {

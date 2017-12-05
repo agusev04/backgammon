@@ -3,6 +3,7 @@ package server.transport;
 import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
+import org.apache.log4j.Logger;
 
 public class TestThrowCube extends Action {
     int cubeValue;
@@ -21,11 +22,13 @@ public class TestThrowCube extends Action {
 
     @Override
     public AbstractMessage apply(Player player) {
+        final Logger logger = Logger.getLogger(this.getClass());
+
         AbstractMessage message;
         try {
             GameMatch gameMatch = player.getGameMatch();
             CubeValue cubeValues = new CubeValue(gameMatch.throwDice(player, cubeValue));
-            System.out.println("TestThrowCube: Player " + player.getName() +
+            logger.info("Player " + player.getName() +
                     " ask to calculate possible position for values " + cubeValue / 10 + " and " + cubeValue % 10);
             int cube1 = cubeValues.getCubeValues() / 10;
             int cube2 = cubeValues.getCubeValues() % 10;
@@ -44,9 +47,10 @@ public class TestThrowCube extends Action {
             packageMessage.addChange(moves);
             message = packageMessage;
         } catch (GameError gameErrors) {
+            logger.error(gameErrors);
             message = new ErrorMessage(gameErrors);
         }
-        System.out.println("TestThrowCube: SERVER SENT TO " + player.getName() + ": " + message);
+        logger.info("SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 }

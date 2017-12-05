@@ -29,3 +29,6 @@ jar {
 applicationDistribution.from("web-test/") {
     into "bin/web-test"
 }
+applicationDistribution.from("log4j.properties") {
+    into "bin/"
+}

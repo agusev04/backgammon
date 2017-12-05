@@ -4,6 +4,7 @@ import game.logics.ChipsPositions;
 import game.logics.GameMatch;
 import game.logics.Player;
 import junit.framework.TestCase;
+import server.Launcher;
 import server.transport.*;
 
 import javax.websocket.EncodeException;
@@ -14,11 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractTest extends TestCase {
 
+
     protected TestRequestHandler requestHandler;
     protected Map<String, TestSession> sessions;
 
     @Override
     public void setUp() throws Exception {
+        Launcher.loadLogger();
         requestHandler = new TestRequestHandler();
         sessions = new HashMap<>();
     }

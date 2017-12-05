@@ -3,6 +3,7 @@ package server.transport;
 import game.gameobjects.GameBoard;
 import game.logics.GameError;
 import game.logics.Player;
+import org.apache.log4j.Logger;
 
 import static game.logics.GameError.CANT_REENTER;
 
@@ -28,8 +29,9 @@ public class Enter extends Action {
 
     @Override
     public AbstractMessage apply(Player player) {
+        final Logger logger = Logger.getLogger(this.getClass());
         AbstractMessage message = null;
-        System.out.println("Enter: " + myUserName + " tries to connect");
+        logger.info( myUserName + " tries to connect");
         try {
             if (player.getName() != null) {
                 throw CANT_REENTER;
@@ -53,9 +55,10 @@ public class Enter extends Action {
                 message = packageMessage;
             }
         } catch (GameError gameErrors) {
+            logger.error(gameErrors);
             message = new ErrorMessage(gameErrors);
         }
-        System.out.println("Enter: SERVER SENT TO " + player.getName() + ": " + message);
+        logger.info("SERVER SENT TO " + player.getName() + ": " + message);
         return message;
     }
 

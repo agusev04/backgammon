@@ -1,7 +1,10 @@
 package game.gameobjects;
 
 
+import org.apache.log4j.Logger;
+
 public class Cell {
+    public final Logger logger = Logger.getLogger(this.getClass());
     public static final char WHITE = 'w';
     public static final char BLACK = 'b';
     public static final char NULL = 'n';
@@ -55,7 +58,7 @@ public class Cell {
     public void putChip(char color) {
         count++;
         if ((this.color != color) && (this.color != NULL)) {
-            System.out.println("Cell: YOU CAN NOT PUT CHIP ON THIS POSITION. YOUR COLOR IS " + color + "BUT COLOR OF CELL IS" + this.color);
+            logger.fatal("Cell: YOU CAN NOT PUT CHIP ON THIS POSITION. YOUR COLOR IS " + color + "BUT COLOR OF CELL IS" + this.color);
         } else {
             this.color = color;
         }
