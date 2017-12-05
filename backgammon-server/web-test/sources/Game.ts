@@ -142,8 +142,8 @@ export class Game extends Container
     {
         console.log('Сообщение из гейма: Sending enter request...');
         this._network.send({
-            CLASS_NAME: 'Enter',
-            myUserName: 'root'
+            CLASS_NAME: 'Enter'
+            // , myUserName: 'root'
         });
         this.loadGame();
     }
@@ -200,26 +200,26 @@ export class Game extends Container
             this._myColor = data.gameState.color;
             this._UserBar.setUserBar(this._myColor, this._opponent);
 
-            // let arrayChips: any[] = [
-            //     [],
-            //     [0,0]
-            //     ,[], [], [], [],
-            //     [1,1,1,1,1],
-            //     [],
-            //     [1,1,1],
-            //     [], [], [],
-            //     [0,0,0,0,0],
-            //     [1,1,1,1,1],
-            //     [], [], [],
-            //     [0,0,0],
-            //     [],
-            //     [0,0,0,0,0],
-            //     [], [], [], [],
-            //     [1,1],
-            //     [],[],[]
-            // ];
-            // this._board.setState(arrayChips);
-            // this._board.drawState();
+            let arrayChips: any[] = [
+                [],
+                [0,0]
+                ,[], [], [], [],
+                [1,1,1,1,1],
+                [],
+                [1,1,1],
+                [], [], [],
+                [0,0,0,0,0],
+                [1,1,1,1,1],
+                [], [], [],
+                [0,0,0],
+                [],
+                [0,0,0,0,0],
+                [], [], [], [],
+                [1,1],
+                [],[],[]
+            ];
+            this._board.setState(arrayChips);
+            this._board.drawState();
 
             if (this._myTurn)
             {
