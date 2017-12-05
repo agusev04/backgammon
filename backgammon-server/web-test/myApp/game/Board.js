@@ -76,7 +76,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                 [],
                 [], []
             ];
-            //
             // public arrayChips: any[] = [
             //     [],
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
@@ -301,14 +300,19 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
         };
         Board.prototype.sectorClick = function (data) {
             if (this._countClick == 0) {
-                this._countClick++;
-                this.sound.playSoundClickChip();
                 this._firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
-                this.selectChip(this._firsSelectSectorIndex);
-                this.deactivationAllSectors();
-                this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
-                this.pokaAllHome();
-                this.highlightSector(this._firsSelectSectorIndex);
+                if (this._firsSelectSectorIndex == this._exitWhite || this._firsSelectSectorIndex == this._exitBlack) {
+                    this.arraySectors[this._firsSelectSectorIndex].interactiveOff();
+                }
+                else {
+                    this._countClick++;
+                    this.sound.playSoundClickChip();
+                    this.selectChip(this._firsSelectSectorIndex);
+                    this.deactivationAllSectors();
+                    this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
+                    this.pokaAllHome();
+                    this.highlightSector(this._firsSelectSectorIndex);
+                }
             }
             else if (this._countClick == 1) {
                 this._secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
