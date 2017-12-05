@@ -15,7 +15,7 @@ define(["require", "exports"], function (require, exports) {
     var Sprite = PIXI.Sprite;
     var Texture = PIXI.Texture;
     var BaseTexture = PIXI.BaseTexture;
-    var Dices = (function (_super) {
+    var Dices = /** @class */ (function (_super) {
         __extends(Dices, _super);
         function Dices() {
             var _this = _super.call(this) || this;

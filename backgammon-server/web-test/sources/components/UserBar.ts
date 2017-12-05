@@ -46,12 +46,15 @@ export class UserBar extends Container
         this.addChild(this._blackName);
     }
 
-    public setUserBar(color: string)
+    public setUserBar(color: string, opponent: string)
     {
         if (color == 'w')
         {
             this._whiteName.text = 'You';
-            this._blackName.text = 'Opponent';
+            if (opponent)
+                this._blackName.text = 'Opponent';
+            else
+                this._blackName.text = 'Waiting...'
         }
         else
         {

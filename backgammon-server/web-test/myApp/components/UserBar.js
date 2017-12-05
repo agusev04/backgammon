@@ -44,10 +44,13 @@ define(["require", "exports", "../Game"], function (require, exports, Game_1) {
             this.addChild(this._whiteName);
             this.addChild(this._blackName);
         };
-        UserBar.prototype.setUserBar = function (color) {
+        UserBar.prototype.setUserBar = function (color, opponent) {
             if (color == 'w') {
                 this._whiteName.text = 'You';
-                this._blackName.text = 'Opponent';
+                if (opponent)
+                    this._blackName.text = 'Opponent';
+                else
+                    this._blackName.text = 'Waiting...';
             }
             else {
                 this._whiteName.text = 'Opponent';

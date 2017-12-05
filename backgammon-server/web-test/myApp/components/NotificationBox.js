@@ -13,7 +13,7 @@ define(["require", "exports", "../Game"], function (require, exports, Game_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     var Container = PIXI.Container;
     var Sprite = PIXI.Sprite;
-    var NotificationBox = (function (_super) {
+    var NotificationBox = /** @class */ (function (_super) {
         __extends(NotificationBox, _super);
         function NotificationBox() {
             var _this = _super.call(this) || this;

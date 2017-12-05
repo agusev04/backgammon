@@ -83,7 +83,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this.removeChild(this._startBtn);
             // this._board.show();
             this.addChild(this._board);
-            this.showMessage('Waiting for\n opponent..', 0, 0);
+            // this.showMessage('Waiting for\n opponent..', 0, 0);
             this.addChild(this._dices);
             this.addChild(this._throwBtn);
             this._throwBtn.hide();
@@ -112,7 +112,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             console.log('Сообщение из гейма: Sending enter request...');
             this._network.send({
                 CLASS_NAME: 'Enter'
-                // myUserName: 'root'
             });
             this.loadGame();
         };
@@ -156,7 +155,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 this._myName = data.gameState.myName;
                 this._myTurn = data.gameState.stateChange.activePlayerColor == this._myColor;
                 this._myColor = data.gameState.color;
-                this._UserBar.setUserBar(this._myColor);
+                this._UserBar.setUserBar(this._myColor, this._opponent);
                 var arrayChips = [
                     [],
                     [0, 0],
@@ -257,6 +256,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 }
                 this.moveDice(this._myTurn);
             }
+            this._UserBar.setUserBar(this._myColor, this._opponent);
             this._UserBar.setActivePlayer(this._myTurn, this._myColor);
         };
         Game.prototype.dataOnError = function (data) {
