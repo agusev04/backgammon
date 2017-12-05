@@ -16,18 +16,15 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
     var Point = PIXI.Point;
     var Sprite2d = PIXI.projection.Sprite2d;
     var Container2d = PIXI.projection.Container2d;
-    //TODO исправить метод для звука
-    //TODO если мы отменим клик с фишки которая в тюрьме можно будет пользоваться любой фишкой
     var Board = (function (_super) {
         __extends(Board, _super);
         function Board() {
             var _this = _super.call(this) || this;
-            _this.OFFSET = 30;
-            _this.countClick = 0;
-            _this.tl = new TimelineLite();
+            _this._OFFSET = 30;
+            _this._countClick = 0;
             _this.sound = new Sound_1.Sound();
-            _this.sectorJailWhite = 0;
-            _this.sectorJailBlack = 25;
+            _this._sectorJailWhite = 0;
+            _this._sectorJailBlack = 25;
             _this._chipsOnTheLeft = 0;
             _this._chipsOnTheRight = 0;
             _this._exitWhite = 26;
@@ -71,22 +68,15 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             // ];
             _this.arrayChips = [
                 [],
-                [],
+                [], [], [], [], [],
+                [], [], [], [], [],
+                [], [], [], [], [],
+                [], [], [], [], [],
                 [], [], [], [],
                 [],
-                [],
-                [],
-                [], [], [],
-                [],
-                [],
-                [], [], [],
-                [],
-                [],
-                [],
-                [], [], [], [],
-                [],
-                [], [], []
+                [], []
             ];
+            //
             // public arrayChips: any[] = [
             //     [],
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
@@ -185,10 +175,10 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             for (var i = 0; i < this.arrayChips.length; i++) {
                 for (var j = 0; j < this.arrayChips[i].length; j++) {
                     if (i >= 1 && i < 13) {
-                        this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x, this.arrayPositionChip[i].y + this.OFFSET * j);
+                        this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x, this.arrayPositionChip[i].y + this._OFFSET * j);
                     }
                     else {
-                        this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x, this.arrayPositionChip[i].y - this.OFFSET * j);
+                        this.arrayChips[i][j].position.set(this.arrayPositionChip[i].x, this.arrayPositionChip[i].y - this._OFFSET * j);
                     }
                 }
             }
@@ -213,9 +203,9 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                     this.arraySectors[i].position.set(this.arrayPositionSector[i].x, this.arrayPositionSector[i].y);
                 }
             }
-            this.arraySectors[this.sectorJailWhite].rotation = -3.14;
-            this.arraySectors[this.sectorJailWhite].position.set(this.arrayPositionSector[this.sectorJailWhite].x, this.arrayPositionSector[this.sectorJailWhite].y); //Jail
-            this.arraySectors[this.sectorJailBlack].position.set(this.arrayPositionSector[this.sectorJailBlack].x, this.arrayPositionSector[this.sectorJailBlack].y); //Jail
+            this.arraySectors[this._sectorJailWhite].rotation = -3.14;
+            this.arraySectors[this._sectorJailWhite].position.set(this.arrayPositionSector[this._sectorJailWhite].x, this.arrayPositionSector[this._sectorJailWhite].y); //Jail
+            this.arraySectors[this._sectorJailBlack].position.set(this.arrayPositionSector[this._sectorJailBlack].x, this.arrayPositionSector[this._sectorJailBlack].y); //Jail
             this.arraySectors[this._exitBlack].rotation = -3.14;
             this.arraySectors[this._exitWhite].position.set(this.arrayPositionSector[this._exitWhite].x, this.arrayPositionSector[this._exitWhite].y);
             this.arraySectors[this._exitBlack].position.set(this.arrayPositionSector[this._exitBlack].x, this.arrayPositionSector[this._exitBlack].y);
@@ -306,49 +296,60 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             this.arrayChips[firsSelectSectorIndex][this.arrayChips[firsSelectSectorIndex].length - 1].selected = false;
             this._chipsOnTheLeft = 0;
             this._chipsOnTheRight = 0;
-            this.selectChipColor = '';
-            this.countClick = 0;
-            // console.log('cелектЧипВайт  ' + this.selectChipColor);
+            this._selectChipColor = '';
+            this._countClick = 0;
         };
         Board.prototype.sectorClick = function (data) {
-            if (this.countClick == 0) {
-                this.countClick++;
+            if (this._countClick == 0) {
+                this._countClick++;
                 this.sound.playSoundClickChip();
-                this.firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
-                this.selectChip(this.firsSelectSectorIndex);
+                this._firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
+                this.selectChip(this._firsSelectSectorIndex);
                 this.deactivationAllSectors();
-                this.arraySectors[this.firsSelectSectorIndex].interactiveOn();
-                // console.log('Выбранный сектор  ' + this.firsSelectSectorIndex );
-                // console.log('cелектЧипВайт  ' + this.selectChipColor);
-                // console.log('cелектЧипВайт через гет '+this.arrayChips[this.firsSelectSectorIndex][0].color);
+                this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
                 this.pokaAllHome();
-                // console.log('пока ол хом '+this.pokaAllHome());
-                // console.log('Чип он ве лефт '+ this._chipsOnTheLeft);
-                // console.log('Чип он ве райт '+ this._chipsOnTheRight);
-                this.highlightSector(this.firsSelectSectorIndex);
+                this.highlightSector(this._firsSelectSectorIndex);
             }
-            else if (this.countClick == 1) {
-                this.secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
+            else if (this._countClick == 1) {
+                this._secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
                 // console.log('сектор второй '+ this.secondSelectSectorIndex);
-                if (this.firsSelectSectorIndex == this.secondSelectSectorIndex) {
-                    this.deselectChip(this.firsSelectSectorIndex);
+                if (this._firsSelectSectorIndex == this._secondSelectSectorIndex) {
+                    this.deselectChip(this._firsSelectSectorIndex);
                 }
                 else {
-                    var currentMove = Math.abs(this.firsSelectSectorIndex - this.secondSelectSectorIndex);
-                    switch (this.secondSelectSectorIndex) {
+                    var currentMove = Math.abs(this._firsSelectSectorIndex - this._secondSelectSectorIndex);
+                    switch (this._secondSelectSectorIndex) {
                         case this._exitBlack:
-                            this.secondSelectSectorIndex = 0;
-                            currentMove = this.firsSelectSectorIndex;
+                            this._secondSelectSectorIndex = 0;
+                            if (this._firsSelectSectorIndex != this._maxCube && this._firsSelectSectorIndex > this._minCube) {
+                                currentMove = this._maxCube;
+                            }
+                            else {
+                                currentMove = this._firsSelectSectorIndex;
+                            }
                             break;
                         case this._exitWhite:
-                            this.secondSelectSectorIndex = 25;
-                            currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
+                            this._secondSelectSectorIndex = 25;
+                            if (this.metamorphoseForWhite(this._firsSelectSectorIndex) != this._maxCube && this.metamorphoseForWhite(this._firsSelectSectorIndex) > this._minCube) {
+                                currentMove = this._maxCube;
+                            }
+                            else {
+                                currentMove = this.metamorphoseForWhite(this._firsSelectSectorIndex);
+                            }
                             break;
                     }
-                    console.log('СекторДва  ' + this.secondSelectSectorIndex);
+                    this._activeMoves -= currentMove;
+                    this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                    this._activeDices = this._activeDices.filter(function (number) {
+                        return number <= this._activeMoves;
+                    }, this);
+                    this._isActive = this._activeMoves != 0;
+                    console.log('Сделан ход: ' + currentMove);
+                    console.log('Кол-во возможных ходов: ', this._activeMoves);
+                    console.log('Активные кубики: ', this._activeDices);
                     this.emit(Board.EVENT_MOVE_CHIP, {
                         CLASS_NAME: 'MoveChip',
-                        from: this.firsSelectSectorIndex,
+                        from: this._firsSelectSectorIndex,
                         cubeValues: currentMove
                     });
                 }
@@ -356,13 +357,13 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
         };
         Board.prototype.selectChip = function (selectSectorIndex) {
             if (this.arrayChips[selectSectorIndex].length != 0) {
-                if (this.countClick == 1) {
+                if (this._countClick == 1) {
                     this.arrayChips[selectSectorIndex][this.arrayChips[selectSectorIndex].length - 1].selected = true;
                     if (this.arrayChips[selectSectorIndex][this.arrayChips[selectSectorIndex].length - 1]._color == 'white') {
-                        this.selectChipColor = 'white';
+                        this._selectChipColor = 'white';
                     }
                     else {
-                        this.selectChipColor = 'black';
+                        this._selectChipColor = 'black';
                     }
                 }
             }
@@ -376,10 +377,10 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                 return new Point(x, y);
             }
             if (this.arrayPositionChip[sectorIndex].y == 618) {
-                y = this.arrayPositionChip[sectorIndex].y - this.OFFSET * chipIndex;
+                y = this.arrayPositionChip[sectorIndex].y - this._OFFSET * chipIndex;
             }
             else {
-                y = this.arrayPositionChip[sectorIndex].y + this.OFFSET * chipIndex;
+                y = this.arrayPositionChip[sectorIndex].y + this._OFFSET * chipIndex;
             }
             return new Point(x, y);
         };
@@ -389,7 +390,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             var newPosition = this.getChipPosition(toSector, this.arrayChips[toSector].length);
             this.animationMoveChip(opponentChip, newPosition.x, newPosition.y);
             this.arrayChips[toSector].push(opponentChip);
-            // console.log('Сообщение из борда: moveOpponentChip from '+fromSector+' to '+toSector);
         };
         Board.prototype.animationMoveChip = function (Chip, x, y) {
             TweenLite.to(Chip, 0.5, {
@@ -403,8 +403,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             }
         };
         Board.prototype.setDice = function (first, second) {
-            this.metaDice1 = this.metamorphose(first);
-            this.metaDice2 = this.metamorphose(second);
             this._activeDices = [];
             if (first == second) {
                 this._activeMoves = first * 4;
@@ -423,54 +421,68 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                 // this._activeDices.push(first + second);
                 this._activeMoves = first + second;
             }
+            this._maxCube = getMaxOfArray(this._activeDices);
+            this._minCube = getMinOfArray(this._activeDices);
+            function getMaxOfArray(numArray) {
+                return Math.max.apply(null, numArray);
+            }
+            function getMinOfArray(numArray) {
+                return Math.min.apply(null, numArray);
+            }
+            console.log('Мax and Min  ' + this._maxCube + ',' + this._minCube);
             console.log('Кол-во возможных ходов: ', this._activeMoves);
             console.log('Активные кубики: ', this._activeDices);
             this._isActive = this._activeMoves != 0;
         };
         Board.prototype.moveChip = function (oldPosition, newPosition) {
-            if (this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].color != this.arrayChips[newPosition][0].color) {
-                var positionJail_X = void 0;
-                var positionJail_Y = void 0;
-                var oldChip = this.arrayChips[oldPosition].pop();
-                this._container.addChild(oldChip);
-                var opponentChip = this.arrayChips[newPosition][0];
-                this._container.addChild(opponentChip);
-                switch (opponentChip.color) {
-                    case Chip_1.Chip.COLOR_WHITE:
-                        this.arrayChips[this.sectorJailWhite].push(opponentChip);
-                        positionJail_X = this.getChipPosition(this.sectorJailWhite, this.arrayChips[this.sectorJailWhite].length).x;
-                        positionJail_Y = this.getChipPosition(this.sectorJailWhite, this.arrayChips[this.sectorJailWhite].length).y;
-                        break;
-                    case Chip_1.Chip.COLOR_BLACK:
-                        this.arrayChips[this.sectorJailBlack].push(opponentChip);
-                        positionJail_X = this.getChipPosition(this.sectorJailBlack, this.arrayChips[this.sectorJailBlack].length).x;
-                        positionJail_Y = this.getChipPosition(this.sectorJailBlack, this.arrayChips[this.sectorJailBlack].length).y;
-                }
-                this.arrayChips[newPosition].pop();
-                this.animationMoveChip(opponentChip, positionJail_X, positionJail_Y);
-                var newPositionX = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).x;
-                var newPositionY = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).y;
-                this.animationMoveChip(oldChip, newPositionX, newPositionY);
-                this.arrayChips[newPosition].push(oldChip);
-                this.calculateMoves(newPosition, oldPosition);
-                this.countClick = 0;
-            }
-            else {
-                var oldChip = this.arrayChips[oldPosition].pop();
-                this._container.addChild(oldChip);
-                var newPositionX = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).x;
-                var newPositionY = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).y;
-                this.animationMoveChip(oldChip, newPositionX, newPositionY);
-                this.arrayChips[newPosition].push(oldChip);
-                this.calculateMoves(newPosition, oldPosition);
-                this.countClick = 0;
-            }
-            this.offHighLightSectors(); //отключаю подсветку
+            // if( this.arrayChips[newPosition].length == 1 && this.arrayChips[oldPosition][0].color != this.arrayChips[newPosition][0].color)
+            // {
+            //     let positionJail_X:number;
+            //     let positionJail_Y:number;
+            //
+            //     let oldChip:Chip = this.arrayChips[oldPosition].pop();
+            //     this._container.addChild(oldChip);
+            //
+            //     let opponentChip:Chip = this.arrayChips[newPosition][0];
+            //     this._container.addChild(opponentChip);
+            //
+            //     switch (opponentChip.color)
+            //     {
+            //         case Chip.COLOR_WHITE:
+            //             this.arrayChips[this._sectorJailWhite].push(opponentChip);
+            //             positionJail_X = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).x;
+            //             positionJail_Y = this.getChipPosition(this._sectorJailWhite,this.arrayChips[this._sectorJailWhite].length).y;
+            //             break;
+            //         case Chip.COLOR_BLACK:
+            //             this.arrayChips[this._sectorJailBlack].push(opponentChip);
+            //             positionJail_X = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).x;
+            //             positionJail_Y = this.getChipPosition(this._sectorJailBlack,this.arrayChips[this._sectorJailBlack].length).y;
+            //     }
+            //     this.arrayChips[newPosition].pop();
+            //     this.animationMoveChip(opponentChip,positionJail_X,positionJail_Y);
+            //     let newPositionX = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).x;
+            //     let newPositionY = this.getChipPosition(newPosition,this.arrayChips[newPosition].length).y;
+            //     this.animationMoveChip(oldChip,newPositionX,newPositionY);
+            //     this.arrayChips[newPosition].push(oldChip);
+            //     this.calculateMoves(newPosition,oldPosition);
+            //     this._countClick = 0;
+            // }
+            // else{
+            var oldChip = this.arrayChips[oldPosition].pop();
+            this._container.addChild(oldChip);
+            var newPositionX = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).x;
+            var newPositionY = this.getChipPosition(newPosition, this.arrayChips[newPosition].length).y;
+            this.animationMoveChip(oldChip, newPositionX, newPositionY);
+            this.arrayChips[newPosition].push(oldChip);
+            // this.calculateMoves(newPosition,oldPosition);
+            this._countClick = 0;
+            // }
+            this.offHighLightSectors();
             this.turnDependsOfTheColor();
             this.endOfTurn();
         };
         Board.prototype.highlightSector = function (sectorIndex) {
-            if (this.selectChipColor == 'white') {
+            if (this._selectChipColor == 'white') {
                 this._activeDices.forEach(function (element) {
                     if (sectorIndex + element <= 24)
                         this.calculateHighlights(sectorIndex + element);
@@ -491,7 +503,7 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
         };
         Board.prototype.calculateHighlights = function (way) {
             if (this.arrayChips[way].length != 0) {
-                if (this.arrayChips[way][0].color == this.selectChipColor) {
+                if (this.arrayChips[way][0].color == this._selectChipColor) {
                     this.arraySectors[way].highlightMove();
                 }
                 else if (this.arrayChips[way].length == 1) {
@@ -567,14 +579,12 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                         this._chipsOnTheLeft = this.metamorphose(maxDice2);
                     }
                 }
-                // console.log('белые лефт  '+ this._chipsOnTheLeft );
                 for (maxDice1; maxDice1 >= 1; maxDice1--) {
                     if (this.arrayChips[this.metamorphose(maxDice1)].length != 0) {
                         this._chipsOnTheRight = this.metamorphose(maxDice1);
                         break;
                     }
                 }
-                // console.log('белые райт  '+ this._chipsOnTheRight);
             }
             else {
                 var maxDice1 = this._maxDice;
@@ -585,13 +595,11 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                         break;
                     }
                 }
-                // console.log('черные райт  '+ this._chipsOnTheRight);
                 for (maxDice1; maxDice1 <= 6; maxDice1++) {
                     if (this.arrayChips[maxDice1].length != 0) {
                         this._chipsOnTheLeft = maxDice1;
                     }
                 }
-                // console.log('черные лефт  '+ this._chipsOnTheLeft);
             }
         };
         Board.prototype.metamorphose = function (x) {
@@ -641,29 +649,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                     break;
             }
             return metX;
-        };
-        Board.prototype.calculateMoves = function (newPosition, oldPosition) {
-            // let currentMove:number;
-            this.currentMove = Math.abs(newPosition - oldPosition);
-            switch (newPosition) {
-                case this._exitBlack:
-                    newPosition = 0;
-                    this.currentMove = this.firsSelectSectorIndex;
-                    break;
-                case this._exitWhite:
-                    newPosition = 25;
-                    this.currentMove = this.metamorphoseForWhite(this.firsSelectSectorIndex);
-                    break;
-            }
-            this._activeMoves -= this.currentMove;
-            this._activeDices.splice(this._activeDices.indexOf(this.currentMove), 1);
-            this._activeDices = this._activeDices.filter(function (number) {
-                return number <= this._activeMoves;
-            }, this);
-            this._isActive = this._activeMoves != 0;
-            console.log('Сделан ход: ' + this.currentMove);
-            console.log('Кол-во возможных ходов: ' + this._activeMoves);
-            console.log('Активные кубики: ' + this._activeDices);
         };
         Board.EVENT_END_OF_TURN = 'EndOfTurn';
         Board.EVENT_MOVE_CHIP = 'MoveChip';
