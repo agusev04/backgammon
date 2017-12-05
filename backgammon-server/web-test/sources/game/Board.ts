@@ -89,7 +89,7 @@ export class Board extends Container2d {
         [],
         [],[]
     ];
-
+    //
     // public arrayChips: any[] = [
     //     [],
     //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
@@ -484,7 +484,7 @@ export class Board extends Container2d {
         function getMinOfArray(numArray:any):number {
             return Math.min.apply(null, numArray);
         }
-        console.log('Мax and Min  '+ this._maxCube +', '+this._minCube );
+        console.log('Мax and Min  '+ this._maxCube +','+this._minCube );
         console.log('Кол-во возможных ходов: ', this._activeMoves, );
         console.log('Активные кубики: ', this._activeDices);
         this._isActive = this._activeMoves != 0;
