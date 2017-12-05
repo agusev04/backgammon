@@ -45,7 +45,6 @@ define(["require", "exports", "../Game"], function (require, exports, Game_1) {
             this.addChild(this._blackName);
         };
         UserBar.prototype.setUserBar = function (color, opponent) {
-            console.log('User Bar updated');
             if (color == 'w') {
                 this._whiteName.text = 'You';
                 if (opponent)

@@ -79,41 +79,41 @@ export class Board extends Container2d {
     //     [],[],[]
     // ];
 
-    private arrayChips: any[] = [
-        [],
-        [],[],[],[],[],
-        [],[],[],[],[],
-        [],[],[],[],[],
-        [],[],[],[],[],
-        [],[],[],[],
-        [],
-        [],[]
-    ];
-
-    // public arrayChips: any[] = [
+    // private arrayChips: any[] = [
     //     [],
-    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
-    //
-    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-    //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+    //     [],[],[],[],[],
+    //     [],[],[],[],[],
+    //     [],[],[],[],[],
+    //     [],[],[],[],[],
+    //     [],[],[],[],
     //     [],
-    //     [ new Chip(Chip.COLOR_BLACK)],
-    //     [],
-    //     [],
-    //     [], [], [],
-    //     [],
-    //     [],
-    //     [], [], [],
-    //     [],
-    //     [],
-    //     [],
-    //     [],
-    //     [],
-    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
-    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
-    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
-    //     [],[],[]
+    //     [],[]
     // ];
+
+    public arrayChips: any[] = [
+        [],
+        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
+
+        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+        [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+        [],
+        [ new Chip(Chip.COLOR_BLACK)],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [], [], [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
+        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
+        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
+        [],[],[]
+    ];
 
     // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
     public arraySectors: any[] = [new Sector(),new Sector(), new Sector(), new Sector(),
@@ -288,6 +288,17 @@ export class Board extends Container2d {
         this.setDice(firsDice,secondDice);
         this._activColor = activColor;
         this.turnDependsOfTheColor();
+
+        if(this.arrayChips[this._sectorJailBlack].length!=0||this.arrayChips[this._sectorJailWhite].length!=0){
+            this.deactivationAllSectors();
+            switch (this._activColor){
+                case 0:this.arraySectors[this._sectorJailWhite].interactiveOn();
+                break;
+                case 1:this.arraySectors[this._sectorJailBlack].interactiveOn();
+            }
+
+
+        }
     }
     public blockOfTurn():void{
         this._activeDices = [];
@@ -340,14 +351,18 @@ export class Board extends Container2d {
 
     private sectorClick(data: InteractionData): void {
         if (this._countClick == 0) {
-            this._countClick++;
-            this.sound.playSoundClickChip();
             this._firsSelectSectorIndex = this.arraySectors.indexOf(data.target);
-            this.selectChip(this._firsSelectSectorIndex);
-            this.deactivationAllSectors();
-            this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
-            this.pokaAllHome();
-            this.highlightSector(this._firsSelectSectorIndex);
+            if(this._firsSelectSectorIndex == this._exitWhite || this._firsSelectSectorIndex == this._exitBlack){
+                this.arraySectors[this._firsSelectSectorIndex].interactiveOff();
+            }else {
+                this._countClick++;
+                this.sound.playSoundClickChip();
+                this.selectChip(this._firsSelectSectorIndex);
+                this.deactivationAllSectors();
+                this.arraySectors[this._firsSelectSectorIndex].interactiveOn();
+                this.pokaAllHome();
+                this.highlightSector(this._firsSelectSectorIndex);
+            }
         } else
             if (this._countClick == 1) {
             this._secondSelectSectorIndex = this.arraySectors.indexOf(data.target);
