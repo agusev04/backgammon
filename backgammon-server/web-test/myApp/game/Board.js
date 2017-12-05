@@ -66,39 +66,40 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
             //     [],[],[]
             // ];
-            // private arrayChips: any[] = [
-            //     [],
-            //     [],[],[],[],[],
-            //     [],[],[],[],[],
-            //     [],[],[],[],[],
-            //     [],[],[],[],[],
-            //     [],[],[],[],
-            //     [],
-            //     [],[]
-            // ];
             _this.arrayChips = [
                 [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [], [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK), new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
+                [], [], [], [], [],
+                [], [], [], [], [],
+                [], [], [], [], [],
+                [], [], [], [], [],
+                [], [], [], [],
                 [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_BLACK)],
-                [],
-                [],
-                [], [], [],
-                [],
-                [],
-                [], [], [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE)],
-                [new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE), new Chip_1.Chip(Chip_1.Chip.COLOR_WHITE),],
-                [], [], []
+                [], []
             ];
+            // public arrayChips: any[] = [
+            //     [],
+            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
+            //
+            //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+            //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+            //     [],
+            //     [ new Chip(Chip.COLOR_BLACK)],
+            //     [],
+            //     [],
+            //     [], [], [],
+            //     [],
+            //     [],
+            //     [], [], [],
+            //     [],
+            //     [],
+            //     [],
+            //     [],
+            //     [],
+            //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
+            //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
+            //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
+            //     [],[],[]
+            // ];
             // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
             _this.arraySectors = [new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(),
                 new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(), new Sector_1.Sector(),
@@ -350,12 +351,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                             }
                             break;
                     }
-                    this._activeMoves -= currentMove;
-                    this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
-                    this._activeDices = this._activeDices.filter(function (number) {
-                        return number <= this._activeMoves;
-                    }, this);
-                    this._isActive = this._activeMoves != 0;
                     console.log('Сделан ход: ' + currentMove);
                     console.log('Кол-во возможных ходов: ', this._activeMoves);
                     console.log('Активные кубики: ', this._activeDices);
@@ -364,6 +359,12 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                         from: this._firsSelectSectorIndex,
                         cubeValues: currentMove
                     });
+                    this._activeMoves -= currentMove;
+                    this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                    this._activeDices = this._activeDices.filter(function (number) {
+                        return number <= this._activeMoves;
+                    }, this);
+                    this._isActive = this._activeMoves != 0;
                 }
             }
         };

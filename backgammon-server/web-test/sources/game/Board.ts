@@ -79,41 +79,41 @@ export class Board extends Container2d {
     //     [],[],[]
     // ];
 
-    // private arrayChips: any[] = [
-    //     [],
-    //     [],[],[],[],[],
-    //     [],[],[],[],[],
-    //     [],[],[],[],[],
-    //     [],[],[],[],[],
-    //     [],[],[],[],
-    //     [],
-    //     [],[]
-    // ];
-
-    public arrayChips: any[] = [
+    private arrayChips: any[] = [
         [],
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
-
-        [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
-        [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+        [],[],[],[],[],
+        [],[],[],[],[],
+        [],[],[],[],[],
+        [],[],[],[],[],
+        [],[],[],[],
         [],
-        [ new Chip(Chip.COLOR_BLACK)],
-        [],
-        [],
-        [], [], [],
-        [],
-        [],
-        [], [], [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
-        [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
-        [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
-        [],[],[]
+        [],[]
     ];
+
+    // public arrayChips: any[] = [
+    //     [],
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK)],
+    //
+    //     [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK),new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+    //     [], [new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK), new Chip(Chip.COLOR_BLACK)],
+    //     [],
+    //     [ new Chip(Chip.COLOR_BLACK)],
+    //     [],
+    //     [],
+    //     [], [], [],
+    //     [],
+    //     [],
+    //     [], [], [],
+    //     [],
+    //     [],
+    //     [],
+    //     [],
+    //     [],
+    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE)],
+    //     [new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE),new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE) ],
+    //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE), ],
+    //     [],[],[]
+    // ];
 
     // ----------Массив секторов которые отслеживают клики на поле(на доске они скрыты)-(0 и 25 Тюрьма)------------
     public arraySectors: any[] = [new Sector(),new Sector(), new Sector(), new Sector(),
@@ -392,13 +392,6 @@ export class Board extends Container2d {
 
                         break;
                 }
-                    this._activeMoves -= currentMove;
-                    this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
-                    this._activeDices = this._activeDices.filter(function(number) {
-                        return number <= this._activeMoves;
-                    }, this);
-
-                    this._isActive = this._activeMoves != 0;
 
                 console.log('Сделан ход: '+currentMove);
                 console.log('Кол-во возможных ходов: ', this._activeMoves, );
@@ -408,6 +401,14 @@ export class Board extends Container2d {
                     from: this._firsSelectSectorIndex,
                     cubeValues: currentMove
                 });
+
+                this._activeMoves -= currentMove;
+                this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                this._activeDices = this._activeDices.filter(function(number) {
+                    return number <= this._activeMoves;
+                }, this);
+
+                this._isActive = this._activeMoves != 0;
 
             }
         }
