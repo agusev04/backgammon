@@ -222,6 +222,29 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
                 this.arraySectors[i].interactiveOff();
             }
         };
+        Board.prototype.deactivationSectorsColor = function (color) {
+            for (var i = 0; i < this.arrayChips.length; i++) {
+                if (this.arrayChips[i].length != 0) {
+                    if (this.arrayChips[i][0].color == color) {
+                        this.arraySectors[i].interactiveOff();
+                    }
+                }
+            }
+        };
+        Board.prototype.deactivationSectorsJails = function () {
+            if (this.arrayChips[this._sectorJailWhite].length != 0) {
+                if (this._activColor == 0) {
+                    this.deactivationSectorsColor(Chip_1.Chip.COLOR_WHITE);
+                    this.arraySectors[this._sectorJailWhite].interactiveOn();
+                }
+            }
+            if (this.arrayChips[this._sectorJailBlack].length != 0) {
+                if (this._activColor == 1) {
+                    this.deactivationSectorsColor(Chip_1.Chip.COLOR_BLACK);
+                    this.arraySectors[this._sectorJailBlack].interactiveOn();
+                }
+            }
+        };
         Board.prototype.turnDependsOfTheColor = function () {
             var colorChip; //перевод цвета из 0 и 1 в true false мне так удобнее
             switch (this._activColor) {
@@ -253,6 +276,7 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             this.setDice(firsDice, secondDice);
             this._activColor = activColor;
             this.turnDependsOfTheColor();
+            this.deactivationSectorsJails();
         };
         Board.prototype.blockOfTurn = function () {
             this._activeDices = [];
@@ -287,16 +311,18 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             }
         };
         Board.prototype.deselectChip = function (firsSelectSectorIndex) {
-            this.deactivationAllSectors();
-            this.sound.playSoundClickChip();
-            this.offHighLightSectors(); //отключаю подсветку
-            this.turnDependsOfTheColor();
-            this.searchNeighbors();
-            this.arrayChips[firsSelectSectorIndex][this.arrayChips[firsSelectSectorIndex].length - 1].selected = false;
-            this._chipsOnTheLeft = 0;
-            this._chipsOnTheRight = 0;
-            this._selectChipColor = '';
-            this._countClick = 0;
+            if (firsSelectSectorIndex != this._sectorJailBlack && firsSelectSectorIndex != this._sectorJailWhite) {
+                this.deactivationAllSectors();
+                this.sound.playSoundClickChip();
+                this.offHighLightSectors(); //отключаю подсветку
+                this.turnDependsOfTheColor();
+                this.searchNeighbors();
+                this.arrayChips[firsSelectSectorIndex][this.arrayChips[firsSelectSectorIndex].length - 1].selected = false;
+                this._chipsOnTheLeft = 0;
+                this._chipsOnTheRight = 0;
+                this._selectChipColor = '';
+                this._countClick = 0;
+            }
         };
         Board.prototype.sectorClick = function (data) {
             if (this._countClick == 0) {
@@ -483,6 +509,7 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             // }
             this.offHighLightSectors();
             this.turnDependsOfTheColor();
+            this.deactivationSectorsJails();
             this.endOfTurn();
         };
         Board.prototype.highlightSector = function (sectorIndex) {

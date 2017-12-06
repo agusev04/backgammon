@@ -255,6 +255,29 @@ export class Board extends Container2d {
             this.arraySectors[i].interactiveOff();
         }
     }
+    private deactivationSectorsColor(color:string):void{
+        for (let i = 0; i < this.arrayChips.length; i++) {
+            if(this.arrayChips[i].length != 0){
+                if(this.arrayChips[i][0].color == color){
+                    this.arraySectors[i].interactiveOff();
+                }
+            }
+        }
+    }
+    private deactivationSectorsJails():void{
+        if(this.arrayChips[this._sectorJailWhite].length !=0){
+            if(this._activColor==0){
+                this.deactivationSectorsColor(Chip.COLOR_WHITE);
+                this.arraySectors[this._sectorJailWhite].interactiveOn();
+            }
+        }
+        if(this.arrayChips[this._sectorJailBlack].length !=0){
+            if(this._activColor==1){
+                this.deactivationSectorsColor(Chip.COLOR_BLACK);
+                this.arraySectors[this._sectorJailBlack].interactiveOn();
+            }
+        }
+    }
 
     private turnDependsOfTheColor():void{
 
@@ -288,7 +311,7 @@ export class Board extends Container2d {
         this.setDice(firsDice,secondDice);
         this._activColor = activColor;
         this.turnDependsOfTheColor();
-
+        this.deactivationSectorsJails();
     }
     public blockOfTurn():void{
         this._activeDices = [];
@@ -327,16 +350,18 @@ export class Board extends Container2d {
     }
 
     private deselectChip(firsSelectSectorIndex:number):void{
-        this.deactivationAllSectors();
-        this.sound.playSoundClickChip();
-        this.offHighLightSectors();  //отключаю подсветку
-        this.turnDependsOfTheColor();
-        this.searchNeighbors();
-        this.arrayChips[firsSelectSectorIndex][this.arrayChips[firsSelectSectorIndex].length - 1 ].selected = false;
-        this._chipsOnTheLeft=0;
-        this._chipsOnTheRight=0;
-        this._selectChipColor = '';
-        this._countClick = 0;
+        if(firsSelectSectorIndex != this._sectorJailBlack && firsSelectSectorIndex != this._sectorJailWhite){
+            this.deactivationAllSectors();
+            this.sound.playSoundClickChip();
+            this.offHighLightSectors();  //отключаю подсветку
+            this.turnDependsOfTheColor();
+            this.searchNeighbors();
+            this.arrayChips[firsSelectSectorIndex][this.arrayChips[firsSelectSectorIndex].length - 1 ].selected = false;
+            this._chipsOnTheLeft=0;
+            this._chipsOnTheRight=0;
+            this._selectChipColor = '';
+            this._countClick = 0;
+        }
     }
 
     private sectorClick(data: InteractionData): void {
@@ -544,6 +569,7 @@ export class Board extends Container2d {
 
         this.offHighLightSectors();
         this.turnDependsOfTheColor();
+        this.deactivationSectorsJails();
         this.endOfTurn();
     }
 
