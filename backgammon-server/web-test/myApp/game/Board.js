@@ -253,15 +253,6 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             this.setDice(firsDice, secondDice);
             this._activColor = activColor;
             this.turnDependsOfTheColor();
-            if (this.arrayChips[this._sectorJailBlack].length != 0 || this.arrayChips[this._sectorJailWhite].length != 0) {
-                this.deactivationAllSectors();
-                switch (this._activColor) {
-                    case 0:
-                        this.arraySectors[this._sectorJailWhite].interactiveOn();
-                        break;
-                    case 1: this.arraySectors[this._sectorJailBlack].interactiveOn();
-                }
-            }
         };
         Board.prototype.blockOfTurn = function () {
             this._activeDices = [];
