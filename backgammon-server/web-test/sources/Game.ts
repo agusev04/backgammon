@@ -29,7 +29,7 @@ export class Game extends Container
     private _ntfBox:NotificationBox;
     private _board:Board;
     private _network:Network;
-    private _UserBar: UserBar;
+    private _userBar: UserBar;
     private _myColor:string;
 
     // Init >>--------------------------------------------------------------<<<<
@@ -49,16 +49,17 @@ export class Game extends Container
         this.set_logo();
         // Menu screen >>---------------------------------------------------<<<<
         this.set_menu();
-        this._throwBtn = new Button('DiceRoll', 'diceRoll', 2000);
+        this._throwBtn = new Button('DiceRoll', 'DiceRoll', 2000);
         this._throwBtn.on('DiceRoll', this.requestCubes, this);
         this._dices = new Dices();
-        this._throwBtn.scale.set(0.8);
+        this._throwBtn.scale.set(1);
+        this._throwBtn.position.set(Game.WIDTH/2, Game.HEIGHT/2 + 15);
         this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2);
         this._board = new Board();
         this._msgBox = new MessageBox();
         this._ntfBox = new NotificationBox();
         this._network = new Network();
-        this._UserBar = new UserBar();
+        this._userBar = new UserBar();
         this._network.on(Network.EVENT_CONNECTED, this.eventConnected, this);
         this._network.on(Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
         this._network.on(Network.EVENT_DATA, this.eventData, this);
@@ -92,7 +93,7 @@ export class Game extends Container
 
     protected set_menu():void
     {
-        this._startBtn = new Button('GameStart', 'test', 5000);
+        this._startBtn = new Button('GameStart', 'Start', 5000);
         this._startBtn.on('GameStart', this.openConnection, this);
         this._startBtn.position.set(Game.WIDTH/2, Game.HEIGHT/2);
         this.addChild(this._startBtn);
@@ -108,7 +109,46 @@ export class Game extends Container
         this.addChild(this._throwBtn);
         this._throwBtn.hide();
         this._dices.hide();
-        this.addChild(this._UserBar);
+        this.addChild(this._userBar);
+        this._userBar.setActiveStatus('Waiting for opponent..');
+        this._userBar.showNotification('Welcome to our game !');
+    }
+
+    protected endOfGame(winner: string)
+    {
+        if (winner == this._myColor)
+            this._userBar.setActiveStatus('You win !');
+        else
+        {
+            this._userBar.setActiveStatus('You lose !');
+        }
+        if (this._myTurn)
+        {
+            this._myTurn = false;
+            this._board.blockOfTurn();
+        }
+
+        this._myTurn = null;
+        this._myName = null;
+        this._myColor = null;
+        this._opponent = null;
+        this._board.interactive = false;
+        this._throwBtn.hide();
+        this._dices.hide();
+        this.removeChild(this._dices);
+        this.removeChild(this._throwBtn);
+        this._network.disconnect();
+        this._userBar.setUserBar(this._myColor, this._opponent);
+        let _restartBtn = new Button('GameRestart', 'Restart', 5000);
+        _restartBtn.on('GameRestart', this.gameRestart, this);
+        _restartBtn.position.set(Game.WIDTH/2, Game.HEIGHT/2);
+        this.addChild(_restartBtn);
+
+    }
+
+    protected gameRestart():void
+    {
+        location.reload();
     }
 
     protected gameStart():void
@@ -120,13 +160,6 @@ export class Game extends Container
     {
         console.log('Сообщение из гейма: Connecting to server...');
         this._network.openConnection('ws://backgammon.connectivegames.com:8888/ws');
-    }
-
-    protected showNotification(text:string):void
-    {
-        let style = new TextStyle({fill: '#ffffff', fontSize: 28, fontWeight: '800', dropShadow: true, align: 'center'});
-        this.addChild(this._ntfBox);
-        this._ntfBox.show(text, 2000, style);
     }
 
     protected showMessage(text:string, duration:number, timeout:number):void
@@ -186,6 +219,18 @@ export class Game extends Container
                 this._board.startTurn(data.first, data.second, 0);
             else
                 this._board.startTurn(data.first, data.second, 1);
+
+            if (data.first == data.second)
+            {
+                this._userBar.showNotification('Lucky one!');
+            }
+        }
+        else
+        {
+            if (data.first == data.second)
+            {
+                this._userBar.showNotification('He\'s lucky!');
+            }
         }
     }
 
@@ -198,7 +243,7 @@ export class Game extends Container
             this._myName = data.gameState.myName;
             this._myTurn = data.gameState.stateChange.activePlayerColor == this._myColor;
             this._myColor = data.gameState.color;
-            this._UserBar.setUserBar(this._myColor, this._opponent);
+            this._userBar.setUserBar(this._myColor, this._opponent);
 
             let arrayChips: any[] = [
                 [],
@@ -248,7 +293,12 @@ export class Game extends Container
                     this._opponent = data.changeArrayList[i].enemyUserName;
                     if (this._myTurn)
                     {
+                        this._userBar.setActiveStatus('Your turn');
                         this.startOfTurn();
+                    }
+                    else
+                    {
+                        this._userBar.setActiveStatus('Opponent\'s turn');
                     }
 
                     console.log('Opponent is: ' + this._opponent);
@@ -308,6 +358,7 @@ export class Game extends Container
                 else if (data.changeArrayList[i].CLASS_NAME == 'Final')
                 {
                     console.log('Игра закончилась ! Победил: ' + data.changeArrayList[i].color);
+                    setTimeout(this.endOfGame.bind(this), 50, data.changeArrayList[i].color);
                 }
             }
         }
@@ -317,7 +368,7 @@ export class Game extends Container
     {
         if (data.turnSkipped)
         {
-            this.showNotification('Blocked dice');
+            this._userBar.showNotification('Blocked dice!');
             this._board.blockOfTurn();
         }
         if (this._myTurn != (data.activePlayerColor == this._myColor))
@@ -325,21 +376,23 @@ export class Game extends Container
             this._myTurn = data.activePlayerColor == this._myColor;
             if (this._myTurn)
             {
+                this._userBar.setActiveStatus('Your turn');
                 this.startOfTurn();
             }
             else
             {
+                this._userBar.setActiveStatus('Opponent\'s turn');
                 this.endTurn();
             }
             this.moveDice(this._myTurn);
         }
-        this._UserBar.setUserBar(this._myColor, this._opponent);
-        this._UserBar.setActivePlayer(this._myTurn, this._myColor);
+        this._userBar.setUserBar(this._myColor, this._opponent);
+        this._userBar.setActivePlayer(this._myTurn, this._myColor);
     }
 
     protected dataOnError(data:any):void
     {
-        this.showNotification(data.message);
+        this._userBar.showNotification(data.message);
     }
 
     // Data (emulating) >>------------------------------------------------------------<<<<
@@ -357,13 +410,11 @@ export class Game extends Container
             this._myColor = data.color;
         }
     }
-
     protected dataOnGameStart(data:any):void
     {
         console.log('Сообщение из гейма: Your opponent is: ' + data.enemyUserName);
         this.gameStart();
     }
-
     protected dataOnCubeValue(data:any):void
     {
         let first = (data.cubeValues - data.cubeValues % 10)/10;
@@ -371,7 +422,6 @@ export class Game extends Container
         console.log('Сообщение из гейма: Values from server: ', first + ', ', second);
         this.throwCubes(first, second);
     }
-
     protected dataOnChangeTable(data:any):void
     {
         console.log('Сообщение из гейма: Move accepted.');
@@ -393,17 +443,9 @@ export class Game extends Container
     protected moveDice(myTurn:boolean)
     {
         if (myTurn)
-        {
             this._dices.position.set(Game.WIDTH/2 + 185, Game.HEIGHT/2 + 15);
-            this._throwBtn.position.set(Game.WIDTH - 70, Game.HEIGHT/2);
-            // this.showNotification('White\'s turn');
-        }
         else
-        {
             this._dices.position.set(Game.WIDTH/2 - 170, Game.HEIGHT/2 + 15);
-            this._throwBtn.position.set(75, Game.HEIGHT/2);
-            // this.showNotification('Black\'s turn');
-        }
     }
 
     protected startOfTurn():void
@@ -429,7 +471,6 @@ export class Game extends Container
             cubeValue: data.cubeValues
         });
     }
-
 
     protected endTurn():void
     {

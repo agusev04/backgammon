@@ -37,16 +37,17 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this.set_logo();
             // Menu screen >>---------------------------------------------------<<<<
             this.set_menu();
-            this._throwBtn = new Button_1.Button('DiceRoll', 'diceRoll', 2000);
+            this._throwBtn = new Button_1.Button('DiceRoll', 'DiceRoll', 2000);
             this._throwBtn.on('DiceRoll', this.requestCubes, this);
             this._dices = new Dices_1.Dices();
-            this._throwBtn.scale.set(0.8);
+            this._throwBtn.scale.set(1);
+            this._throwBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2 + 15);
             this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
             this._board = new Board_1.Board();
             this._msgBox = new MessageBox_1.MessageBox();
             this._ntfBox = new NotificationBox_1.NotificationBox();
             this._network = new Network_1.Network();
-            this._UserBar = new UserBar_1.UserBar();
+            this._userBar = new UserBar_1.UserBar();
             this._network.on(Network_1.Network.EVENT_CONNECTED, this.eventConnected, this);
             this._network.on(Network_1.Network.EVENT_DISCONNECTED, this.eventDisconnected, this);
             this._network.on(Network_1.Network.EVENT_DATA, this.eventData, this);
@@ -74,7 +75,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             // TweenLite.fromTo(logo, 3, {alpha: 1}, {alpha: 0});
         };
         Game.prototype.set_menu = function () {
-            this._startBtn = new Button_1.Button('GameStart', 'test', 5000);
+            this._startBtn = new Button_1.Button('GameStart', 'Start', 5000);
             this._startBtn.on('GameStart', this.openConnection, this);
             this._startBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
             this.addChild(this._startBtn);
@@ -88,7 +89,38 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this.addChild(this._throwBtn);
             this._throwBtn.hide();
             this._dices.hide();
-            this.addChild(this._UserBar);
+            this.addChild(this._userBar);
+            this._userBar.setActiveStatus('Waiting for opponent..');
+            this._userBar.showNotification('Welcome to our game !');
+        };
+        Game.prototype.endOfGame = function (winner) {
+            if (winner == this._myColor)
+                this._userBar.setActiveStatus('You win !');
+            else {
+                this._userBar.setActiveStatus('You lose !');
+            }
+            if (this._myTurn) {
+                this._myTurn = false;
+                this._board.blockOfTurn();
+            }
+            this._myTurn = null;
+            this._myName = null;
+            this._myColor = null;
+            this._opponent = null;
+            this._board.interactive = false;
+            this._throwBtn.hide();
+            this._dices.hide();
+            this.removeChild(this._dices);
+            this.removeChild(this._throwBtn);
+            this._network.disconnect();
+            this._userBar.setUserBar(this._myColor, this._opponent);
+            var _restartBtn = new Button_1.Button('GameRestart', 'Restart', 5000);
+            _restartBtn.on('GameRestart', this.gameRestart, this);
+            _restartBtn.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
+            this.addChild(_restartBtn);
+        };
+        Game.prototype.gameRestart = function () {
+            location.reload();
         };
         Game.prototype.gameStart = function () {
             this.startOfTurn();
@@ -96,11 +128,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         Game.prototype.openConnection = function () {
             console.log('Сообщение из гейма: Connecting to server...');
             this._network.openConnection('ws://backgammon.connectivegames.com:8888/ws');
-        };
-        Game.prototype.showNotification = function (text) {
-            var style = new TextStyle({ fill: '#ffffff', fontSize: 28, fontWeight: '800', dropShadow: true, align: 'center' });
-            this.addChild(this._ntfBox);
-            this._ntfBox.show(text, 2000, style);
         };
         Game.prototype.showMessage = function (text, duration, timeout) {
             var redStyle = new TextStyle({ fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center' });
@@ -147,6 +174,14 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                     this._board.startTurn(data.first, data.second, 0);
                 else
                     this._board.startTurn(data.first, data.second, 1);
+                if (data.first == data.second) {
+                    this._userBar.showNotification('Lucky one!');
+                }
+            }
+            else {
+                if (data.first == data.second) {
+                    this._userBar.showNotification('He\'s lucky!');
+                }
             }
         };
         // Data (server)  >>------------------------------------------------------------<<<<
@@ -156,7 +191,7 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                 this._myName = data.gameState.myName;
                 this._myTurn = data.gameState.stateChange.activePlayerColor == this._myColor;
                 this._myColor = data.gameState.color;
-                this._UserBar.setUserBar(this._myColor, this._opponent);
+                this._userBar.setUserBar(this._myColor, this._opponent);
                 var arrayChips = [
                     [],
                     [0, 0],
@@ -194,7 +229,11 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                     if (data.changeArrayList[i].CLASS_NAME == 'GameStart') {
                         this._opponent = data.changeArrayList[i].enemyUserName;
                         if (this._myTurn) {
+                            this._userBar.setActiveStatus('Your turn');
                             this.startOfTurn();
+                        }
+                        else {
+                            this._userBar.setActiveStatus('Opponent\'s turn');
                         }
                         console.log('Opponent is: ' + this._opponent);
                     }
@@ -238,30 +277,33 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                     }
                     else if (data.changeArrayList[i].CLASS_NAME == 'Final') {
                         console.log('Игра закончилась ! Победил: ' + data.changeArrayList[i].color);
+                        setTimeout(this.endOfGame.bind(this), 50, data.changeArrayList[i].color);
                     }
                 }
             }
         };
         Game.prototype.dataChangeTurn = function (data) {
             if (data.turnSkipped) {
-                this.showNotification('Blocked dice');
+                this._userBar.showNotification('Blocked dice!');
                 this._board.blockOfTurn();
             }
             if (this._myTurn != (data.activePlayerColor == this._myColor)) {
                 this._myTurn = data.activePlayerColor == this._myColor;
                 if (this._myTurn) {
+                    this._userBar.setActiveStatus('Your turn');
                     this.startOfTurn();
                 }
                 else {
+                    this._userBar.setActiveStatus('Opponent\'s turn');
                     this.endTurn();
                 }
                 this.moveDice(this._myTurn);
             }
-            this._UserBar.setUserBar(this._myColor, this._opponent);
-            this._UserBar.setActivePlayer(this._myTurn, this._myColor);
+            this._userBar.setUserBar(this._myColor, this._opponent);
+            this._userBar.setActivePlayer(this._myTurn, this._myColor);
         };
         Game.prototype.dataOnError = function (data) {
-            this.showNotification(data.message);
+            this._userBar.showNotification(data.message);
         };
         // Data (emulating) >>------------------------------------------------------------<<<<
         Game.prototype.dataOnGameState = function (data) {
@@ -300,16 +342,10 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             });
         };
         Game.prototype.moveDice = function (myTurn) {
-            if (myTurn) {
+            if (myTurn)
                 this._dices.position.set(Game.WIDTH / 2 + 185, Game.HEIGHT / 2 + 15);
-                this._throwBtn.position.set(Game.WIDTH - 70, Game.HEIGHT / 2);
-                // this.showNotification('White\'s turn');
-            }
-            else {
+            else
                 this._dices.position.set(Game.WIDTH / 2 - 170, Game.HEIGHT / 2 + 15);
-                this._throwBtn.position.set(75, Game.HEIGHT / 2);
-                // this.showNotification('Black\'s turn');
-            }
         };
         Game.prototype.startOfTurn = function () {
             console.log('Сообщение из гейма: Текущий цвет на начало хода - ', this._myColor);

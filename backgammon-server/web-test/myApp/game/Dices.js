@@ -66,6 +66,8 @@ define(["require", "exports"], function (require, exports) {
             console.log('Animate DICE');
             this._dice1.texture = new Texture(BaseTexture.fromImage('assets/dice_1.png'));
             this._dice2.texture = new Texture(BaseTexture.fromImage('assets/dice_2.png'));
+            this._dice1.texture.frame = this._animation[0][0];
+            this._dice2.texture.frame = this._animation[1][0];
             this._dice1.visible = true;
             this._dice2.visible = true;
             var _loop_1 = function (i) {
@@ -75,7 +77,7 @@ define(["require", "exports"], function (require, exports) {
                 }.bind(this_1), i * 80);
             };
             var this_1 = this;
-            for (var i = 0; i < 18; i++) {
+            for (var i = 1; i < 18; i++) {
                 _loop_1(i);
             }
             setTimeout(function () {
@@ -83,10 +85,10 @@ define(["require", "exports"], function (require, exports) {
                 this._dice2.texture = this._diceFinal[1][val2 - 1];
                 this._dice1.texture.frame = new PIXI.Rectangle(0, 0, 77, 72);
                 this._dice2.texture.frame = new PIXI.Rectangle(0, 0, 71, 70);
-            }.bind(this), 1440);
+            }.bind(this), 1360);
             setTimeout(function () {
                 this.emit('SuccessfulThrow', { first: val1, second: val2 });
-            }.bind(this), 1500);
+            }.bind(this), 1400);
         };
         Dices.prototype.throwDice = function (val1, val2) {
             this._val1 = val1;

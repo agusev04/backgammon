@@ -180,15 +180,13 @@ define(["require", "exports"], function (require, exports) {
                 }
             }
         };
-        Network.prototype.disconnect = function (event) {
+        Network.prototype.disconnect = function () {
             this._socket.close();
-            console.log(event);
-            this.emit(Network.EVENT_DISCONNECTED);
         };
         // Events >>------------------------------------------------------------<<<<
         Network.prototype.onError = function (event) {
             this.emit(Network.EVENT_ERROR);
-            this.disconnect(event);
+            this.disconnect();
         };
         Network.prototype.onOpen = function () {
             console.log('Connection succeed.');

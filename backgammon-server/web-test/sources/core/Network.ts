@@ -196,18 +196,16 @@ export class Network extends EventEmitter
         }
     }
 
-    private disconnect(event:any):void
+    public disconnect():void
     {
         this._socket.close();
-        console.log(event);
-        this.emit(Network.EVENT_DISCONNECTED);
     }
 
     // Events >>------------------------------------------------------------<<<<
     private onError(event:any)
     {
         this.emit(Network.EVENT_ERROR);
-        this.disconnect(event);
+        this.disconnect();
     }
 
     private onOpen():void

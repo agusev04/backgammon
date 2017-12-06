@@ -72,9 +72,11 @@ export class Dices extends Container
         console.log('Animate DICE');
         this._dice1.texture = new Texture(BaseTexture.fromImage('assets/dice_1.png'));
         this._dice2.texture = new Texture(BaseTexture.fromImage('assets/dice_2.png'));
+        this._dice1.texture.frame = this._animation[0][0];
+        this._dice2.texture.frame = this._animation[1][0];
         this._dice1.visible = true;
         this._dice2.visible = true;
-        for (let i=0; i < 18;i++)
+        for (let i=1; i < 18;i++)
         {
             setTimeout(function () {
                 this._dice1.texture.frame = this._animation[0][i];
@@ -87,11 +89,11 @@ export class Dices extends Container
             this._dice2.texture = this._diceFinal[1][val2-1];
             this._dice1.texture.frame = new PIXI.Rectangle(0,0,77,72);
             this._dice2.texture.frame = new PIXI.Rectangle(0,0,71,70);
-        }.bind(this), 1440);
+        }.bind(this), 1360);
 
         setTimeout(function () {
             this.emit('SuccessfulThrow', {first: val1, second: val2});
-        }.bind(this), 1500);
+        }.bind(this), 1400);
     }
 
     public throwDice(val1:number, val2:number):void
