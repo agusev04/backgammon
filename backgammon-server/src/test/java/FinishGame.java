@@ -18,10 +18,10 @@ public class FinishGame extends AbstractTest {
     public void testPlayerFinishGame() throws Exception, GameError {
 
         PackageMessage packageMessage = enter("0", "Tom");
-        Player whitePlayer = getPlayers().get(0);
+        Player whitePlayer = getPlayers().get("0");
         GameMatch gameMatch = whitePlayer.getGameMatch();
         PackageMessage packageMessage1 = enter("1", "Sam");
-        Player blackPlayer = getPlayers().get(1);
+        Player blackPlayer = getPlayers().get("1");
 
 
         gameMatch.getTable().cells[1].setCell(Cell.NULL, 0);

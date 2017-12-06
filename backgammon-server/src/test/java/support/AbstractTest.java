@@ -27,7 +27,7 @@ public abstract class AbstractTest extends TestCase {
     }
 
     protected GameMatch getGameMatch(String sessionId) {
-        return requestHandler.getPlayers().get(Integer.valueOf(sessionId)).getGameMatch();
+        return requestHandler.getPlayers().get(sessionId).getGameMatch();
     }
 
     protected PackageMessage enter(String sessionId, String user) throws EncodeException {
@@ -64,7 +64,7 @@ public abstract class AbstractTest extends TestCase {
         return packageMessage;
     }
 
-    protected ConcurrentHashMap<Integer, Player> getPlayers() {
+    protected ConcurrentHashMap<String, Player> getPlayers() {
         return requestHandler.getPlayers();
     }
 

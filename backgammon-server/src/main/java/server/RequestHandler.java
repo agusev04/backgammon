@@ -19,7 +19,7 @@ import static game.logics.GameError.PLAYER_CAME_OUT;
 public class RequestHandler {
 
     private final Logger logger = Logger.getLogger(this.getClass());
-    protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<>();
+    protected ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<>();
     protected volatile GameMatch currentGameMatch = null;
     protected ArrayList<GameMatch> gameMatchArrayList = new ArrayList<>();
 
@@ -29,14 +29,20 @@ public class RequestHandler {
             return pack;
         }
         Player thisPlayer = null;
-        if (!players.containsKey(Integer.parseInt(session.getId()))) {
+        if (!players.containsKey(session.getId())) {
             message = registration(session, pack);
         } else {
-            for (Map.Entry<Integer, Player> entry : players.entrySet()) {
-                if (entry.getKey() == Integer.parseInt(session.getId())) {
+            for (Map.Entry<String, Player> entry : players.entrySet()) {
+                if (entry.getKey().equals(session.getId())) {
+                    System.out.println("****************"+entry.getKey()+"****");
                     thisPlayer = entry.getValue();
                     break;
                 }
+            }
+            if(thisPlayer == null){
+                System.out.println("-----------------------------------------");
+            } else{
+                System.out.println("+++++++++++++++" + thisPlayer.getName());
             }
             message = pack.apply(thisPlayer);
             /*
@@ -75,7 +81,7 @@ public class RequestHandler {
             packageMessage.addChange(new StateChange(currentGameMatch));
             currentGameMatch.getWhitePlayer().sendMessage(packageMessage);
         }
-        players.put(Integer.parseInt(session.getId()), thisPlayer);
+        players.put(session.getId(), thisPlayer);
 
         if (currentGameMatch.getNumberOfPlayers() == 2) {
             gameMatchArrayList.add(currentGameMatch);

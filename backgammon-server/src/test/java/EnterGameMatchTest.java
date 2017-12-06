@@ -3,6 +3,7 @@ import server.transport.GameState;
 import server.transport.PackageMessage;
 import support.AbstractTest;
 
+
 import javax.websocket.EncodeException;
 import java.util.ArrayList;
 
@@ -15,13 +16,13 @@ public class EnterGameMatchTest extends AbstractTest {
         PackageMessage gameState = enter("0", "11");
 
         assertEquals(1, getPlayers().size());
-        assertNotNull(getPlayers().get(0));
+        assertNotNull(getPlayers().get("0"));
         assertEquals('w', gameState.getGameState().getColor());
 
         /*second player enters*/
         PackageMessage gameState2 = enter("1", "user 2");
         assertEquals(2, getPlayers().size());
-        assertNotNull(getPlayers().get(1));
+        assertNotNull(getPlayers().get("1"));
         assertEquals('b', gameState2.getGameState().getColor());
     }
 
@@ -59,17 +60,18 @@ public class EnterGameMatchTest extends AbstractTest {
 //        assertEquals();
 
         assertEquals(2, getPlayers().size());
-        assertNotNull(getPlayers().get(0));
+        assertNotNull(getPlayers().get("0"));
         assertEquals('w', gameState1.getColor());
 
         /*second player enters*/
 //        GameState gameState2 = enter("1", "user 2");
         assertEquals(2, getPlayers().size());
-        assertNotNull(getPlayers().get(1));
+        assertNotNull(getPlayers().get("1"));
         assertEquals('b', gameState2.getColor());
     }
 
     public void testEnterEqualName() throws EncodeException {
+
         assertTrue(getPlayers().isEmpty());
 
         PackageMessage gameState1 = enter("0", "11");
@@ -78,8 +80,8 @@ public class EnterGameMatchTest extends AbstractTest {
         assertEquals("11", gameState1.getGameState().getMyName());
         assertEquals("11", gameState2.getGameState().getMyName());
 
-        assertNotNull(getPlayers().get(0));
-        assertNotNull(getPlayers().get(1));
+        assertNotNull(getPlayers().get("0"));
+        assertNotNull(getPlayers().get("1"));
 
         assertEquals('w', gameState1.getGameState().getColor());
         assertEquals('b', gameState2.getGameState().getColor());
@@ -94,8 +96,8 @@ public class EnterGameMatchTest extends AbstractTest {
         assertEquals("user0", gameState1.getGameState().getMyName());
         assertEquals("user1", gameState2.getGameState().getMyName());
 
-        assertNotNull(getPlayers().get(0));
-        assertNotNull(getPlayers().get(1));
+        assertNotNull(getPlayers().get("0"));
+        assertNotNull(getPlayers().get("1"));
 
         assertEquals('w', gameState1.getGameState().getColor());
         assertEquals('b', gameState2.getGameState().getColor());
@@ -110,8 +112,8 @@ public class EnterGameMatchTest extends AbstractTest {
         assertEquals("user0", gameState1.getGameState().getMyName());
         assertEquals("user1", gameState2.getGameState().getMyName());
 
-        assertNotNull(getPlayers().get(0));
-        assertNotNull(getPlayers().get(1));
+        assertNotNull(getPlayers().get("0"));
+        assertNotNull(getPlayers().get("1"));
 
         assertEquals('w', gameState1.getGameState().getColor());
         assertEquals('b', gameState2.getGameState().getColor());

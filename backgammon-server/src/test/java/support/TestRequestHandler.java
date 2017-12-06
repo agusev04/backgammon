@@ -10,7 +10,7 @@ class TestRequestHandler extends RequestHandler {
     TestRequestHandler() {
     }
 
-    ConcurrentHashMap<Integer, Player> getPlayers() {
+    ConcurrentHashMap<String, Player> getPlayers() {
         return players;
     }
 }
