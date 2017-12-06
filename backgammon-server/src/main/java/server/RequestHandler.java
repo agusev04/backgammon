@@ -101,7 +101,7 @@ public class RequestHandler {
     }
 
     public void deletePlayer(Session session) {
-        Player player = players.remove(Integer.parseInt(session.getId())); //получаем пользователя, если он прошел рег.
+        Player player = players.remove((session.getId())); //получаем пользователя, если он прошел рег.
         if (player != null) {
             logger.info(gameMatchArrayList.size() + " games before");
             logger.info((players.size() + 1) + " players before");
@@ -110,7 +110,7 @@ public class RequestHandler {
             Player otherPlayer = gameMatch.getOtherPlayer(player);
             if (otherPlayer != null) {
                 otherPlayer.sendMessage(new ErrorMessage(PLAYER_CAME_OUT));
-                players.remove(Integer.parseInt(otherPlayer.getSession().getId()));
+                players.remove(otherPlayer.getSession().getId());
             }
 
             gameMatchArrayList.remove(gameMatch);
