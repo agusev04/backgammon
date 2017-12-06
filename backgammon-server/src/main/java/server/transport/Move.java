@@ -44,7 +44,6 @@ public class Move extends Response implements Change {
         return "Move{" +
                 "from=" + from +
                 ", to=" + to +
-                ", CLASS_NAME='" + CLASS_NAME + '\'' +
                 '}';
     }
 }

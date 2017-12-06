@@ -27,8 +27,13 @@ public class AutomaticGameTest extends AbstractTest {
     }
 
     public void testSequence1() throws Exception {
-//        List<Integer> testDiceThrowResultsSeq = Arrays.asList(12, 34, 26, 36, 22, 33, 14, 25, 18, 66, 66, 66, 66, 55, 44, 14, 25, 45, 66 );
-//        checkSequenceFirst(testDiceThrowResultsSeq);
+        List<Integer> testDiceThrowResultsSeq = Arrays.asList(12, 34, 26, 36, 22, 33, 14, 25, 18, 66, 66, 66, 66, 55,
+                44, 14, 25, 45, 66);
+        checkSequenceFirst(testDiceThrowResultsSeq);
+    }
+
+    public void testSequenceRand() throws Exception {
+        checkSequenceRandom(null);
     }
 
     private void checkSequenceFirst(List<Integer> testDiceThrowResultsSeq) throws Exception {
@@ -45,12 +50,14 @@ public class AutomaticGameTest extends AbstractTest {
 
     private void checkSequence(List<Integer> testDiceThrowResultsSeq,
                                Function<List<MoveAction>, MoveAction> moveSelectFunc) throws Exception {
-        String testPlayer = WHITE;
         GameBoard testBoard = new GameBoard();
         GameMatch gameMatch = startSimpleMatch();
-        boolean gameOver = false;
 
         int turnNumber = 0;
+        boolean gameOver = false;
+        String testPlayer = WHITE;
+        int testCondition = GameMatch.waiting_throw_dice;
+
         do {
             Integer testDiceThrowResult = null;
             if (testDiceThrowResultsSeq != null && testDiceThrowResultsSeq.size() > turnNumber) {
@@ -61,7 +68,6 @@ public class AutomaticGameTest extends AbstractTest {
             System.out.println();
             System.out.println("__________ Бросок # " + turnNumber + ", белый = " + testTurnWhite + " _____________");
 
-            int testCondition = GameMatch.waiting_throw_dice;
 
             System.out.println("Проверяем StateChange...");
             assertEquals(testTurnWhite, gameMatch.isTurnWhite());
@@ -96,90 +102,96 @@ public class AutomaticGameTest extends AbstractTest {
             } else {
                 testAllCubeUses.addAll(Arrays.asList(testDiceThrowResult / 10, testDiceThrowResult % 10));
             }
-            System.out.println("Игрок может использовать кости = " + testAllCubeUses);
+            System.out.println("Выпали кости = " + testAllCubeUses);
+            testCondition = GameMatch.waiting_move_chip;
 
-            StateChange stateChange = packageMessage.getChange(StateChange.class);
-            if (stateChange.isTurnSkipped()) {
-                System.out.println("Произошел пропуск всех ходов ");
+            do {
                 List<MoveAction> allMoves = getAllMoves(testBoard, testTurnWhite, testAllCubeUses);
-                //todo olegus remove comment after 63 fix
-                testCondition = GameMatch.waiting_move_chip; //temporary
-//                assertTrue(allMoves.isEmpty());
-            } else {
-                testCondition = GameMatch.waiting_move_chip;
-            }
+                if (allMoves.isEmpty()) {
+                    System.out.println("Доступных ходов нет, кости " + testAllCubeUses);
+                    StateChange stateChange = packageMessage.getChange(StateChange.class);
+                    assertTrue(stateChange.isTurnSkipped());
+                    testCondition = GameMatch.waiting_throw_dice;
+                } else {
+                    assertEquals(testCondition, gameMatch.getActivePlayerCondition());
 
+                    System.out.println("Проверяем PossibleMoves...");
+                    PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
+                    ArrayList<Move> possibleMovesSortedForComparison = possibleMoves.getPossibleMoves();
+                    assertFalse(possibleMovesSortedForComparison.isEmpty());
+                    possibleMovesSortedForComparison.sort(Comparator.comparingInt(o -> (o.from + 100 * o.to)));
+                    assertEquals(allMoves.stream()
+                                    .map(moveAction -> new Move(moveAction.from,
+                                            calcToCrazyHack(calcTo(testTurnWhite, moveAction))))
+                                    .sorted(Comparator.comparingInt(o -> (o.from + 100 * o.to)))
+                                    .collect(Collectors.toList()).toString(),
+                            possibleMovesSortedForComparison.toString());
+                    System.out.println("ОК!!, PossibleMoves = " + possibleMoves.getPossibleMoves().toString());
 
-            while (gameMatch.getActivePlayerCondition() == GameMatch.waiting_move_chip) {
-                System.out.println();
-                System.out.println("_______Ход игрока, белый = " + testTurnWhite + ", игрок может использовать = " + testAllCubeUses);
-                PossibleMoves possibleMoves = packageMessage.getChange(PossibleMoves.class);
-                assertNotNull(possibleMoves);
-                assertFalse(possibleMoves.getPossibleMoves().isEmpty());
-                Final aFinal = packageMessage.getChange(Final.class);
-                if (aFinal != null) {
-                    System.out.println("!!Игра закончена!!");
-                    gameOver = true;
-                    break;
-                }
+                    //Select a move
+                    MoveAction testSelectedMove = moveSelectFunc.apply(allMoves);
+                    System.out.println("Игрок ходит = " + testSelectedMove);
+                    response = moveChip(testPlayer, testSelectedMove.from, testSelectedMove.cubeValue);
+                    assertFalse(response instanceof ErrorMessage);
+                    packageMessage = (PackageMessage) response;
+                    System.out.println("ОК");
 
-                System.out.println("Проверяем StateChange...");
-                assertEquals(testTurnWhite, gameMatch.isTurnWhite());
-                assertEquals(testCondition, gameMatch.getActivePlayerCondition());
-                System.out.println("ОК");
-
-                List<MoveAction> testAllMoves = getAllMoves(testBoard, testTurnWhite, testAllCubeUses);
-
-                System.out.println("Проверяем PossibleMoves...");
-                assertFalse(testAllMoves.isEmpty());
-                ArrayList<Move> possibleMovesSortedForComparison = possibleMoves.getPossibleMoves();
-                possibleMovesSortedForComparison.sort(Comparator.comparingInt(o -> (o.from * 100 + getDir(testTurnWhite) * o.to)));
-                assertEquals(testAllMoves.stream()
-                                .map(moveAction -> new Move(moveAction.from, calcTo(testTurnWhite, moveAction)))
-                                .collect(Collectors.toList()).toString(),
-                        possibleMovesSortedForComparison.toString());
-
-                System.out.println("ОК!!, ходы = " + possibleMoves.getPossibleMoves().toString());
-
-                //Select a move
-                MoveAction testSelectedMove = moveSelectFunc.apply(testAllMoves);
-                System.out.println("Игрок ходит = " + testSelectedMove);
-                response = moveChip(testPlayer, testSelectedMove.from, testSelectedMove.cubeValue);
-                assertFalse(response instanceof ErrorMessage);
-                packageMessage = (PackageMessage) response;
-                System.out.println("ОК");
-
-                //Do the move
-                testBoard.getCells()[testSelectedMove.from].takeChip();
-                int testTo = calcTo(testTurnWhite, testSelectedMove);
-                if (testBoard.getCells()[testTo].getColor() == getColor(testTurnWhite)) { /*на свою*/
-                    testBoard.getCells()[testTo].inc();
-                } else { /*на пустую или чужую*/
-                    if (testBoard.getCells()[testTo].getColor() == getColor(!testTurnWhite)) {//чужая
-                        Cell enemyBarCell = testBoard.getCells()[getBarIndex(!testTurnWhite)];
-                        enemyBarCell.inc();
-                        enemyBarCell.setColor(getColor(!testTurnWhite));
+                    //Do the move
+                    testBoard.getCells()[testSelectedMove.from].takeChip();
+                    int testTo = calcTo(testTurnWhite, testSelectedMove);
+                    if (!isGoingOut(testTo)) { /*если фишка идет в пределы поля*/
+                        Cell destinationCell = testBoard.getCells()[testTo];
+                        char curPlayerColor = getColor(testTurnWhite);
+                        if (destinationCell.getColor() == curPlayerColor) { /*на свою*/
+                            destinationCell.inc();
+                        } else { /*на пустую или чужую*/
+                            char enemyColor = getColor(!testTurnWhite);
+                            if (destinationCell.getColor() == enemyColor) {//чужая
+                                Cell enemyBarCell = testBoard.getCells()[getBarIndex(!testTurnWhite)];
+                                enemyBarCell.inc();
+                                enemyBarCell.setColor(enemyColor);
+                            }
+                            destinationCell.setCell(curPlayerColor, 1);
+                        }
                     }
-                    testBoard.getCells()[testTo].setCell(getColor(testTurnWhite), 1);
+                    testAllCubeUses.remove((Integer) testSelectedMove.cubeValue);
+
+                    System.out.println("Проверяем Доску...");
+                    ArrayList<ChipsPosition> whitePositions = checkWhitePositions(testBoard, gameMatch);
+                    ArrayList<ChipsPosition> blackPositions = checkBlackPositions(testBoard, gameMatch);
+                    System.out.println("ОК");
+
+                    if (whitePositions.isEmpty() || blackPositions.isEmpty()) {
+                        gameOver = true;
+                        System.out.println("!!Игра закончена!!");
+                        Final aFinal = packageMessage.getChange(Final.class);
+                        assertNotNull(aFinal);
+                        break;
+                    }
+                    if (testAllCubeUses.isEmpty()) {
+                        testCondition = GameMatch.waiting_throw_dice;
+                        assertEquals(testCondition, gameMatch.getActivePlayerCondition());
+                    } else {
+                        System.out.println("_______Ход игрока, белый = " + testTurnWhite + ", остались кости = " + testAllCubeUses);
+                    }
                 }
-                testAllCubeUses.remove((Integer) testSelectedMove.cubeValue);
-
-                System.out.println("Проверяем Доску...");
-                checkWhitePositions(testBoard, gameMatch);
-                checkBlackPositions(testBoard, gameMatch);
-                System.out.println("ОК");
-            }
-
-            if (!testAllCubeUses.isEmpty()) {
-                System.out.println("Произошел пропуск части ходов = " + testAllCubeUses);
-            }
-            /*change turn*/
+            } while (testCondition == GameMatch.waiting_move_chip);
+            System.out.println("Переход хода");
             testPlayer = WHITE.equals(testPlayer) ? BLACK : WHITE;
         } while (!gameOver);
     }
 
     private int calcTo(boolean testTurnWhite, MoveAction testMove) {
         return testMove.from + getDir(testTurnWhite) * testMove.cubeValue;
+    }
+
+    private int calcToCrazyHack(int normalTo) {
+        if (normalTo > GameBoard.BLACK_BAR) {
+            return GameBoard.BLACK_BAR;
+        } else if (normalTo < GameBoard.WHITE_BAR) {
+            return GameBoard.WHITE_BAR;
+        }
+        return normalTo;
     }
 
     private List<MoveAction> getAllMoves(GameBoard testBoard, boolean testTurnWhite, List<Integer> testAllCubeUses) {
@@ -194,23 +206,36 @@ public class AutomaticGameTest extends AbstractTest {
         } else {
             testPlayerPos = testTurnWhite ? testBoard.getGameState().getWhitePos() : testBoard.getGameState().getBlackPos();
             allAtHome = testPlayerPos.stream()
-                    .allMatch(chipsPosition -> (getDir(testTurnWhite) * (chipsPosition.getPosition() - getHomeIndex(testTurnWhite))) >= 0);
+                    .allMatch(chipsPosition -> getDir(testTurnWhite) * (chipsPosition.getPosition() - getHomeIndex(testTurnWhite)) >= 0);
             if (allAtHome) {
                 System.out.println("___ВСЕ ФИШКИ В ДОМЕ, игрок белый = " + testTurnWhite);
             }
         }
-
         List<ChipsPosition> testEnemyPos = testTurnWhite ? testBoard.getGameState().getBlackPos() : testBoard.getGameState().getWhitePos();
+        testEnemyPos.removeIf(enemyPos -> enemyPos.getPosition() == getBarIndex(!testTurnWhite)); /*remove enemy bar*/
 
-        return testPlayerPos
+        HashSet<Integer> allCubesSet = new HashSet<>(testAllCubeUses);
+        List<MoveAction> allMoves = testPlayerPos
                 .stream().map(ChipsPosition::getPosition)
-                .flatMap(from -> (new HashSet<>(testAllCubeUses)).stream().map(aCubeUse -> new MoveAction(from, aCubeUse))) //для каждой фишки каждый кубик
+                .flatMap(from -> allCubesSet.stream().map(aCubeUse -> new MoveAction(from, aCubeUse))) //для каждой фишки каждый кубик
                 .filter(move ->
                         testEnemyPos.stream()
                                 .filter(enemyPosition -> (enemyPosition.getQuantity() > 1)) //для позиций противника, где стоит больше одной фишки
                                 .noneMatch(chipsPosition -> chipsPosition.getPosition() == calcTo(testTurnWhite, move))) //нет ни одной такой позиции в месте, куда придем
-                .filter(move -> allAtHome || !isGoingOut(calcTo(testTurnWhite, move)))
+
+                .filter(move -> !isGoingOut(calcTo(testTurnWhite, move)) || allAtHome)
                 .collect(Collectors.toList());
+        if (allAtHome) {
+            Map<Integer, List<MoveAction>> moveActionMap = allMoves.stream()
+                    .collect(Collectors.groupingBy(move -> move.cubeValue));
+            moveActionMap.forEach((key, movesOfSameCube) -> movesOfSameCube.stream()
+                    .filter(moveAction -> isGoingOutOverUseDice(calcTo(testTurnWhite, moveAction)) &&
+                        testPlayerPos.stream()
+                                .map(ChipsPosition::getPosition)
+                                .anyMatch(pos -> (getDir(testTurnWhite) * (moveAction.from - pos) > 0)))
+                    .forEach(allMoves::remove));
+        }
+        return allMoves;
     }
 
     private char getColor(boolean testTurnWhite) {
@@ -233,15 +258,23 @@ public class AutomaticGameTest extends AbstractTest {
         return to >= GameBoard.BLACK_BAR || to <= GameBoard.WHITE_BAR;
     }
 
-    private void checkWhitePositions(GameBoard testBoard, GameMatch gameMatch) {
-        ChipsPositions actualPositions = gameMatch.getTable().getGameState();
-        System.out.println("Белые = " + actualPositions.getWhitePos().toString());
-        assertEquals(testBoard.getGameState().getWhitePos().toString(), actualPositions.getWhitePos().toString());
+    private boolean isGoingOutOverUseDice(int to) {
+        return to > GameBoard.BLACK_BAR || to < GameBoard.WHITE_BAR;
     }
 
-    private void checkBlackPositions(GameBoard testBoard, GameMatch gameMatch) {
+    private ArrayList<ChipsPosition> checkWhitePositions(GameBoard testBoard, GameMatch gameMatch) {
+        ChipsPositions actualPositions = gameMatch.getTable().getGameState();
+        System.out.println("Белые = " + actualPositions.getWhitePos().toString());
+        ArrayList<ChipsPosition> whitePos = testBoard.getGameState().getWhitePos();
+        assertEquals(whitePos.toString(), actualPositions.getWhitePos().toString());
+        return whitePos;
+    }
+
+    private ArrayList<ChipsPosition> checkBlackPositions(GameBoard testBoard, GameMatch gameMatch) {
         ChipsPositions actualPositions = gameMatch.getTable().getGameState();
         System.out.println("Черные = " + actualPositions.getBlackPos().toString());
-        assertEquals(testBoard.getGameState().getBlackPos().toString(), actualPositions.getBlackPos().toString());
+        ArrayList<ChipsPosition> blackPos = testBoard.getGameState().getBlackPos();
+        assertEquals(blackPos.toString(), actualPositions.getBlackPos().toString());
+        return blackPos;
     }
 }

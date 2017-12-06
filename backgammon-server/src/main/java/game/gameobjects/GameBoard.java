@@ -2,10 +2,8 @@ package game.gameobjects;
 
 import game.logics.ChipsPositions;
 import game.logics.GameError;
-import game.logics.GameMatch;
 import server.transport.Change;
 import server.transport.ChipsCounter;
-import server.transport.Move;
 import server.transport.MoveBar;
 
 import static game.gameobjects.Cell.BLACK;

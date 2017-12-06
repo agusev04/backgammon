@@ -1,5 +1,4 @@
 import game.gameobjects.Cell;
-import game.gameobjects.GameBoard;
 import game.logics.GameError;
 import game.logics.GameMatch;
 import game.logics.Player;
