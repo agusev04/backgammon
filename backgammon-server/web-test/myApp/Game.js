@@ -304,6 +304,9 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         };
         Game.prototype.dataOnError = function (data) {
             this._userBar.showNotification(data.message);
+            if (data.message == 'Your opponent came out') {
+                this.endOfGame(this._myColor);
+            }
         };
         // Data (emulating) >>------------------------------------------------------------<<<<
         Game.prototype.dataOnGameState = function (data) {

@@ -364,7 +364,7 @@ export class Game extends Container
         }
     }
 
-    protected dataChangeTurn(data:any, )
+    protected dataChangeTurn(data:any)
     {
         if (data.turnSkipped)
         {
@@ -393,6 +393,10 @@ export class Game extends Container
     protected dataOnError(data:any):void
     {
         this._userBar.showNotification(data.message);
+        if (data.message == 'Your opponent came out')
+        {
+            this.endOfGame(this._myColor);
+        }
     }
 
     // Data (emulating) >>------------------------------------------------------------<<<<
