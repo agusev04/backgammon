@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "./components/Button", "./game/Board", "./components/MessageBox", "./game/Dices", "./core/Network", "./components/NotificationBox", "./components/UserBar"], function (require, exports, Button_1, Board_1, MessageBox_1, Dices_1, Network_1, NotificationBox_1, UserBar_1) {
+define(["require", "exports", "./components/Button", "./game/Board", "./components/MessageBox", "./game/Dices", "./core/Network", "./components/UserBar"], function (require, exports, Button_1, Board_1, MessageBox_1, Dices_1, Network_1, UserBar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -18,7 +18,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
      */
     var Container = PIXI.Container;
     var Sprite = PIXI.Sprite;
-    var TextStyle = PIXI.TextStyle;
     var Game = (function (_super) {
         __extends(Game, _super);
         // Init >>--------------------------------------------------------------<<<<
@@ -45,7 +44,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this._dices.position.set(Game.WIDTH / 2, Game.HEIGHT / 2);
             this._board = new Board_1.Board();
             this._msgBox = new MessageBox_1.MessageBox();
-            this._ntfBox = new NotificationBox_1.NotificationBox();
             this._network = new Network_1.Network();
             this._userBar = new UserBar_1.UserBar();
             this._network.on(Network_1.Network.EVENT_CONNECTED, this.eventConnected, this);
@@ -56,7 +54,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             // this._board.on(Board.EVENT_MOVE_CHIP_JAIL, this.moveAction, this);
             // this.addChild(this._board);
             this.addChild(this._msgBox);
-            this.addChild(this._ntfBox);
         };
         // Base >>--------------------------------------------------------------<<<<
         Game.prototype.set_logo = function () {
@@ -128,11 +125,6 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
         Game.prototype.openConnection = function () {
             console.log('Сообщение из гейма: Connecting to server...');
             this._network.openConnection('ws://backgammon.connectivegames.com:8888/ws');
-        };
-        Game.prototype.showMessage = function (text, duration, timeout) {
-            var redStyle = new TextStyle({ fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center' });
-            this.addChild(this._msgBox);
-            setTimeout(this._msgBox.show.bind(this._msgBox, text, duration, redStyle), timeout);
         };
         // Events >>------------------------------------------------------------<<<<
         Game.prototype.eventConnected = function () {
@@ -258,6 +250,9 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                         if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange') {
                             this.dataChangeTurn(data.changeArrayList[i + 1]);
                         }
+                        if (this._whaitingForServer) {
+                            this._whaitingForServer = false;
+                        }
                     }
                     else if (data.changeArrayList[i].CLASS_NAME == 'StateChange') {
                         this.dataChangeTurn(data.changeArrayList[i]);
@@ -273,6 +268,9 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
                             this._board.moveOpponentChip(data.changeArrayList[i].from, 25);
                         if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange') {
                             this.dataChangeTurn(data.changeArrayList[i + 1]);
+                        }
+                        if (this._whaitingForServer) {
+                            this._whaitingForServer = false;
                         }
                     }
                     else if (data.changeArrayList[i].CLASS_NAME == 'Final') {
@@ -362,11 +360,15 @@ define(["require", "exports", "./components/Button", "./game/Board", "./componen
             this._dices.on('SuccessfulThrow', this.eventSuccessfulThrow, this);
         };
         Game.prototype.moveAction = function (data) {
-            this._network.send({
-                CLASS_NAME: 'MoveAction',
-                from: data.from,
-                cubeValue: data.cubeValues
-            });
+            if (!this._whaitingForServer) {
+                console.log('Посылаем мув');
+                this._whaitingForServer = true;
+                this._network.send({
+                    CLASS_NAME: 'MoveAction',
+                    from: data.from,
+                    cubeValue: data.cubeValues
+                });
+            }
         };
         Game.prototype.endTurn = function () {
             console.log('Сообщение из гейма: EndOfTurn пришел.');

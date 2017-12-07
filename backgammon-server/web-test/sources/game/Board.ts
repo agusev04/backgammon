@@ -40,6 +40,7 @@ export class Board extends Container2d {
     private _currentMove:number;
     private _maxCube:number;
     private _minCube:number;
+    private _lastCube:number;
     // public arrayChips: any[] = [
     //     [],
     //     [new Chip(Chip.COLOR_WHITE), new Chip(Chip.COLOR_WHITE)]
@@ -419,13 +420,15 @@ export class Board extends Container2d {
                     cubeValues: currentMove
                 });
 
-                this._activeMoves -= currentMove;
-                this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
-                this._activeDices = this._activeDices.filter(function(number) {
-                    return number <= this._activeMoves;
-                }, this);
+                this._lastCube = currentMove;
 
-                this._isActive = this._activeMoves != 0;
+                // this._activeMoves -= currentMove;
+                // this._activeDices.splice(this._activeDices.indexOf(currentMove), 1);
+                // this._activeDices = this._activeDices.filter(function(number) {
+                //     return number <= this._activeMoves;
+                // }, this);
+
+                // this._isActive = this._activeMoves != 0;
 
             }
         }
@@ -567,6 +570,14 @@ export class Board extends Container2d {
             this.arrayChips[newPosition].push(oldChip);
             // this.calculateMoves(newPosition,oldPosition);
             this._countClick = 0;
+
+            this._activeMoves -= this._lastCube;
+            this._activeDices.splice(this._activeDices.indexOf(this._lastCube), 1);
+            this._activeDices = this._activeDices.filter(function(number) {
+                return number <= this._activeMoves;
+            }, this);
+
+            this._isActive = this._activeMoves != 0;
         // }
 
         this.offHighLightSectors();

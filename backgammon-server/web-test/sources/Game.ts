@@ -26,11 +26,11 @@ export class Game extends Container
     private _throwBtn:Button;
     private _dices:Dices;
     private _msgBox:MessageBox;
-    private _ntfBox:NotificationBox;
     private _board:Board;
     private _network:Network;
     private _userBar: UserBar;
     private _myColor:string;
+    private _whaitingForServer: boolean;
 
     // Init >>--------------------------------------------------------------<<<<
     /**
@@ -57,7 +57,6 @@ export class Game extends Container
         this._dices.position.set(Game.WIDTH/2, Game.HEIGHT/2);
         this._board = new Board();
         this._msgBox = new MessageBox();
-        this._ntfBox = new NotificationBox();
         this._network = new Network();
         this._userBar = new UserBar();
         this._network.on(Network.EVENT_CONNECTED, this.eventConnected, this);
@@ -69,7 +68,6 @@ export class Game extends Container
 
         // this.addChild(this._board);
         this.addChild(this._msgBox);
-        this.addChild(this._ntfBox);
     }
 
     // Base >>--------------------------------------------------------------<<<<
@@ -160,13 +158,6 @@ export class Game extends Container
     {
         console.log('Сообщение из гейма: Connecting to server...');
         this._network.openConnection('ws://backgammon.connectivegames.com:8888/ws');
-    }
-
-    protected showMessage(text:string, duration:number, timeout:number):void
-    {
-        let redStyle = new TextStyle({fill: '#ff0000', fontSize: 42, fontWeight: '800', dropShadow: true, align: 'center'});
-        this.addChild(this._msgBox);
-        setTimeout(this._msgBox.show.bind(this._msgBox, text, duration, redStyle),timeout);
     }
 
     // Events >>------------------------------------------------------------<<<<
@@ -331,6 +322,11 @@ export class Game extends Container
                     {
                         this.dataChangeTurn(data.changeArrayList[i + 1]);
                     }
+
+                    if (this._whaitingForServer)
+                    {
+                        this._whaitingForServer = false;
+                    }
                 }
                 else if (data.changeArrayList[i].CLASS_NAME == 'StateChange')
                 {
@@ -353,6 +349,10 @@ export class Game extends Container
                     if (data.changeArrayList[i + 1].CLASS_NAME == 'StateChange')
                     {
                         this.dataChangeTurn(data.changeArrayList[i+1]);
+                    }
+                    if (this._whaitingForServer)
+                    {
+                        this._whaitingForServer = false;
                     }
                 }
                 else if (data.changeArrayList[i].CLASS_NAME == 'Final')
@@ -469,11 +469,16 @@ export class Game extends Container
 
     protected moveAction(data:any):void
     {
-        this._network.send({
-            CLASS_NAME: 'MoveAction',
-            from: data.from,
-            cubeValue: data.cubeValues
-        });
+        if (!this._whaitingForServer)
+        {
+            console.log('Посылаем мув');
+            this._whaitingForServer = true;
+            this._network.send({
+                CLASS_NAME: 'MoveAction',
+                from: data.from,
+                cubeValue: data.cubeValues
+            });
+        }
     }
 
     protected endTurn():void
