@@ -279,6 +279,8 @@ define(["require", "exports", "./Chip", "./Sector", "./Sound", "../Game"], funct
             this.deactivationSectorsJails();
         };
         Board.prototype.blockOfTurn = function () {
+            this.deactivationAllSectors();
+            this._activeMoves = 0;
             this._activeDices = [];
             this.endOfTurn();
         };

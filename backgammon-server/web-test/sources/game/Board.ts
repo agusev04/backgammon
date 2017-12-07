@@ -314,6 +314,8 @@ export class Board extends Container2d {
         this.deactivationSectorsJails();
     }
     public blockOfTurn():void{
+        this.deactivationAllSectors();
+        this._activeMoves = 0;
         this._activeDices = [];
         this.endOfTurn();
     }
